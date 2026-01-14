@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Random Website</title>
+    <title>NeverLanding</title>
     <style>
       :root {
         --bg: #f6f1e4;
@@ -28,7 +28,7 @@
       }
 
       .wrap {
-        max-width: 720px;
+        max-width: 1100px;
         margin: 0 auto;
       }
 
@@ -48,20 +48,38 @@
       .card {
         background: var(--panel);
         border: 2px solid var(--ink);
-        padding: 20px;
+        padding: 16px;
         box-shadow: 6px 6px 0 var(--ink);
       }
 
       .url {
-        font-size: 1.1rem;
+        font-size: 1rem;
         word-break: break-word;
-        min-height: 2.2rem;
+        min-height: 1.6rem;
       }
 
       .meta {
-        margin-top: 12px;
-        font-size: 0.9rem;
+        margin-top: 8px;
+        font-size: 0.85rem;
         color: var(--muted);
+      }
+
+      .viewer {
+        margin-top: 20px;
+        border: 2px solid var(--ink);
+        box-shadow: 6px 6px 0 var(--ink);
+        background: #fff;
+        height: calc(100vh - 360px);
+        min-height: 320px;
+        width: 100%;
+      }
+
+      .viewer iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        display: block;
+        background: #fff;
       }
 
       .bar {
@@ -75,14 +93,13 @@
       }
 
       .bar-inner {
-        max-width: 720px;
+        max-width: 1100px;
         margin: 0 auto;
         display: flex;
-        gap: 12px;
       }
 
       button {
-        flex: 1;
+        width: 100%;
         padding: 12px 16px;
         font-size: 1rem;
         border: 2px solid var(--ink);
@@ -90,11 +107,6 @@
         color: #fff;
         cursor: pointer;
         transition: transform 0.08s ease, background 0.2s ease;
-      }
-
-      button.secondary {
-        background: #fff;
-        color: var(--ink);
       }
 
       button:disabled {
@@ -110,46 +122,53 @@
         background: var(--accent-dark);
       }
 
-      button.secondary:not(:disabled):hover {
-        background: #f2e8d5;
-      }
-
       @media (max-width: 560px) {
-        .bar-inner {
-          flex-direction: column;
+        body {
+          padding: 36px 16px 120px;
+        }
+
+        .viewer {
+          height: calc(100vh - 360px);
         }
       }
     </style>
   </head>
   <body>
     <div class="wrap">
-      <h1>Random Website</h1>
-      <p>Pull a real, randomly sampled page from the latest Common Crawl.</p>
+      <h1>Never Landing Page</h1>
+      <p>Pull a real, randomly sampled page from the bowels of the internet.</p>
       <div class="card">
-        <div id="url" class="url">No URL yet.</div>
+          <a id="url" class="url" href="#" target="_blank" rel="noopener noreferrer">No URL yet.</a>
         <div id="meta" class="meta">Waiting for your first click.</div>
+      </div>
+      <div class="viewer">
+        <iframe
+          id="viewer"
+          title="Random website preview"
+          sandbox="allow-forms allow-scripts allow-same-origin allow-popups"
+        ></iframe>
       </div>
     </div>
 
     <div class="bar">
       <div class="bar-inner">
         <button id="get">Get random website</button>
-        <button id="open" class="secondary" disabled>Open</button>
       </div>
     </div>
 
     <script>
       const getButton = document.getElementById("get");
-      const openButton = document.getElementById("open");
       const urlEl = document.getElementById("url");
       const metaEl = document.getElementById("meta");
+      const viewerEl = document.getElementById("viewer");
       let currentUrl = "";
 
       async function loadRandom() {
         getButton.disabled = true;
-        openButton.disabled = true;
         urlEl.textContent = "Loading...";
+        urlEl.href = "#";
         metaEl.textContent = "";
+        viewerEl.src = "about:blank";
 
         try {
           const res = await fetch("http://localhost:8787/api/random", { method: "GET" });
@@ -159,25 +178,25 @@
           const data = await res.json();
           currentUrl = data.url || "";
           urlEl.textContent = currentUrl || "No URL returned.";
+          urlEl.href = currentUrl || "#";
           const metaParts = [];
           if (data.crawl) metaParts.push(data.crawl);
           if (data.at) metaParts.push(data.at);
           metaEl.textContent = metaParts.join(" - ");
-          openButton.disabled = !currentUrl;
+          if (currentUrl) {
+            viewerEl.src = currentUrl;
+          }
         } catch (err) {
           currentUrl = "";
           urlEl.textContent = "Error loading a URL.";
-          metaEl.textContent = "Please try again.";
+          urlEl.href = "#";
+          metaEl.textContent = "Please try again. Some sites block embeds.";
         } finally {
           getButton.disabled = false;
         }
       }
 
       getButton.addEventListener("click", loadRandom);
-      openButton.addEventListener("click", () => {
-        if (!currentUrl) return;
-        window.open(currentUrl, "_blank", "noopener,noreferrer");
-      });
     </script>
   </body>
 </html>
