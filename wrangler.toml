@@ -1,0 +1,6 @@
+name = "random-website"
+main = "worker.js"
+compatibility_date = "2026-01-14"
+
+[observability]
+enabled = true

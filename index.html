@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Random Website</title>
+    <style>
+      :root {
+        --bg: #f6f1e4;
+        --ink: #1b1b1b;
+        --muted: #6b6256;
+        --accent: #c84b31;
+        --accent-dark: #a03a25;
+        --panel: #fff7ea;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Georgia", "Times New Roman", serif;
+        background: radial-gradient(circle at 20% 20%, #fff, var(--bg));
+        color: var(--ink);
+        min-height: 100vh;
+        padding: 48px 20px 120px;
+      }
+
+      .wrap {
+        max-width: 720px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 4vw, 3rem);
+        margin: 0 0 12px;
+        letter-spacing: -0.02em;
+      }
+
+      p {
+        margin: 0 0 24px;
+        color: var(--muted);
+        font-size: 1.05rem;
+        line-height: 1.5;
+      }
+
+      .card {
+        background: var(--panel);
+        border: 2px solid var(--ink);
+        padding: 20px;
+        box-shadow: 6px 6px 0 var(--ink);
+      }
+
+      .url {
+        font-size: 1.1rem;
+        word-break: break-word;
+        min-height: 2.2rem;
+      }
+
+      .meta {
+        margin-top: 12px;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      .bar {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #fff;
+        border-top: 2px solid var(--ink);
+        padding: 14px 20px;
+      }
+
+      .bar-inner {
+        max-width: 720px;
+        margin: 0 auto;
+        display: flex;
+        gap: 12px;
+      }
+
+      button {
+        flex: 1;
+        padding: 12px 16px;
+        font-size: 1rem;
+        border: 2px solid var(--ink);
+        background: var(--accent);
+        color: #fff;
+        cursor: pointer;
+        transition: transform 0.08s ease, background 0.2s ease;
+      }
+
+      button.secondary {
+        background: #fff;
+        color: var(--ink);
+      }
+
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      button:not(:disabled):active {
+        transform: translateY(1px);
+      }
+
+      button:not(:disabled):hover {
+        background: var(--accent-dark);
+      }
+
+      button.secondary:not(:disabled):hover {
+        background: #f2e8d5;
+      }
+
+      @media (max-width: 560px) {
+        .bar-inner {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Random Website</h1>
+      <p>Pull a real, randomly sampled page from the latest Common Crawl.</p>
+      <div class="card">
+        <div id="url" class="url">No URL yet.</div>
+        <div id="meta" class="meta">Waiting for your first click.</div>
+      </div>
+    </div>
+
+    <div class="bar">
+      <div class="bar-inner">
+        <button id="get">Get random website</button>
+        <button id="open" class="secondary" disabled>Open</button>
+      </div>
+    </div>
+
+    <script>
+      const getButton = document.getElementById("get");
+      const openButton = document.getElementById("open");
+      const urlEl = document.getElementById("url");
+      const metaEl = document.getElementById("meta");
+      let currentUrl = "";
+
+      async function loadRandom() {
+        getButton.disabled = true;
+        openButton.disabled = true;
+        urlEl.textContent = "Loading...";
+        metaEl.textContent = "";
+
+        try {
+          const res = await fetch("http://localhost:8787/api/random", { method: "GET" });
+          if (!res.ok) {
+            throw new Error("Request failed");
+          }
+          const data = await res.json();
+          currentUrl = data.url || "";
+          urlEl.textContent = currentUrl || "No URL returned.";
+          const metaParts = [];
+          if (data.crawl) metaParts.push(data.crawl);
+          if (data.at) metaParts.push(data.at);
+          metaEl.textContent = metaParts.join(" - ");
+          openButton.disabled = !currentUrl;
+        } catch (err) {
+          currentUrl = "";
+          urlEl.textContent = "Error loading a URL.";
+          metaEl.textContent = "Please try again.";
+        } finally {
+          getButton.disabled = false;
+        }
+      }
+
+      getButton.addEventListener("click", loadRandom);
+      openButton.addEventListener("click", () => {
+        if (!currentUrl) return;
+        window.open(currentUrl, "_blank", "noopener,noreferrer");
+      });
+    </script>
+  </body>
+</html>
