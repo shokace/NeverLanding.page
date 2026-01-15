@@ -2,6 +2,7 @@ const LIST_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 const LIST_META_URL = "https://tranco-list.eu/api/lists/date/latest";
 
 let cachedList = null;
+let urlQueue = [];
 
 function jsonResponse(body, init = {}) {
   const headers = new Headers(init.headers || {});
@@ -79,8 +80,75 @@ function pickRandomUrl(domains) {
   return `https://${domain}`;
 }
 
+async function fetchWithTimeout(url, init, timeoutMs) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function allowsEmbedding(headers) {
+  const xfo = (headers.get("x-frame-options") || "").toLowerCase();
+  if (xfo.includes("deny") || xfo.includes("sameorigin") || xfo.includes("allow-from")) {
+    return false;
+  }
+
+  const csp = (headers.get("content-security-policy") || "").toLowerCase();
+  if (csp.includes("frame-ancestors")) {
+    if (csp.includes("frame-ancestors 'none'")) return false;
+    if (!csp.includes("frame-ancestors *")) return false;
+  }
+
+  return true;
+}
+
+async function isUrlReachable(url) {
+  try {
+    const head = await fetchWithTimeout(
+      url,
+      { method: "HEAD", redirect: "follow" },
+      4000
+    );
+    if (head.ok && allowsEmbedding(head.headers)) return true;
+  } catch {}
+
+  try {
+    const get = await fetchWithTimeout(
+      url,
+      {
+        method: "GET",
+        redirect: "follow",
+        headers: { Range: "bytes=0-0" },
+      },
+      5000
+    );
+    return get.ok && allowsEmbedding(get.headers);
+  } catch {
+    return false;
+  }
+}
+
+async function fillQueue(env, minSize = 1, maxAttempts = 12) {
+  if (urlQueue.length >= minSize) return;
+  const { listUrl, listId } = await resolveListUrl(env);
+  const list = await loadDomainList(listUrl);
+  let attempts = 0;
+
+  while (urlQueue.length < minSize && attempts < maxAttempts) {
+    attempts += 1;
+    const candidate = pickRandomUrl(list.domains);
+    const ok = await isUrlReachable(candidate);
+    if (ok) {
+      urlQueue.push({ url: candidate, listId });
+    }
+  }
+}
+
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const { method, url } = request;
     const { pathname } = new URL(url);
 
@@ -93,12 +161,15 @@ export default {
     }
 
     try {
-      const { listUrl, listId } = await resolveListUrl(env);
-      const list = await loadDomainList(listUrl);
-      const randomUrl = pickRandomUrl(list.domains);
+      await fillQueue(env, 1);
+      const queued = urlQueue.shift();
+      if (ctx) ctx.waitUntil(fillQueue(env, 2));
+      if (!queued) {
+        return jsonResponse({ error: "No URL found" }, { status: 502 });
+      }
       const body = {
-        url: randomUrl,
-        crawl: `tranco-${listId}`,
+        url: queued.url,
+        crawl: `tranco-${queued.listId}`,
         source: "Tranco Top 1M",
         at: new Date().toISOString(),
       };
