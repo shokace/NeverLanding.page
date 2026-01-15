@@ -1,10 +1,7 @@
-const CACHE_TTL_MS = 6 * 60 * 60 * 1000;
-const CRAWL_INFO_URL = "https://index.commoncrawl.org/collinfo.json";
-const CHARSET = "abcdefghijklmnopqrstuvwxyz0123456789";
-// CDX supports prefix matching on SURT-formatted hostnames (e.g., com,aa).
-const SURT_TLDS = ["com"];
+const LIST_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+const LIST_META_URL = "https://tranco-list.eu/api/lists/date/latest";
 
-let cachedCrawl = null;
+let cachedList = null;
 
 function jsonResponse(body, init = {}) {
   const headers = new Headers(init.headers || {});
@@ -18,87 +15,71 @@ function jsonResponse(body, init = {}) {
   });
 }
 
-function randomPrefix() {
-  const len = 2 + Math.floor(Math.random() * 2);
-  let out = "";
-  for (let i = 0; i < len; i += 1) {
-    out += CHARSET[Math.floor(Math.random() * CHARSET.length)];
+async function resolveListUrl(env) {
+  if (env && env.TRANCO_URL) {
+    return { listUrl: env.TRANCO_URL, listId: "custom" };
   }
-  return out;
+
+  const res = await fetch(LIST_META_URL, { cf: { cacheTtl: 6 * 60 * 60 } });
+  if (!res.ok) {
+    throw new Error("Failed to fetch Tranco list metadata");
+  }
+  const data = await res.json();
+  if (!data || !data.download) {
+    throw new Error("Tranco metadata missing download URL");
+  }
+  return { listUrl: data.download, listId: data.list_id || "latest" };
 }
 
-async function getLatestCrawl() {
+async function loadDomainList(listUrl) {
   const now = Date.now();
-  if (cachedCrawl && now - cachedCrawl.fetchedAt < CACHE_TTL_MS) {
-    return cachedCrawl;
+  if (cachedList && now - cachedList.fetchedAt < LIST_TTL_MS) {
+    return cachedList;
   }
 
-  const res = await fetch(CRAWL_INFO_URL, { cf: { cacheTtl: 3600 } });
+  const res = await fetch(listUrl, {
+    cf: { cacheTtl: 24 * 60 * 60 },
+    headers: {
+      "user-agent": "random-website-worker/1.0",
+      accept: "text/csv",
+    },
+  });
   if (!res.ok) {
-    throw new Error("Failed to fetch crawl info");
-  }
-  const info = await res.json();
-  if (!Array.isArray(info) || info.length === 0) {
-    throw new Error("Crawl info empty");
+    throw new Error("Failed to fetch Tranco list");
   }
 
-  const latest = info.reduce((best, item) => {
-    if (!best) return item;
-    return String(item.id) > String(best.id) ? item : best;
-  }, null);
+  const text = await res.text();
+  const lines = text.split("\n");
+  const domains = [];
 
-  if (!latest || !latest.id || !latest["cdx-api"]) {
-    throw new Error("Crawl info malformed");
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    const parts = trimmed.split(",");
+    if (parts.length < 2) continue;
+    const domain = parts[1].trim();
+    if (domain) domains.push(domain);
   }
 
-  cachedCrawl = {
-    id: latest.id,
-    api: latest["cdx-api"],
+  if (domains.length === 0) {
+    throw new Error("Tranco list empty");
+  }
+
+  cachedList = {
+    domains,
     fetchedAt: now,
   };
 
-  return cachedCrawl;
+  return cachedList;
 }
 
-async function fetchRandomUrl(crawl) {
-  const attempts = 6;
-  for (let i = 0; i < attempts; i += 1) {
-    const prefix = randomPrefix();
-    const tld = SURT_TLDS[Math.floor(Math.random() * SURT_TLDS.length)];
-    const surtPrefix = `${tld},${prefix}`;
-    const query = encodeURIComponent(surtPrefix);
-    const url = `${crawl.api}?url=${query}&matchType=prefix&output=json&limit=50&filter=status:200&filter=mime:text/html`;
-    const res = await fetch(url, { cf: { cacheTtl: 60 } });
-    if (!res.ok) {
-      continue;
-    }
-    const text = await res.text();
-    const lines = text.split("\n").map((line) => line.trim()).filter(Boolean);
-    if (lines.length === 0) {
-      continue;
-    }
-    const records = [];
-    for (const line of lines) {
-      try {
-        const obj = JSON.parse(line);
-        if (obj && obj.url) records.push(obj);
-      } catch {
-        // ignore parse errors
-      }
-    }
-    if (records.length === 0) {
-      continue;
-    }
-    const pick = records[Math.floor(Math.random() * records.length)];
-    if (pick && pick.url) {
-      return pick.url;
-    }
-  }
-  return null;
+function pickRandomUrl(domains) {
+  const domain = domains[Math.floor(Math.random() * domains.length)];
+  return `https://${domain}`;
 }
 
 export default {
-  async fetch(request) {
+  async fetch(request, env) {
     const { method, url } = request;
     const { pathname } = new URL(url);
 
@@ -111,15 +92,13 @@ export default {
     }
 
     try {
-      const crawl = await getLatestCrawl();
-      const randomUrl = await fetchRandomUrl(crawl);
-      if (!randomUrl) {
-        return jsonResponse({ error: "No URL found" }, { status: 502 });
-      }
+      const { listUrl, listId } = await resolveListUrl(env);
+      const list = await loadDomainList(listUrl);
+      const randomUrl = pickRandomUrl(list.domains);
       const body = {
         url: randomUrl,
-        crawl: crawl.id,
-        source: "Common Crawl CDX",
+        crawl: `tranco-${listId}`,
+        source: "Tranco Top 1M",
         at: new Date().toISOString(),
       };
       return jsonResponse(body, {
