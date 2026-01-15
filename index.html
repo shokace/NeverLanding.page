@@ -6,12 +6,14 @@
     <title>NeverLanding</title>
     <style>
       :root {
-        --bg: #f6f1e4;
-        --ink: #1b1b1b;
-        --muted: #6b6256;
-        --accent: #c84b31;
-        --accent-dark: #a03a25;
-        --panel: #fff7ea;
+        --win-bg: #008080;
+        --win-surface: #c0c0c0;
+        --win-light: #ffffff;
+        --win-shadow: #808080;
+        --win-dark: #404040;
+        --win-blue: #000080;
+        --win-blue-light: #1084d0;
+        --win-text: #000000;
       }
 
       * {
@@ -25,62 +27,191 @@
 
       body {
         margin: 0;
-        font-family: "Georgia", "Times New Roman", serif;
-        background: radial-gradient(circle at 20% 20%, #fff, var(--bg));
-        color: var(--ink);
+        font-family: "MS Sans Serif", "Tahoma", "Geneva", sans-serif;
+        background: var(--win-bg);
+        color: var(--win-text);
         overflow: hidden;
       }
 
-      .wrap {
-        max-width: 100%;
-        margin: 0 auto;
-        height: 100vh;
-        padding: 48px 24px 120px;
+      .desktop {
+        height: 100%;
+        padding: 18px 22px 22px;
+      }
+
+      .window {
+        height: 100%;
+        background: var(--win-surface);
+        border: 2px solid #000;
+        box-shadow:
+          inset 1px 1px 0 var(--win-light),
+          inset -1px -1px 0 var(--win-shadow);
         display: flex;
         flex-direction: column;
-        box-sizing: border-box;
       }
 
-      h1 {
-        font-size: clamp(2rem, 4vw, 3rem);
-        margin: 0 0 12px;
-        letter-spacing: -0.02em;
+      .titlebar {
+        background: linear-gradient(90deg, var(--win-blue), var(--win-blue-light));
+        color: #fff;
+        padding: 5px 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-weight: bold;
+        font-size: 0.9rem;
       }
 
-      p {
-        margin: 0 0 24px;
-        color: var(--muted);
-        font-size: 1.05rem;
-        line-height: 1.5;
+      .titlebar-left {
+        display: flex;
+        align-items: center;
+        gap: 6px;
       }
 
-      .card {
-        background: var(--panel);
-        border: 2px solid var(--ink);
-        padding: 16px;
-        box-shadow: 6px 6px 0 var(--ink);
+      .ie-icon {
+        width: 14px;
+        height: 14px;
+        border: 1px solid #fff;
+        background: #4a90e2;
+        box-shadow: inset -1px -1px 0 rgba(0, 0, 0, 0.4);
       }
 
-      .url {
-        font-size: 1rem;
-        word-break: break-word;
-        min-height: 1.6rem;
+      .titlebar-controls {
+        display: flex;
+        gap: 4px;
       }
 
-      .meta {
-        margin-top: 8px;
+      .control {
+        width: 18px;
+        height: 16px;
+        background: var(--win-surface);
+        border: 2px solid #000;
+        box-shadow:
+          inset 1px 1px 0 var(--win-light),
+          inset -1px -1px 0 var(--win-shadow);
+      }
+
+      .menubar {
+        display: flex;
+        gap: 18px;
+        padding: 4px 8px 3px;
         font-size: 0.85rem;
-        color: var(--muted);
+        background: var(--win-surface);
+        border-bottom: 1px solid var(--win-shadow);
+      }
+
+      .toolbar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 8px;
+        background: var(--win-surface);
+        border-bottom: 1px solid var(--win-shadow);
+        flex-wrap: wrap;
+      }
+
+      .tool-button {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 8px;
+        border: 2px solid #000;
+        background: var(--win-surface);
+        box-shadow:
+          inset 1px 1px 0 var(--win-light),
+          inset -1px -1px 0 var(--win-shadow);
+        font-size: 0.8rem;
+        cursor: pointer;
+      }
+
+      .tool-icon {
+        width: 14px;
+        height: 14px;
+        background: #5a5a5a;
+        border: 1px solid #000;
+      }
+
+      .address-bar {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 6px;
+        padding: 6px 8px;
+        background: var(--win-surface);
+        border-bottom: 2px solid #000;
+      }
+
+      .address-label {
+        font-size: 0.85rem;
+        align-self: center;
+      }
+
+      .address-field {
+        background: #fff;
+        border: 2px solid #000;
+        padding: 4px 6px;
+        box-shadow:
+          inset 1px 1px 0 var(--win-light),
+          inset -1px -1px 0 var(--win-shadow);
+        font-size: 0.85rem;
+        min-height: 26px;
+        display: flex;
+        align-items: center;
+      }
+
+      .address-field a {
+        color: var(--win-blue);
+        word-break: break-word;
+        text-decoration: none;
+      }
+
+      .go-button {
+        padding: 4px 10px;
+        border: 2px solid #000;
+        background: var(--win-surface);
+        box-shadow:
+          inset 1px 1px 0 var(--win-light),
+          inset -1px -1px 0 var(--win-shadow);
+        font-size: 0.85rem;
+        cursor: pointer;
+      }
+
+      .content {
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex: 1;
+        min-height: 0;
+      }
+
+      .intro {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .intro-text {
+        display: grid;
+        gap: 6px;
+      }
+
+      .intro-text h1 {
+        margin: 0;
+        font-size: 1.2rem;
+      }
+
+      .intro-text p {
+        margin: 0;
+        font-size: 0.9rem;
       }
 
       .viewer {
-        margin-top: 20px;
-        border: 2px solid var(--ink);
-        box-shadow: 6px 6px 0 var(--ink);
+        border: 2px solid #000;
+        box-shadow:
+          inset 1px 1px 0 var(--win-light),
+          inset -1px -1px 0 var(--win-shadow);
         background: #fff;
         flex: 1;
         min-height: 0;
-        width: 100%;
       }
 
       .viewer iframe {
@@ -92,86 +223,109 @@
       }
 
       .embed-note {
-        margin-top: 10px;
-        font-size: 0.9rem;
-        color: var(--muted);
+        font-size: 0.85rem;
       }
 
-      .embed-note a {
-        color: var(--accent-dark);
-        text-decoration: underline;
+      .statusbar {
+        border-top: 2px solid #000;
+        padding: 6px 8px;
+        background: var(--win-surface);
+        box-shadow:
+          inset 1px 1px 0 var(--win-light),
+          inset -1px -1px 0 var(--win-shadow);
+        font-size: 0.85rem;
       }
 
-      .bar {
-        position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: #fff;
-        border-top: 2px solid var(--ink);
-        padding: 14px 20px;
-      }
+      @media (max-width: 720px) {
+        .desktop {
+          padding: 10px;
+        }
 
-      .bar-inner {
-        max-width: 100%;
-        margin: 0 auto;
-        display: flex;
-      }
+        .toolbar {
+          gap: 6px;
+        }
 
-      button {
-        width: 100%;
-        padding: 12px 16px;
-        font-size: 1rem;
-        border: 2px solid var(--ink);
-        background: var(--accent);
-        color: #fff;
-        cursor: pointer;
-        transition: transform 0.08s ease, background 0.2s ease;
-      }
+        .intro {
+          flex-direction: column;
+        }
 
-      button:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
+        .address-bar {
+          grid-template-columns: 1fr;
+        }
 
-      button:not(:disabled):active {
-        transform: translateY(1px);
-      }
-
-      button:not(:disabled):hover {
-        background: var(--accent-dark);
-      }
-
-      @media (max-width: 560px) {
-        .wrap {
-          padding: 36px 16px 120px;
+        .address-label,
+        .go-button {
+          display: none;
         }
       }
     </style>
   </head>
   <body>
-    <div class="wrap">
-      <h1>Never Landing Page</h1>
-      <p>Pull a real, randomly sampled page from the bowels of the internet.</p>
-      <div class="card">
-          <a id="url" class="url" href="#" target="_blank" rel="noopener noreferrer">No URL yet.</a>
-        <div id="meta" class="meta">Waiting for your first click.</div>
-      </div>
-      <div class="viewer">
-        <iframe
-          id="viewer"
-          title="Random website preview"
-          sandbox="allow-forms allow-scripts allow-same-origin allow-popups"
-        ></iframe>
-      </div>
-      <div id="embed-note" class="embed-note">
-        Some sites block embeds. Open the link above if the frame is blank.
-      </div>
-    </div>
-
-    <div class="bar">
-      <div class="bar-inner">
-        <button id="get">Get random website</button>
+    <div class="desktop">
+      <div class="window">
+        <div class="titlebar">
+          <div class="titlebar-left">
+            <div class="ie-icon" aria-hidden="true"></div>
+            <div>NeverLanding Page</div>
+          </div>
+          <div class="titlebar-controls">
+            <div class="control" aria-hidden="true"></div>
+            <div class="control" aria-hidden="true"></div>
+            <div class="control" aria-hidden="true"></div>
+          </div>
+        </div>
+        <div class="menubar">
+          <span>File</span>
+          <span>Edit</span>
+          <span>View</span>
+          <span>Go</span>
+          <span>Favorites</span>
+          <span>Help</span>
+        </div>
+        <div class="toolbar">
+          <button class="tool-button" type="button">
+            <span class="tool-icon" aria-hidden="true"></span>
+            Back
+          </button>
+          <button class="tool-button" type="button">
+            <span class="tool-icon" aria-hidden="true"></span>
+            Forward
+          </button>
+          <button class="tool-button" type="button">
+            <span class="tool-icon" aria-hidden="true"></span>
+            Stop
+          </button>
+          <button class="tool-button" type="button">
+            <span class="tool-icon" aria-hidden="true"></span>
+            Refresh
+          </button>
+          <button class="tool-button" type="button">
+            <span class="tool-icon" aria-hidden="true"></span>
+            Home
+          </button>
+        </div>
+        <div class="address-bar">
+          <div class="address-label">Address</div>
+          <div class="address-field">
+            <a id="url" href="#" target="_blank" rel="noopener noreferrer">No URL yet.</a>
+          </div>
+          <button id="get" class="go-button" type="button">Go</button>
+        </div>
+        <div class="content">
+          <div class="viewer">
+            <iframe
+              id="viewer"
+              title="Random website preview"
+              sandbox="allow-forms allow-scripts allow-same-origin allow-popups"
+            ></iframe>
+          </div>
+          <div id="embed-note" class="embed-note">
+            Some sites block embeds. Open the link above if the frame is blank.
+          </div>
+        </div>
+        <div class="statusbar">
+          <span id="meta">Waiting for your first click.</span>
+        </div>
       </div>
     </div>
 
