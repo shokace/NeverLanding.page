@@ -416,7 +416,7 @@
 
         try {
           fetchController = new AbortController();
-          const res = await fetch("http://localhost:8787/api/random", {
+          const res = await fetch("/api/random", {
             method: "GET",
             signal: fetchController.signal,
           });
