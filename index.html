@@ -18,18 +18,27 @@
         box-sizing: border-box;
       }
 
+      html,
+      body {
+        height: 100%;
+      }
+
       body {
         margin: 0;
         font-family: "Georgia", "Times New Roman", serif;
         background: radial-gradient(circle at 20% 20%, #fff, var(--bg));
         color: var(--ink);
-        min-height: 100vh;
-        padding: 48px 20px 120px;
+        overflow: hidden;
       }
 
       .wrap {
         max-width: 1100px;
         margin: 0 auto;
+        height: 100vh;
+        padding: 48px 20px 120px;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
       }
 
       h1 {
@@ -69,8 +78,8 @@
         border: 2px solid var(--ink);
         box-shadow: 6px 6px 0 var(--ink);
         background: #fff;
-        height: calc(100vh - 360px);
-        min-height: 320px;
+        flex: 1;
+        min-height: 0;
         width: 100%;
       }
 
@@ -80,6 +89,17 @@
         border: 0;
         display: block;
         background: #fff;
+      }
+
+      .embed-note {
+        margin-top: 10px;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      .embed-note a {
+        color: var(--accent-dark);
+        text-decoration: underline;
       }
 
       .bar {
@@ -123,12 +143,8 @@
       }
 
       @media (max-width: 560px) {
-        body {
+        .wrap {
           padding: 36px 16px 120px;
-        }
-
-        .viewer {
-          height: calc(100vh - 360px);
         }
       }
     </style>
@@ -148,6 +164,9 @@
           sandbox="allow-forms allow-scripts allow-same-origin allow-popups"
         ></iframe>
       </div>
+      <div id="embed-note" class="embed-note">
+        Some sites block embeds. Open the link above if the frame is blank.
+      </div>
     </div>
 
     <div class="bar">
@@ -161,6 +180,7 @@
       const urlEl = document.getElementById("url");
       const metaEl = document.getElementById("meta");
       const viewerEl = document.getElementById("viewer");
+      const embedNoteEl = document.getElementById("embed-note");
       let currentUrl = "";
 
       async function loadRandom() {
@@ -169,6 +189,8 @@
         urlEl.href = "#";
         metaEl.textContent = "";
         viewerEl.src = "about:blank";
+        embedNoteEl.textContent =
+          "Some sites block embeds. Open the link above if the frame is blank.";
 
         try {
           const res = await fetch("http://localhost:8787/api/random", { method: "GET" });
@@ -190,7 +212,9 @@
           currentUrl = "";
           urlEl.textContent = "Error loading a URL.";
           urlEl.href = "#";
-          metaEl.textContent = "Please try again. Some sites block embeds.";
+          metaEl.textContent = "Please try again.";
+          embedNoteEl.textContent =
+            "Unable to load a site. Try again or open the link above.";
         } finally {
           getButton.disabled = false;
         }
