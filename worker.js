@@ -44,6 +44,7 @@ async function loadDomainList(listUrl) {
       accept: "text/csv",
     },
   });
+  
   if (!res.ok) {
     throw new Error("Failed to fetch Tranco list");
   }
