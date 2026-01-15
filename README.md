@@ -1,4 +1,4 @@
-# Random Website (Common Crawl)
+# [NeverLanding.page](https://neverlanding.page)
 
 Super lightweight static frontend + Cloudflare Worker API that returns a random website URL from the Tranco Top 1M list.
 
