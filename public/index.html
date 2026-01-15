@@ -234,6 +234,20 @@
           inset 1px 1px 0 var(--win-light),
           inset -1px -1px 0 var(--win-shadow);
         font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .statusbar .status-left {
+        min-width: 0;
+      }
+
+      .statusbar .status-link {
+        color: var(--win-blue);
+        text-decoration: underline;
+        white-space: nowrap;
       }
 
       @media (max-width: 720px) {
@@ -329,7 +343,14 @@
           </div>
         </div>
         <div class="statusbar">
-          <span id="meta">Waiting for your first click.</span>
+          <span id="meta" class="status-left">Waiting for your first click.</span>
+          <a
+            class="status-link"
+            href="https://github.com/shokace"
+            target="_blank"
+            rel="noopener noreferrer"
+            >GitHub</a
+          >
         </div>
       </div>
     </div>
