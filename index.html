@@ -283,23 +283,23 @@
           <span>Help</span>
         </div>
         <div class="toolbar">
-          <button class="tool-button" type="button">
+          <button class="tool-button" type="button" id="back">
             <span class="tool-icon" aria-hidden="true"></span>
             Back
           </button>
-          <button class="tool-button" type="button">
+          <button class="tool-button" type="button" id="forward">
             <span class="tool-icon" aria-hidden="true"></span>
             Forward
           </button>
-          <button class="tool-button" type="button">
+          <button class="tool-button" type="button" id="stop">
             <span class="tool-icon" aria-hidden="true"></span>
             Stop
           </button>
-          <button class="tool-button" type="button">
+          <button class="tool-button" type="button" id="refresh">
             <span class="tool-icon" aria-hidden="true"></span>
             Refresh
           </button>
-          <button class="tool-button" type="button">
+          <button class="tool-button" type="button" id="reset">
             <span class="tool-icon" aria-hidden="true"></span>
             Home
           </button>
@@ -331,11 +331,79 @@
 
     <script>
       const getButton = document.getElementById("get");
+      const backButton = document.getElementById("back");
+      const forwardButton = document.getElementById("forward");
+      const stopButton = document.getElementById("stop");
+      const refreshButton = document.getElementById("refresh");
+      const resetButton = document.getElementById("reset");
       const urlEl = document.getElementById("url");
       const metaEl = document.getElementById("meta");
       const viewerEl = document.getElementById("viewer");
       const embedNoteEl = document.getElementById("embed-note");
       let currentUrl = "";
+      let fetchController = null;
+      let history = [];
+      let historyIndex = -1;
+      const HISTORY_KEY = "neverlanding-history";
+      const HISTORY_LIMIT = 50;
+
+      function loadHistory() {
+        try {
+          const raw = sessionStorage.getItem(HISTORY_KEY);
+          if (!raw) return;
+          const data = JSON.parse(raw);
+          if (Array.isArray(data.items)) {
+            history = data.items;
+            historyIndex = Number.isInteger(data.index) ? data.index : history.length - 1;
+          }
+        } catch {}
+      }
+
+      function saveHistory() {
+        try {
+          sessionStorage.setItem(
+            HISTORY_KEY,
+            JSON.stringify({ items: history, index: historyIndex })
+          );
+        } catch {}
+      }
+
+      function updateBackButton() {
+        backButton.disabled = historyIndex <= 0;
+      }
+
+      function updateForwardButton() {
+        forwardButton.disabled = historyIndex >= history.length - 1;
+      }
+
+      function applyEntry(entry) {
+        currentUrl = entry.url || "";
+        urlEl.textContent = currentUrl || "No URL returned.";
+        urlEl.href = currentUrl || "#";
+        const metaParts = [];
+        if (entry.crawl) metaParts.push(entry.crawl);
+        if (entry.at) metaParts.push(entry.at);
+        metaEl.textContent = metaParts.join(" - ");
+        viewerEl.src = currentUrl || "about:blank";
+        embedNoteEl.textContent =
+          "Some sites block embeds. Open the link above if the frame is blank.";
+      }
+
+      function pushHistory(entry) {
+        history = history.slice(0, historyIndex + 1);
+        history.push(entry);
+        if (history.length > HISTORY_LIMIT) {
+          history.shift();
+        } else {
+          historyIndex += 1;
+        }
+        if (history.length >= HISTORY_LIMIT) {
+          historyIndex = history.length - 1;
+        }
+        saveHistory();
+        updateBackButton();
+        updateForwardButton();
+      }
 
       async function loadRandom() {
         getButton.disabled = true;
@@ -347,21 +415,22 @@
           "Some sites block embeds. Open the link above if the frame is blank.";
 
         try {
-          const res = await fetch("http://localhost:8787/api/random", { method: "GET" });
+          fetchController = new AbortController();
+          const res = await fetch("http://localhost:8787/api/random", {
+            method: "GET",
+            signal: fetchController.signal,
+          });
           if (!res.ok) {
             throw new Error("Request failed");
           }
           const data = await res.json();
-          currentUrl = data.url || "";
-          urlEl.textContent = currentUrl || "No URL returned.";
-          urlEl.href = currentUrl || "#";
-          const metaParts = [];
-          if (data.crawl) metaParts.push(data.crawl);
-          if (data.at) metaParts.push(data.at);
-          metaEl.textContent = metaParts.join(" - ");
-          if (currentUrl) {
-            viewerEl.src = currentUrl;
-          }
+          const entry = {
+            url: data.url || "",
+            crawl: data.crawl || "",
+            at: data.at || "",
+          };
+          applyEntry(entry);
+          if (entry.url) pushHistory(entry);
         } catch (err) {
           currentUrl = "";
           urlEl.textContent = "Error loading a URL.";
@@ -371,10 +440,77 @@
             "Unable to load a site. Try again or open the link above.";
         } finally {
           getButton.disabled = false;
+          fetchController = null;
         }
       }
 
       getButton.addEventListener("click", loadRandom);
+      backButton.addEventListener("click", () => {
+        if (historyIndex <= 0) return;
+        historyIndex -= 1;
+        const entry = history[historyIndex];
+        applyEntry(entry);
+        saveHistory();
+        updateBackButton();
+        updateForwardButton();
+      });
+
+      forwardButton.addEventListener("click", () => {
+        if (historyIndex >= history.length - 1) return;
+        historyIndex += 1;
+        const entry = history[historyIndex];
+        applyEntry(entry);
+        saveHistory();
+        updateBackButton();
+        updateForwardButton();
+      });
+
+      stopButton.addEventListener("click", () => {
+        if (fetchController) {
+          fetchController.abort();
+          fetchController = null;
+        }
+        try {
+          if (viewerEl.contentWindow) {
+            viewerEl.contentWindow.stop();
+          }
+        } catch {}
+        embedNoteEl.textContent = "Loading stopped.";
+      });
+
+      refreshButton.addEventListener("click", () => {
+        if (!currentUrl) return;
+        viewerEl.src = "about:blank";
+        setTimeout(() => {
+          viewerEl.src = currentUrl;
+        }, 60);
+        embedNoteEl.textContent =
+          "Some sites block embeds. Open the link above if the frame is blank.";
+      });
+
+      loadHistory();
+      if (historyIndex >= 0 && history[historyIndex]) {
+        applyEntry(history[historyIndex]);
+      }
+      updateBackButton();
+      updateForwardButton();
+
+      resetButton.addEventListener("click", () => {
+        history = [];
+        historyIndex = -1;
+        currentUrl = "";
+        urlEl.textContent = "No URL yet.";
+        urlEl.href = "#";
+        metaEl.textContent = "Waiting for your first click.";
+        viewerEl.src = "about:blank";
+        embedNoteEl.textContent =
+          "Some sites block embeds. Open the link above if the frame is blank.";
+        try {
+          sessionStorage.removeItem(HISTORY_KEY);
+        } catch {}
+        updateBackButton();
+        updateForwardButton();
+      });
     </script>
   </body>
 </html>
