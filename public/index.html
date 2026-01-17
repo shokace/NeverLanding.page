@@ -212,6 +212,8 @@
         background: #fff;
         flex: 1;
         min-height: 0;
+        position: relative;
+        overflow: hidden;
       }
 
       .viewer iframe {
@@ -220,6 +222,46 @@
         border: 0;
         display: block;
         background: #fff;
+      }
+
+      .loading-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+        z-index: 2;
+      }
+
+      .loading-overlay img {
+        width: min(240px, 60%);
+        height: auto;
+        image-rendering: pixelated;
+      }
+
+      .loading-overlay.is-hidden {
+        display: none;
+      }
+
+      .throbber-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+        z-index: 3;
+      }
+
+      .throbber-overlay img {
+        width: 64px;
+        height: 64px;
+        image-rendering: pixelated;
+      }
+
+      .throbber-overlay.is-hidden {
+        display: none;
       }
 
       .embed-note {
@@ -332,6 +374,12 @@
         </div>
         <div class="content">
           <div class="viewer">
+            <div id="loading" class="loading-overlay" aria-hidden="true">
+              <img src="/go_clippy.png" alt="" />
+            </div>
+            <div id="throbber" class="throbber-overlay is-hidden" aria-hidden="true">
+              <img src="/hourglass_throbber.gif" alt="" />
+            </div>
             <iframe
               id="viewer"
               title="Random website preview"
@@ -339,7 +387,7 @@
             ></iframe>
           </div>
           <div id="embed-note" class="embed-note">
-            Some sites block embeds. Open the link above if the frame is blank.
+            Some sites block embeds. Press link if frame is blank.
           </div>
         </div>
         <div class="statusbar">
@@ -366,10 +414,13 @@
       const metaEl = document.getElementById("meta");
       const viewerEl = document.getElementById("viewer");
       const embedNoteEl = document.getElementById("embed-note");
+      const loadingEl = document.getElementById("loading");
+      const throbberEl = document.getElementById("throbber");
       let currentUrl = "";
       let fetchController = null;
       let history = [];
       let historyIndex = -1;
+      let hasStarted = false;
       const HISTORY_KEY = "neverlanding-history";
       const HISTORY_LIMIT = 50;
 
@@ -380,7 +431,7 @@
           const data = JSON.parse(raw);
           if (Array.isArray(data.items)) {
             history = data.items;
-            historyIndex = Number.isInteger(data.index) ? data.index : history.length - 1;
+            historyIndex = -1;
           }
         } catch {}
       }
@@ -413,6 +464,9 @@
         viewerEl.src = currentUrl || "about:blank";
         embedNoteEl.textContent =
           "Some sites block embeds. Open the link above if the frame is blank.";
+        if (!currentUrl && !hasStarted) {
+          loadingEl.classList.remove("is-hidden");
+        }
       }
 
       function pushHistory(entry) {
@@ -437,6 +491,8 @@
         urlEl.href = "#";
         metaEl.textContent = "";
         viewerEl.src = "about:blank";
+        loadingEl.classList.add("is-hidden");
+        throbberEl.classList.remove("is-hidden");
         embedNoteEl.textContent =
           "Some sites block embeds. Open the link above if the frame is blank.";
 
@@ -462,6 +518,8 @@
           urlEl.textContent = "Error loading a URL.";
           urlEl.href = "#";
           metaEl.textContent = "Please try again.";
+          throbberEl.classList.add("is-hidden");
+          if (!hasStarted) loadingEl.classList.remove("is-hidden");
           embedNoteEl.textContent =
             "Unable to load a site. Try again or open the link above.";
         } finally {
@@ -515,9 +573,6 @@
       });
 
       loadHistory();
-      if (historyIndex >= 0 && history[historyIndex]) {
-        applyEntry(history[historyIndex]);
-      }
       updateBackButton();
       updateForwardButton();
 
@@ -525,10 +580,13 @@
         history = [];
         historyIndex = -1;
         currentUrl = "";
+        hasStarted = false;
         urlEl.textContent = "No URL yet.";
         urlEl.href = "#";
         metaEl.textContent = "Waiting for your first click.";
         viewerEl.src = "about:blank";
+        loadingEl.classList.remove("is-hidden");
+        throbberEl.classList.add("is-hidden");
         embedNoteEl.textContent =
           "Some sites block embeds. Open the link above if the frame is blank.";
         try {
@@ -536,6 +594,15 @@
         } catch {}
         updateBackButton();
         updateForwardButton();
+      });
+
+      viewerEl.addEventListener("load", () => {
+        if (!currentUrl) return;
+        throbberEl.classList.add("is-hidden");
+        if (!hasStarted) {
+          loadingEl.classList.add("is-hidden");
+          hasStarted = true;
+        }
       });
     </script>
   </body>
