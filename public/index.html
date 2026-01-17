@@ -339,7 +339,6 @@
           <span>File</span>
           <span>Edit</span>
           <span>View</span>
-          <span>Go</span>
           <span>Favorites</span>
           <span>Help</span>
         </div>
@@ -462,8 +461,6 @@
         if (entry.at) metaParts.push(entry.at);
         metaEl.textContent = metaParts.join(" - ");
         viewerEl.src = currentUrl || "about:blank";
-        embedNoteEl.textContent =
-          "Some sites block embeds. Open the link above if the frame is blank.";
         if (!currentUrl && !hasStarted) {
           loadingEl.classList.remove("is-hidden");
         }
@@ -493,8 +490,6 @@
         viewerEl.src = "about:blank";
         loadingEl.classList.add("is-hidden");
         throbberEl.classList.remove("is-hidden");
-        embedNoteEl.textContent =
-          "Some sites block embeds. Open the link above if the frame is blank.";
 
         try {
           fetchController = new AbortController();
@@ -520,8 +515,6 @@
           metaEl.textContent = "Please try again.";
           throbberEl.classList.add("is-hidden");
           if (!hasStarted) loadingEl.classList.remove("is-hidden");
-          embedNoteEl.textContent =
-            "Unable to load a site. Try again or open the link above.";
         } finally {
           getButton.disabled = false;
           fetchController = null;
@@ -568,8 +561,6 @@
         setTimeout(() => {
           viewerEl.src = currentUrl;
         }, 60);
-        embedNoteEl.textContent =
-          "Some sites block embeds. Open the link above if the frame is blank.";
       });
 
       loadHistory();
@@ -587,8 +578,6 @@
         viewerEl.src = "about:blank";
         loadingEl.classList.remove("is-hidden");
         throbberEl.classList.add("is-hidden");
-        embedNoteEl.textContent =
-          "Some sites block embeds. Open the link above if the frame is blank.";
         try {
           sessionStorage.removeItem(HISTORY_KEY);
         } catch {}
