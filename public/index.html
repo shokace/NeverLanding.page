@@ -359,10 +359,6 @@
             <span class="tool-icon" aria-hidden="true"></span>
             Refresh
           </button>
-          <button class="tool-button" type="button" id="reset">
-            <span class="tool-icon" aria-hidden="true"></span>
-            Home
-          </button>
         </div>
         <div class="address-bar">
           <div class="address-label">Address</div>
@@ -408,7 +404,6 @@
       const forwardButton = document.getElementById("forward");
       const stopButton = document.getElementById("stop");
       const refreshButton = document.getElementById("refresh");
-      const resetButton = document.getElementById("reset");
       const urlEl = document.getElementById("url");
       const metaEl = document.getElementById("meta");
       const viewerEl = document.getElementById("viewer");
@@ -565,24 +560,6 @@
       loadHistory();
       updateBackButton();
       updateForwardButton();
-
-      resetButton.addEventListener("click", () => {
-        history = [];
-        historyIndex = -1;
-        currentUrl = "";
-        hasStarted = false;
-        urlEl.textContent = "No URL yet.";
-        urlEl.href = "#";
-        metaEl.textContent = "Waiting for your first click.";
-        viewerEl.src = "about:blank";
-        loadingEl.classList.remove("is-hidden");
-        throbberEl.classList.add("is-hidden");
-        try {
-          sessionStorage.removeItem(HISTORY_KEY);
-        } catch {}
-        updateBackButton();
-        updateForwardButton();
-      });
 
       viewerEl.addEventListener("load", () => {
         if (!currentUrl) return;
