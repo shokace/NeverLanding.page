@@ -417,6 +417,7 @@
       let hasStarted = false;
       const HISTORY_KEY = "neverlanding-history";
       const HISTORY_LIMIT = 50;
+      const SHARE_PARAM = "url";
 
       function loadHistory() {
         try {
@@ -447,6 +448,39 @@
         forwardButton.disabled = historyIndex >= history.length - 1;
       }
 
+      function getShareUrl(targetUrl) {
+        if (!targetUrl) return "";
+        const url = new URL(window.location.href);
+        url.searchParams.set(SHARE_PARAM, targetUrl);
+        return url.toString();
+      }
+
+      function updateShareParam(targetUrl) {
+        if (!targetUrl) {
+          const url = new URL(window.location.href);
+          url.searchParams.delete(SHARE_PARAM);
+          window.history.replaceState(null, "", url.toString());
+          return;
+        }
+        const shareUrl = getShareUrl(targetUrl);
+        if (shareUrl) {
+          window.history.replaceState(null, "", shareUrl);
+        }
+      }
+
+      function normalizeSharedUrl(raw) {
+        if (!raw) return "";
+        try {
+          const parsed = new URL(raw);
+          if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+            return "";
+          }
+          return parsed.toString();
+        } catch {
+          return "";
+        }
+      }
+
       function applyEntry(entry) {
         currentUrl = entry.url || "";
         urlEl.textContent = currentUrl || "No URL returned.";
@@ -459,6 +493,7 @@
         if (!currentUrl && !hasStarted) {
           loadingEl.classList.remove("is-hidden");
         }
+        updateShareParam(currentUrl);
       }
 
       function pushHistory(entry) {
@@ -560,6 +595,15 @@
       loadHistory();
       updateBackButton();
       updateForwardButton();
+
+      const sharedParam = new URLSearchParams(window.location.search).get(
+        SHARE_PARAM
+      );
+      const sharedUrl = normalizeSharedUrl(sharedParam);
+      if (sharedUrl) {
+        applyEntry({ url: sharedUrl, crawl: "shared link", at: "" });
+        pushHistory({ url: sharedUrl, crawl: "shared link", at: "" });
+      }
 
       viewerEl.addEventListener("load", () => {
         if (!currentUrl) return;
