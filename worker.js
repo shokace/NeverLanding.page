@@ -1,8 +1,11 @@
 const LIST_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 const LIST_META_URL = "https://tranco-list.eu/api/lists/date/latest";
+const DNS_FILTER_TTL_MS = 24 * 60 * 60 * 1000;
+const DNS_FILTER_URL = "https://family.cloudflare-dns.com/dns-query";
 
 let cachedList = null;
 let urlQueue = [];
+let dnsCache = new Map();
 
 function jsonResponse(body, init = {}) {
   const headers = new Headers(init.headers || {});
@@ -131,6 +134,41 @@ async function isUrlReachable(url) {
   }
 }
 
+async function passesDnsFilter(domain, env) {
+  const mode = (env && env.DNS_FILTER) || "family";
+  if (mode === "off") return true;
+
+  const now = Date.now();
+  const cached = dnsCache.get(domain);
+  if (cached && now - cached.at < DNS_FILTER_TTL_MS) {
+    return cached.ok;
+  }
+
+  try {
+    const url = `${DNS_FILTER_URL}?name=${encodeURIComponent(domain)}&type=A`;
+    const res = await fetch(url, {
+      cf: { cacheTtl: 6 * 60 * 60 },
+      headers: { accept: "application/dns-json" },
+    });
+    if (!res.ok) throw new Error("DNS filter fetch failed");
+
+    const data = await res.json();
+    const answers = Array.isArray(data.Answer) ? data.Answer : [];
+    const ok =
+      data.Status === 0 &&
+      answers.some((answer) => {
+        if (answer.type !== 1) return false;
+        const ip = String(answer.data || "").trim();
+        return ip && ip !== "0.0.0.0" && ip !== "127.0.0.1";
+      });
+
+    dnsCache.set(domain, { ok, at: now });
+    return ok;
+  } catch {
+    return true;
+  }
+}
+
 async function fillQueue(env, minSize = 1, maxAttempts = 12) {
   if (urlQueue.length >= minSize) return;
   const { listUrl, listId } = await resolveListUrl(env);
@@ -140,6 +178,9 @@ async function fillQueue(env, minSize = 1, maxAttempts = 12) {
   while (urlQueue.length < minSize && attempts < maxAttempts) {
     attempts += 1;
     const candidate = pickRandomUrl(list.domains);
+    const hostname = new URL(candidate).hostname;
+    const dnsOk = await passesDnsFilter(hostname, env);
+    if (!dnsOk) continue;
     const ok = await isUrlReachable(candidate);
     if (ok) {
       urlQueue.push({ url: candidate, listId });
