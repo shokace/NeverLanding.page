@@ -13,6 +13,14 @@ function buildAchievementTiles(total) {
     const tile = document.createElement("div");
     tile.className = "achievement-tile";
     tile.dataset.index = String(i);
+    const info = achievementData[i];
+    if (info && info.icon) {
+      const img = document.createElement("img");
+      img.src = info.icon;
+      img.alt = "";
+      img.loading = "lazy";
+      tile.appendChild(img);
+    }
     tiles.appendChild(tile);
   }
   achievementsGrid.appendChild(tiles);

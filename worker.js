@@ -318,6 +318,15 @@ async function getUserFromSession(env, token) {
   return result || null;
 }
 
+async function requireUser(env, request) {
+  const token = readCookie(request, "nl_session");
+  const user = await getUserFromSession(env, token);
+  if (!user) {
+    return { error: jsonResponse({ error: "Unauthorized" }, { status: 401 }) };
+  }
+  return { user };
+}
+
 export default {
   async fetch(request, env, ctx) {
     const { method, url } = request;
@@ -551,6 +560,58 @@ export default {
       }
 
       return jsonResponse({ error: "Not found" }, { status: 404 });
+    }
+
+    if (pathname === "/api/visits" && method === "POST") {
+      if (!env || !env.DB) {
+        return jsonResponse({ error: "Database not configured" }, { status: 500 });
+      }
+      const auth = await requireUser(env, request);
+      if (auth.error) return auth.error;
+      const body = await readJson(request);
+      if (!body) return jsonResponse({ error: "Invalid JSON" }, { status: 400 });
+      const urlValue = String(body.url || "").trim();
+      const titleValue = String(body.title || "").trim();
+      if (!urlValue) {
+        return jsonResponse({ error: "URL required" }, { status: 400 });
+      }
+      await env.DB.prepare(
+        "INSERT INTO visits (user_id, url, title) VALUES (?, ?, ?)"
+      )
+        .bind(auth.user.id, urlValue, titleValue || null)
+        .run();
+      return jsonResponse({ ok: true }, { status: 201 });
+    }
+
+    if (pathname === "/api/progress" && method === "GET") {
+      if (!env || !env.DB) {
+        return jsonResponse({ error: "Database not configured" }, { status: 500 });
+      }
+      const auth = await requireUser(env, request);
+      if (auth.error) return auth.error;
+      const visitsCount = await env.DB.prepare(
+        "SELECT COUNT(*) as count FROM visits WHERE user_id = ?"
+      )
+        .bind(auth.user.id)
+        .first();
+      const uniqueCount = await env.DB.prepare(
+        "SELECT COUNT(DISTINCT url) as count FROM visits WHERE user_id = ?"
+      )
+        .bind(auth.user.id)
+        .first();
+      const favoritesCount = await env.DB.prepare(
+        "SELECT COUNT(*) as count FROM favorites WHERE user_id = ?"
+      )
+        .bind(auth.user.id)
+        .first();
+      return jsonResponse(
+        {
+          visits: visitsCount ? visitsCount.count : 0,
+          uniqueVisits: uniqueCount ? uniqueCount.count : 0,
+          favorites: favoritesCount ? favoritesCount.count : 0,
+        },
+        { status: 200 }
+      );
     }
 
     if (method !== "GET" || pathname !== "/api/random") {

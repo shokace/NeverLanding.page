@@ -36,6 +36,7 @@ let fetchController = null;
 let history = [];
 let historyIndex = -1;
 let hasStarted = false;
+let currentUser = null;
 const HISTORY_KEY = "neverlanding-history";
 const HISTORY_LIMIT = 50;
 const SHARE_PARAM = "url";
@@ -105,6 +106,7 @@ function setLoginStatus(message) {
 }
 
 function setAuthState(user) {
+  currentUser = user || null;
   if (loginMenuItem) {
     const loggedIn = Boolean(user);
     loginMenuItem.classList.toggle("is-disabled", loggedIn);
@@ -335,6 +337,17 @@ fetch("/api/auth/me")
   })
   .catch(() => {});
 
+async function logVisit(url) {
+  if (!currentUser || !url) return;
+  try {
+    await fetch("/api/visits", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ url }),
+    });
+  } catch {}
+}
+
 
 function loadHistory() {
   try {
@@ -455,6 +468,7 @@ async function loadRandom() {
     };
     applyEntry(entry);
     if (entry.url) pushHistory(entry);
+    if (entry.url) logVisit(entry.url);
   } catch (err) {
     currentUrl = "";
     urlEl.textContent = "Error loading a URL.";

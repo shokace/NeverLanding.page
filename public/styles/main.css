@@ -503,6 +503,20 @@ body {
   box-shadow:
     inset 1px 1px 0 var(--win-light),
     inset -1px -1px 0 var(--win-shadow);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.achievement-tile img {
+  max-width: 70%;
+  max-height: 70%;
+  width: auto;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: grayscale(1);
 }
 
 .achievement-tile:hover {
