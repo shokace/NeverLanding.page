@@ -390,6 +390,10 @@ body {
   flex-direction: column;
 }
 
+.modal-window--small {
+  width: min(360px, 88vw);
+}
+
 .modal-titlebar {
   background: linear-gradient(90deg, var(--win-blue), var(--win-blue-light));
   color: #fff;
@@ -507,6 +511,7 @@ body {
     inset -1px -1px 0 var(--win-light),
     inset 2px 2px 0 var(--win-shadow);
 }
+
 
 @media (max-width: 720px) {
   .achievements-grid {

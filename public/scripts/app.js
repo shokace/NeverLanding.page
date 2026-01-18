@@ -23,7 +23,6 @@ const achievementsModal = document.getElementById("achievements-modal");
 const achievementsClose = achievementsModal
   ? achievementsModal.querySelector(".modal-close")
   : null;
-const achievementsGrid = document.getElementById("achievements-grid");
 const emailToggle = loginModal ? loginModal.querySelector("[data-action=\"email-login\"]") : null;
 const signupToggle = loginModal ? loginModal.querySelector("[data-action=\"email-signup\"]") : null;
 const emailForm = document.getElementById("email-login");
@@ -336,18 +335,6 @@ fetch("/api/auth/me")
   })
   .catch(() => {});
 
-if (achievementsGrid && !achievementsGrid.children.length) {
-  const tiles = document.createDocumentFragment();
-  const baseAchievements = 100;
-  const countryCount = 195;
-  const totalTiles = baseAchievements + countryCount;
-  for (let i = 0; i < totalTiles; i += 1) {
-    const tile = document.createElement("div");
-    tile.className = "achievement-tile";
-    tiles.appendChild(tile);
-  }
-  achievementsGrid.appendChild(tiles);
-}
 
 function loadHistory() {
   try {
