@@ -9,6 +9,23 @@ const viewerEl = document.getElementById("viewer");
 const embedNoteEl = document.getElementById("embed-note");
 const loadingEl = document.getElementById("loading");
 const throbberEl = document.getElementById("throbber");
+const loginMenuItem = document.getElementById("login-menu");
+const logoutMenuItem = document.getElementById("logout-menu");
+const shareMenuItem = document.getElementById("share-menu");
+const achievementsMenuItem = document.getElementById("achievements-menu");
+const fullscreenMenuItem = document.getElementById("fullscreen-menu");
+const favoritesAddMenuItem = document.getElementById("favorites-add-menu");
+const favoritesEditMenuItem = document.getElementById("favorites-edit-menu");
+const loginModal = document.getElementById("login-modal");
+const loginClose = loginModal ? loginModal.querySelector(".modal-close") : null;
+const emailToggle = loginModal ? loginModal.querySelector("[data-action=\"email-login\"]") : null;
+const signupToggle = loginModal ? loginModal.querySelector("[data-action=\"email-signup\"]") : null;
+const emailForm = document.getElementById("email-login");
+const signupForm = document.getElementById("email-signup");
+const loginStatus = document.getElementById("login-status");
+const providerButtons = loginModal
+  ? Array.from(loginModal.querySelectorAll("[data-provider]"))
+  : [];
 let currentUrl = "";
 let fetchController = null;
 let history = [];
@@ -54,6 +71,230 @@ document.addEventListener("keydown", (event) => {
     closeMenus();
   }
 });
+
+function openLoginModal() {
+  if (!loginModal) return;
+  loginModal.classList.remove("is-hidden");
+}
+
+function closeLoginModal() {
+  if (!loginModal) return;
+  loginModal.classList.add("is-hidden");
+  if (emailForm) emailForm.classList.add("is-hidden");
+  if (signupForm) signupForm.classList.add("is-hidden");
+}
+
+function setLoginStatus(message) {
+  if (!loginStatus) return;
+  loginStatus.textContent = message;
+}
+
+function setAuthState(user) {
+  if (loginMenuItem) {
+    const loggedIn = Boolean(user);
+    loginMenuItem.classList.toggle("is-disabled", loggedIn);
+    loginMenuItem.classList.toggle("is-truncated", loggedIn);
+    loginMenuItem.setAttribute("aria-disabled", loggedIn ? "true" : "false");
+    loginMenuItem.textContent = loggedIn
+      ? `Logged in as ${user.username || user.email || "user"}`
+      : "Login";
+  }
+  if (logoutMenuItem) {
+    logoutMenuItem.classList.toggle("is-disabled", !user);
+    logoutMenuItem.setAttribute("aria-disabled", !user ? "true" : "false");
+  }
+  if (achievementsMenuItem) {
+    achievementsMenuItem.classList.toggle("is-disabled", !user);
+    achievementsMenuItem.setAttribute("aria-disabled", !user ? "true" : "false");
+  }
+  if (user && metaEl) {
+    metaEl.textContent = `Signed in as ${user.username || user.email}.`;
+  }
+}
+
+if (loginMenuItem) {
+  loginMenuItem.addEventListener("click", () => {
+    closeMenus();
+    setLoginStatus("");
+    openLoginModal();
+  });
+}
+
+if (loginModal) {
+  loginModal.addEventListener("click", (event) => {
+    if (event.target === loginModal) closeLoginModal();
+  });
+}
+
+if (loginClose) {
+  loginClose.addEventListener("click", closeLoginModal);
+}
+
+if (emailToggle && emailForm) {
+  emailToggle.addEventListener("click", () => {
+    emailForm.classList.toggle("is-hidden");
+    if (signupForm) signupForm.classList.add("is-hidden");
+  });
+}
+
+if (signupToggle && signupForm) {
+  signupToggle.addEventListener("click", () => {
+    signupForm.classList.toggle("is-hidden");
+    if (emailForm) emailForm.classList.add("is-hidden");
+  });
+}
+
+if (emailForm) {
+  emailForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(emailForm);
+    const payload = {
+      email: String(formData.get("email") || ""),
+      password: String(formData.get("password") || ""),
+    };
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setAuthState(data.user);
+      closeLoginModal();
+      setLoginStatus("");
+    } else {
+      setLoginStatus("Email login failed. Check your credentials.");
+    }
+  });
+}
+
+if (signupForm) {
+  signupForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(signupForm);
+    const payload = {
+      email: String(formData.get("email") || ""),
+      username: String(formData.get("username") || ""),
+      password: String(formData.get("password") || ""),
+    };
+    const res = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setAuthState(data.user);
+      closeLoginModal();
+      setLoginStatus("");
+    } else {
+      setLoginStatus("Sign up failed. Try a different email or username.");
+    }
+  });
+}
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && loginModal && !loginModal.classList.contains("is-hidden")) {
+    closeLoginModal();
+  }
+});
+
+if (logoutMenuItem) {
+  logoutMenuItem.addEventListener("click", async () => {
+    closeMenus();
+    await fetch("/api/auth/logout", { method: "POST" });
+    metaEl.textContent = "Signed out.";
+    setAuthState(null);
+  });
+}
+
+if (shareMenuItem) {
+  shareMenuItem.addEventListener("click", async () => {
+    closeMenus();
+    if (!currentUrl) {
+      metaEl.textContent = "No URL to share yet.";
+      return;
+    }
+    const shareUrl = getShareUrl(currentUrl);
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(shareUrl);
+        metaEl.textContent = "Share link copied to clipboard.";
+      } else {
+        window.prompt("Copy share link:", shareUrl);
+      }
+    } catch {
+      window.prompt("Copy share link:", shareUrl);
+    }
+  });
+}
+
+if (fullscreenMenuItem) {
+  fullscreenMenuItem.addEventListener("click", async () => {
+    closeMenus();
+    if (!document.fullscreenElement) {
+      try {
+        await document.documentElement.requestFullscreen();
+      } catch {}
+    } else {
+      try {
+        await document.exitFullscreen();
+      } catch {}
+    }
+  });
+}
+
+if (achievementsMenuItem) {
+  achievementsMenuItem.addEventListener("click", () => {
+    closeMenus();
+    metaEl.textContent = "Achievements coming soon.";
+  });
+}
+
+if (favoritesAddMenuItem) {
+  favoritesAddMenuItem.addEventListener("click", () => {
+    closeMenus();
+    metaEl.textContent = "Favorites coming soon.";
+  });
+}
+
+if (favoritesEditMenuItem) {
+  favoritesEditMenuItem.addEventListener("click", () => {
+    closeMenus();
+    metaEl.textContent = "Favorites coming soon.";
+  });
+}
+
+if (providerButtons.length) {
+  fetch("/api/auth/providers")
+    .then((res) => (res.ok ? res.json() : null))
+    .then((data) => {
+      if (!data || !data.providers) return;
+      providerButtons.forEach((button) => {
+        const provider = button.getAttribute("data-provider");
+        const available = Boolean(data.providers[provider]);
+        if (!available) {
+          button.classList.add("is-disabled");
+          button.setAttribute("aria-disabled", "true");
+        }
+        button.addEventListener("click", (event) => {
+          if (!available) {
+            event.preventDefault();
+            setLoginStatus(`${provider} sign-in is not configured yet.`);
+          }
+        });
+      });
+    })
+    .catch(() => {});
+}
+
+fetch("/api/auth/me")
+  .then((res) => (res.ok ? res.json() : null))
+  .then((data) => {
+    if (!data) return;
+    setAuthState(data.user);
+  })
+  .catch(() => {});
 
 function loadHistory() {
   try {
