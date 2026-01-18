@@ -17,11 +17,6 @@ The Worker fetches the latest Tranco list metadata and downloads the Top 1M CSV,
 then caches it in memory for ~30 days.
 You can override the list URL via the `TRANCO_URL` variable.
 
-## DNS family filter (optional)
-
-By default the Worker checks each candidate domain against Cloudflare's Family DNS
-over DoH to avoid adult domains. Set `DNS_FILTER=off` to disable this check.
-
 ## Deploy
 
 ```bash

@@ -5,6 +5,7 @@ const achievementDetailClose = achievementDetailModal
   ? achievementDetailModal.querySelector(".modal-close")
   : null;
 let achievementData = [];
+let unlockedCodes = new Set();
 
 function buildAchievementTiles(total) {
   if (!achievementsGrid) return;
@@ -24,6 +25,20 @@ function buildAchievementTiles(total) {
     tiles.appendChild(tile);
   }
   achievementsGrid.appendChild(tiles);
+  applyUnlocks();
+}
+
+function applyUnlocks() {
+  if (!achievementsGrid) return;
+  const tiles = achievementsGrid.querySelectorAll(".achievement-tile");
+  tiles.forEach((tile) => {
+    const index = Number(tile.dataset.index || 0);
+    const info = achievementData[index];
+    const code = info && info.code ? info.code : "";
+    if (code && unlockedCodes.has(code)) {
+      tile.classList.add("is-unlocked");
+    }
+  });
 }
 
 function openDetailModal(text) {
@@ -53,6 +68,22 @@ async function loadAchievements() {
 }
 
 loadAchievements();
+refreshUnlocked();
+
+async function refreshUnlocked() {
+  try {
+    const res = await fetch("/api/achievements/unlocked");
+    if (!res.ok) return;
+    const data = await res.json();
+    unlockedCodes = new Set(Array.isArray(data.codes) ? data.codes : []);
+    applyUnlocks();
+  } catch {}
+}
+
+document.addEventListener("auth-changed", (event) => {
+  if (!event.detail || !event.detail.user) return;
+  refreshUnlocked();
+});
 
 if (achievementsGrid) {
   achievementsGrid.addEventListener("click", (event) => {

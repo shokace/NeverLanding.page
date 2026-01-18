@@ -85,14 +85,33 @@ body {
 
 .menubar {
   display: flex;
-  gap: 18px;
+  gap: 10px;
   padding: 4px 8px 3px;
   font-size: 0.85rem;
   background: var(--win-surface);
   border-bottom: 1px solid var(--win-shadow);
   position: relative;
   z-index: 5;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  align-items: center;
+  overflow-x: auto;
+}
+
+.menubar-spacer {
+  flex: 1;
+  min-width: 8px;
+}
+
+.landing-counter {
+  font-size: 0.8rem;
+  padding: 2px 6px;
+  border: 1px solid #000;
+  background: var(--win-surface);
+  box-shadow:
+    inset 1px 1px 0 var(--win-light),
+    inset -1px -1px 0 var(--win-shadow);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .menu {
@@ -519,6 +538,10 @@ body {
   filter: grayscale(1);
 }
 
+.achievement-tile.is-unlocked img {
+  filter: none;
+}
+
 .achievement-tile:hover {
   background: #c8c8c8;
   box-shadow:
@@ -536,6 +559,17 @@ body {
 @media (max-width: 720px) {
   .desktop {
     padding: 10px;
+  }
+
+  .menubar {
+    gap: 6px;
+    padding: 3px 6px 2px;
+    font-size: 0.8rem;
+  }
+
+  .landing-counter {
+    font-size: 0.75rem;
+    padding: 1px 5px;
   }
 
   .toolbar {

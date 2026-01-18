@@ -17,6 +17,7 @@ const leaderboardMenuItem = document.getElementById("leaderboard-menu");
 const fullscreenMenuItem = document.getElementById("fullscreen-menu");
 const favoritesAddMenuItem = document.getElementById("favorites-add-menu");
 const favoritesEditMenuItem = document.getElementById("favorites-edit-menu");
+const landingCounter = document.getElementById("landing-counter");
 const loginModal = document.getElementById("login-modal");
 const loginClose = loginModal ? loginModal.querySelector(".modal-close") : null;
 const achievementsModal = document.getElementById("achievements-modal");
@@ -127,6 +128,12 @@ function setAuthState(user) {
   if (user && metaEl) {
     metaEl.textContent = `Signed in as ${user.username || user.email}.`;
   }
+  if (!user && landingCounter) {
+    landingCounter.textContent = "Landings: 0";
+  }
+  document.dispatchEvent(
+    new CustomEvent("auth-changed", { detail: { user: currentUser } })
+  );
 }
 
 if (loginMenuItem) {
@@ -334,8 +341,19 @@ fetch("/api/auth/me")
   .then((data) => {
     if (!data) return;
     setAuthState(data.user);
+    if (data.user) fetchProgress();
   })
   .catch(() => {});
+
+async function fetchProgress() {
+  if (!landingCounter) return;
+  try {
+    const res = await fetch("/api/progress");
+    if (!res.ok) return;
+    const data = await res.json();
+    landingCounter.textContent = `Landings: ${data.visits || 0}`;
+  } catch {}
+}
 
 async function logVisit(url) {
   if (!currentUser || !url) return;
@@ -345,6 +363,7 @@ async function logVisit(url) {
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ url }),
     });
+    fetchProgress();
   } catch {}
 }
 

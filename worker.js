@@ -327,6 +327,44 @@ async function requireUser(env, request) {
   return { user };
 }
 
+function extractTld(urlValue) {
+  if (!urlValue) return null;
+  const raw = String(urlValue).trim();
+  if (!raw) return null;
+  let url;
+  try {
+    url = new URL(raw);
+  } catch {
+    try {
+      url = new URL(`https://${raw}`);
+    } catch {
+      return null;
+    }
+  }
+  const hostname = (url.hostname || "").toLowerCase().replace(/\.$/, "");
+  if (!hostname) return null;
+  const parts = hostname.split(".").filter(Boolean);
+  if (!parts.length) return null;
+  return {
+    tld: parts[parts.length - 1],
+    hasGov: hostname === "gov" || hostname.endsWith(".gov") || hostname.includes(".gov."),
+  };
+}
+
+async function grantAchievement(env, userId, code) {
+  const achievement = await env.DB.prepare(
+    "SELECT id FROM achievements WHERE code = ?"
+  )
+    .bind(code)
+    .first();
+  if (!achievement) return;
+  await env.DB.prepare(
+    "INSERT OR IGNORE INTO user_achievements (id, user_id, achievement_id) VALUES (?, ?, ?)"
+  )
+    .bind(crypto.randomUUID(), userId, achievement.id)
+    .run();
+}
+
 export default {
   async fetch(request, env, ctx) {
     const { method, url } = request;
@@ -373,6 +411,7 @@ export default {
           .bind(userId, email, username, displayName || null, hash, salt, algo)
           .run();
 
+        await grantAchievement(env, userId, "login_first");
         const session = await createSession(env, userId);
         const headers = new Headers();
         setSessionCookie(headers, session.token, SESSION_TTL_DAYS * 24 * 60 * 60, new URL(url));
@@ -403,6 +442,7 @@ export default {
           return jsonResponse({ error: "Invalid credentials" }, { status: 401 });
         }
 
+        await grantAchievement(env, user.id, "login_first");
         const session = await createSession(env, user.id);
         const headers = new Headers();
         setSessionCookie(headers, session.token, SESSION_TTL_DAYS * 24 * 60 * 60, new URL(url));
@@ -432,6 +472,9 @@ export default {
       if (pathname === "/api/auth/me" && method === "GET") {
         const token = readCookie(request, "nl_session");
         const user = await getUserFromSession(env, token);
+        if (user) {
+          await grantAchievement(env, user.id, "login_first");
+        }
         return jsonResponse({ user }, { status: 200 });
       }
 
@@ -552,6 +595,7 @@ export default {
             .run();
         }
 
+        await grantAchievement(env, userId, "login_first");
         const session = await createSession(env, userId);
         const headers = new Headers();
         clearCookie(headers, "nl_oauth_state", requestUrl);
@@ -580,6 +624,13 @@ export default {
       )
         .bind(auth.user.id, urlValue, titleValue || null)
         .run();
+      const tldInfo = extractTld(urlValue);
+      if (tldInfo && tldInfo.tld) {
+        await grantAchievement(env, auth.user.id, `tld_${tldInfo.tld}`);
+        if (tldInfo.hasGov && tldInfo.tld !== "gov") {
+          await grantAchievement(env, auth.user.id, "tld_gov");
+        }
+      }
       return jsonResponse({ ok: true }, { status: 201 });
     }
 
@@ -612,6 +663,24 @@ export default {
         },
         { status: 200 }
       );
+    }
+
+    if (pathname === "/api/achievements/unlocked" && method === "GET") {
+      if (!env || !env.DB) {
+        return jsonResponse({ error: "Database not configured" }, { status: 500 });
+      }
+      const auth = await requireUser(env, request);
+      if (auth.error) return auth.error;
+      const rows = await env.DB.prepare(
+        `SELECT achievements.code as code
+         FROM user_achievements
+         JOIN achievements ON achievements.id = user_achievements.achievement_id
+         WHERE user_achievements.user_id = ?`
+      )
+        .bind(auth.user.id)
+        .all();
+      const codes = rows && rows.results ? rows.results.map((row) => row.code) : [];
+      return jsonResponse({ codes }, { status: 200 });
     }
 
     if (method !== "GET" || pathname !== "/api/random") {

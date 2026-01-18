@@ -2,7 +2,9 @@
   "achievements": [
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 01.ico",
-      "description": ""
+      "description": "Log in for the first time.",
+      "code": "login_first",
+      "title": "First Login"
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 02.ico",
