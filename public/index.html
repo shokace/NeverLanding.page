@@ -4,322 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>NeverLanding</title>
-    <style>
-      :root {
-        --win-bg: #008080;
-        --win-surface: #c0c0c0;
-        --win-light: #ffffff;
-        --win-shadow: #808080;
-        --win-dark: #404040;
-        --win-blue: #000080;
-        --win-blue-light: #1084d0;
-        --win-text: #000000;
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-
-      html,
-      body {
-        height: 100%;
-      }
-
-      body {
-        margin: 0;
-        font-family: "MS Sans Serif", "Tahoma", "Geneva", sans-serif;
-        background: var(--win-bg);
-        color: var(--win-text);
-        overflow: hidden;
-      }
-
-      .desktop {
-        height: 100%;
-        padding: 18px 22px 22px;
-      }
-
-      .window {
-        height: 100%;
-        background: var(--win-surface);
-        border: 2px solid #000;
-        box-shadow:
-          inset 1px 1px 0 var(--win-light),
-          inset -1px -1px 0 var(--win-shadow);
-        display: flex;
-        flex-direction: column;
-      }
-
-      .titlebar {
-        background: linear-gradient(90deg, var(--win-blue), var(--win-blue-light));
-        color: #fff;
-        padding: 5px 8px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-weight: bold;
-        font-size: 0.9rem;
-      }
-
-      .titlebar-left {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-
-      .ie-icon {
-        width: 14px;
-        height: 14px;
-        border: 1px solid #fff;
-        background: #4a90e2;
-        box-shadow: inset -1px -1px 0 rgba(0, 0, 0, 0.4);
-      }
-
-      .titlebar-controls {
-        display: flex;
-        gap: 4px;
-      }
-
-      .control {
-        width: 18px;
-        height: 16px;
-        background: var(--win-surface);
-        border: 2px solid #000;
-        box-shadow:
-          inset 1px 1px 0 var(--win-light),
-          inset -1px -1px 0 var(--win-shadow);
-      }
-
-      .menubar {
-        display: flex;
-        gap: 18px;
-        padding: 4px 8px 3px;
-        font-size: 0.85rem;
-        background: var(--win-surface);
-        border-bottom: 1px solid var(--win-shadow);
-      }
-
-      .toolbar {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 6px 8px;
-        background: var(--win-surface);
-        border-bottom: 1px solid var(--win-shadow);
-        flex-wrap: wrap;
-      }
-
-      .tool-button {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 8px;
-        border: 2px solid #000;
-        background: var(--win-surface);
-        box-shadow:
-          inset 1px 1px 0 var(--win-light),
-          inset -1px -1px 0 var(--win-shadow);
-        font-size: 0.8rem;
-        cursor: pointer;
-      }
-
-      .tool-icon {
-        width: 14px;
-        height: 14px;
-        background: #5a5a5a;
-        border: 1px solid #000;
-      }
-
-      .address-bar {
-        display: grid;
-        grid-template-columns: auto 1fr auto;
-        gap: 6px;
-        padding: 6px 8px;
-        background: var(--win-surface);
-        border-bottom: 2px solid #000;
-      }
-
-      .address-label {
-        font-size: 0.85rem;
-        align-self: center;
-      }
-
-      .address-field {
-        background: #fff;
-        border: 2px solid #000;
-        padding: 4px 6px;
-        box-shadow:
-          inset 1px 1px 0 var(--win-light),
-          inset -1px -1px 0 var(--win-shadow);
-        font-size: 0.85rem;
-        min-height: 26px;
-        display: flex;
-        align-items: center;
-      }
-
-      .address-field a {
-        color: var(--win-blue);
-        word-break: break-word;
-        text-decoration: none;
-      }
-
-      .go-button {
-        padding: 4px 10px;
-        border: 2px solid #000;
-        background: var(--win-surface);
-        box-shadow:
-          inset 1px 1px 0 var(--win-light),
-          inset -1px -1px 0 var(--win-shadow);
-        font-size: 0.85rem;
-        cursor: pointer;
-      }
-
-      .content {
-        padding: 10px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        flex: 1;
-        min-height: 0;
-      }
-
-      .intro {
-        display: flex;
-        justify-content: space-between;
-        gap: 12px;
-        align-items: flex-start;
-      }
-
-      .intro-text {
-        display: grid;
-        gap: 6px;
-      }
-
-      .intro-text h1 {
-        margin: 0;
-        font-size: 1.2rem;
-      }
-
-      .intro-text p {
-        margin: 0;
-        font-size: 0.9rem;
-      }
-
-      .viewer {
-        border: 2px solid #000;
-        box-shadow:
-          inset 1px 1px 0 var(--win-light),
-          inset -1px -1px 0 var(--win-shadow);
-        background: #fff;
-        flex: 1;
-        min-height: 0;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .viewer iframe {
-        width: 100%;
-        height: 100%;
-        border: 0;
-        display: block;
-        background: #fff;
-      }
-
-      .loading-overlay {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #fff;
-        z-index: 2;
-      }
-
-      .loading-overlay img {
-        width: min(240px, 60%);
-        height: auto;
-        image-rendering: pixelated;
-      }
-
-      .loading-overlay.is-hidden {
-        display: none;
-      }
-
-      .throbber-overlay {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #fff;
-        z-index: 3;
-      }
-
-      .throbber-overlay img {
-        width: 64px;
-        height: 64px;
-        image-rendering: pixelated;
-      }
-
-      .throbber-overlay.is-hidden {
-        display: none;
-      }
-
-      .embed-note {
-        font-size: 0.85rem;
-      }
-
-      .statusbar {
-        border-top: 2px solid #000;
-        padding: 6px 8px;
-        background: var(--win-surface);
-        box-shadow:
-          inset 1px 1px 0 var(--win-light),
-          inset -1px -1px 0 var(--win-shadow);
-        font-size: 0.85rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-      }
-
-      .statusbar .status-left {
-        min-width: 0;
-      }
-
-      .statusbar .status-link {
-        color: var(--win-blue);
-        text-decoration: underline;
-        white-space: nowrap;
-      }
-
-      @media (max-width: 720px) {
-        .desktop {
-          padding: 10px;
-        }
-
-        .toolbar {
-          gap: 6px;
-        }
-
-        .intro {
-          flex-direction: column;
-        }
-
-        .address-bar {
-          grid-template-columns: 1fr;
-          gap: 8px;
-        }
-
-        .address-label {
-          display: none;
-        }
-
-        .go-button {
-          display: block;
-          width: 100%;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="/styles/main.css" />
   </head>
   <body>
     <div class="desktop">
@@ -336,11 +21,62 @@
           </div>
         </div>
         <div class="menubar">
-          <span>File</span>
-          <span>Edit</span>
-          <span>View</span>
-          <span>Favorites</span>
-          <span>Help</span>
+          <div class="menu">
+            <button class="menu-button" type="button" aria-haspopup="true" aria-expanded="false">
+              File
+            </button>
+            <ul class="menu-list" role="menu" aria-label="File">
+              <li role="menuitem">New Window</li>
+              <li role="menuitem">Open Location...</li>
+              <li role="menuitem">Save As...</li>
+              <li role="menuitem">Print...</li>
+              <li role="menuitem">Close</li>
+            </ul>
+          </div>
+          <div class="menu">
+            <button class="menu-button" type="button" aria-haspopup="true" aria-expanded="false">
+              Edit
+            </button>
+            <ul class="menu-list" role="menu" aria-label="Edit">
+              <li role="menuitem">Undo</li>
+              <li role="menuitem">Redo</li>
+              <li role="menuitem">Cut</li>
+              <li role="menuitem">Copy</li>
+              <li role="menuitem">Paste</li>
+            </ul>
+          </div>
+          <div class="menu">
+            <button class="menu-button" type="button" aria-haspopup="true" aria-expanded="false">
+              View
+            </button>
+            <ul class="menu-list" role="menu" aria-label="View">
+              <li role="menuitem">Refresh</li>
+              <li role="menuitem">Text Size</li>
+              <li role="menuitem">Full Screen</li>
+              <li role="menuitem">Toolbars</li>
+            </ul>
+          </div>
+          <div class="menu">
+            <button class="menu-button" type="button" aria-haspopup="true" aria-expanded="false">
+              Favorites
+            </button>
+            <ul class="menu-list" role="menu" aria-label="Favorites">
+              <li role="menuitem">Add to Favorites...</li>
+              <li role="menuitem">Organize Favorites...</li>
+              <li role="menuitem">NeverLanding HQ</li>
+              <li role="menuitem">Mystery Portal</li>
+            </ul>
+          </div>
+          <div class="menu">
+            <button class="menu-button" type="button" aria-haspopup="true" aria-expanded="false">
+              Help
+            </button>
+            <ul class="menu-list" role="menu" aria-label="Help">
+              <li role="menuitem">View Help</li>
+              <li role="menuitem">Report Issue</li>
+              <li role="menuitem">About NeverLanding</li>
+            </ul>
+          </div>
         </div>
         <div class="toolbar">
           <button class="tool-button" type="button" id="back">
@@ -398,221 +134,6 @@
       </div>
     </div>
 
-    <script>
-      const getButton = document.getElementById("get");
-      const backButton = document.getElementById("back");
-      const forwardButton = document.getElementById("forward");
-      const stopButton = document.getElementById("stop");
-      const refreshButton = document.getElementById("refresh");
-      const urlEl = document.getElementById("url");
-      const metaEl = document.getElementById("meta");
-      const viewerEl = document.getElementById("viewer");
-      const embedNoteEl = document.getElementById("embed-note");
-      const loadingEl = document.getElementById("loading");
-      const throbberEl = document.getElementById("throbber");
-      let currentUrl = "";
-      let fetchController = null;
-      let history = [];
-      let historyIndex = -1;
-      let hasStarted = false;
-      const HISTORY_KEY = "neverlanding-history";
-      const HISTORY_LIMIT = 50;
-      const SHARE_PARAM = "url";
-
-      function loadHistory() {
-        try {
-          const raw = sessionStorage.getItem(HISTORY_KEY);
-          if (!raw) return;
-          const data = JSON.parse(raw);
-          if (Array.isArray(data.items)) {
-            history = data.items;
-            historyIndex = -1;
-          }
-        } catch {}
-      }
-
-      function saveHistory() {
-        try {
-          sessionStorage.setItem(
-            HISTORY_KEY,
-            JSON.stringify({ items: history, index: historyIndex })
-          );
-        } catch {}
-      }
-
-      function updateBackButton() {
-        backButton.disabled = historyIndex <= 0;
-      }
-
-      function updateForwardButton() {
-        forwardButton.disabled = historyIndex >= history.length - 1;
-      }
-
-      function getShareUrl(targetUrl) {
-        if (!targetUrl) return "";
-        const url = new URL(window.location.href);
-        url.searchParams.set(SHARE_PARAM, targetUrl);
-        return url.toString();
-      }
-
-      function updateShareParam(targetUrl) {
-        if (!targetUrl) {
-          const url = new URL(window.location.href);
-          url.searchParams.delete(SHARE_PARAM);
-          window.history.replaceState(null, "", url.toString());
-          return;
-        }
-        const shareUrl = getShareUrl(targetUrl);
-        if (shareUrl) {
-          window.history.replaceState(null, "", shareUrl);
-        }
-      }
-
-      function normalizeSharedUrl(raw) {
-        if (!raw) return "";
-        try {
-          const parsed = new URL(raw);
-          if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
-            return "";
-          }
-          return parsed.toString();
-        } catch {
-          return "";
-        }
-      }
-
-      function applyEntry(entry) {
-        currentUrl = entry.url || "";
-        urlEl.textContent = currentUrl || "No URL returned.";
-        urlEl.href = currentUrl || "#";
-        const metaParts = [];
-        if (entry.crawl) metaParts.push(entry.crawl);
-        if (entry.at) metaParts.push(entry.at);
-        metaEl.textContent = metaParts.join(" - ");
-        viewerEl.src = currentUrl || "about:blank";
-        if (!currentUrl && !hasStarted) {
-          loadingEl.classList.remove("is-hidden");
-        }
-        updateShareParam(currentUrl);
-      }
-
-      function pushHistory(entry) {
-        history = history.slice(0, historyIndex + 1);
-        history.push(entry);
-        if (history.length > HISTORY_LIMIT) {
-          history.shift();
-        } else {
-          historyIndex += 1;
-        }
-        if (history.length >= HISTORY_LIMIT) {
-          historyIndex = history.length - 1;
-        }
-        saveHistory();
-        updateBackButton();
-        updateForwardButton();
-      }
-
-      async function loadRandom() {
-        getButton.disabled = true;
-        urlEl.textContent = "Loading...";
-        urlEl.href = "#";
-        metaEl.textContent = "";
-        viewerEl.src = "about:blank";
-        loadingEl.classList.add("is-hidden");
-        throbberEl.classList.remove("is-hidden");
-
-        try {
-          fetchController = new AbortController();
-          const res = await fetch("/api/random", {
-            method: "GET",
-            signal: fetchController.signal,
-          });
-          if (!res.ok) {
-            throw new Error("Request failed");
-          }
-          const data = await res.json();
-          const entry = {
-            url: data.url || "",
-            crawl: data.crawl || "",
-            at: data.at || "",
-          };
-          applyEntry(entry);
-          if (entry.url) pushHistory(entry);
-        } catch (err) {
-          currentUrl = "";
-          urlEl.textContent = "Error loading a URL.";
-          urlEl.href = "#";
-          metaEl.textContent = "Please try again.";
-          throbberEl.classList.add("is-hidden");
-          if (!hasStarted) loadingEl.classList.remove("is-hidden");
-        } finally {
-          getButton.disabled = false;
-          fetchController = null;
-        }
-      }
-
-      getButton.addEventListener("click", loadRandom);
-      backButton.addEventListener("click", () => {
-        if (historyIndex <= 0) return;
-        historyIndex -= 1;
-        const entry = history[historyIndex];
-        applyEntry(entry);
-        saveHistory();
-        updateBackButton();
-        updateForwardButton();
-      });
-
-      forwardButton.addEventListener("click", () => {
-        if (historyIndex >= history.length - 1) return;
-        historyIndex += 1;
-        const entry = history[historyIndex];
-        applyEntry(entry);
-        saveHistory();
-        updateBackButton();
-        updateForwardButton();
-      });
-
-      stopButton.addEventListener("click", () => {
-        if (fetchController) {
-          fetchController.abort();
-          fetchController = null;
-        }
-        try {
-          if (viewerEl.contentWindow) {
-            viewerEl.contentWindow.stop();
-          }
-        } catch {}
-      });
-
-      refreshButton.addEventListener("click", () => {
-        if (!currentUrl) return;
-        viewerEl.src = "about:blank";
-        setTimeout(() => {
-          viewerEl.src = currentUrl;
-        }, 60);
-      });
-
-      loadHistory();
-      updateBackButton();
-      updateForwardButton();
-
-      const sharedParam = new URLSearchParams(window.location.search).get(
-        SHARE_PARAM
-      );
-      const sharedUrl = normalizeSharedUrl(sharedParam);
-      if (sharedUrl) {
-        applyEntry({ url: sharedUrl, crawl: "shared link", at: "" });
-        pushHistory({ url: sharedUrl, crawl: "shared link", at: "" });
-      }
-
-      viewerEl.addEventListener("load", () => {
-        if (!currentUrl) return;
-        throbberEl.classList.add("is-hidden");
-        if (!hasStarted) {
-          loadingEl.classList.add("is-hidden");
-          hasStarted = true;
-        }
-      });
-    </script>
+    <script src="/scripts/app.js"></script>
   </body>
 </html>
