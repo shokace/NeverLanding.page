@@ -85,6 +85,10 @@ document.addEventListener("auth-changed", (event) => {
   refreshUnlocked();
 });
 
+document.addEventListener("achievements-changed", () => {
+  refreshUnlocked();
+});
+
 if (achievementsGrid) {
   achievementsGrid.addEventListener("click", (event) => {
     const tile = event.target.closest(".achievement-tile");

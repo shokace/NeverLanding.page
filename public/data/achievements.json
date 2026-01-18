@@ -173,6 +173,1266 @@
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 97.ico",
       "description": ""
+    },
+    {
+      "icon": "/assets/achievements/countries/united_kingdom.png",
+      "code": "tld_uk",
+      "title": "United Kingdom",
+      "description": "Visited a site ending in .uk."
+    },
+    {
+      "icon": "/assets/achievements/countries/afghanistan.png",
+      "code": "tld_af",
+      "title": "Afghanistan",
+      "description": "Visited a site ending in .af."
+    },
+    {
+      "icon": "/assets/achievements/countries/aland_islands.png",
+      "code": "tld_ax",
+      "title": "Åland Islands",
+      "description": "Visited a site ending in .ax."
+    },
+    {
+      "icon": "/assets/achievements/countries/albania.png",
+      "code": "tld_al",
+      "title": "Albania",
+      "description": "Visited a site ending in .al."
+    },
+    {
+      "icon": "/assets/achievements/countries/algeria.png",
+      "code": "tld_dz",
+      "title": "Algeria",
+      "description": "Visited a site ending in .dz."
+    },
+    {
+      "icon": "/assets/achievements/countries/andorra.png",
+      "code": "tld_ad",
+      "title": "Andorra",
+      "description": "Visited a site ending in .ad."
+    },
+    {
+      "icon": "/assets/achievements/countries/angola.png",
+      "code": "tld_ao",
+      "title": "Angola",
+      "description": "Visited a site ending in .ao."
+    },
+    {
+      "icon": "/assets/achievements/countries/antigua_and_barbuda.png",
+      "code": "tld_ag",
+      "title": "Antigua & Barbuda",
+      "description": "Visited a site ending in .ag."
+    },
+    {
+      "icon": "/assets/achievements/countries/argentina.png",
+      "code": "tld_ar",
+      "title": "Argentina",
+      "description": "Visited a site ending in .ar."
+    },
+    {
+      "icon": "/assets/achievements/countries/armenia.png",
+      "code": "tld_am",
+      "title": "Armenia",
+      "description": "Visited a site ending in .am."
+    },
+    {
+      "icon": "/assets/achievements/countries/aruba.png",
+      "code": "tld_aw",
+      "title": "Aruba",
+      "description": "Visited a site ending in .aw."
+    },
+    {
+      "icon": "/assets/achievements/countries/australia.png",
+      "code": "tld_au",
+      "title": "Australia",
+      "description": "Visited a site ending in .au."
+    },
+    {
+      "icon": "/assets/achievements/countries/austria.png",
+      "code": "tld_at",
+      "title": "Austria",
+      "description": "Visited a site ending in .at."
+    },
+    {
+      "icon": "/assets/achievements/countries/azerbaijan.png",
+      "code": "tld_az",
+      "title": "Azerbaijan",
+      "description": "Visited a site ending in .az."
+    },
+    {
+      "icon": "/assets/achievements/countries/bahamas.png",
+      "code": "tld_bs",
+      "title": "Bahamas",
+      "description": "Visited a site ending in .bs."
+    },
+    {
+      "icon": "/assets/achievements/countries/bahrain.png",
+      "code": "tld_bh",
+      "title": "Bahrain",
+      "description": "Visited a site ending in .bh."
+    },
+    {
+      "icon": "/assets/achievements/countries/bangladesh.png",
+      "code": "tld_bd",
+      "title": "Bangladesh",
+      "description": "Visited a site ending in .bd."
+    },
+    {
+      "icon": "/assets/achievements/countries/barbados.png",
+      "code": "tld_bb",
+      "title": "Barbados",
+      "description": "Visited a site ending in .bb."
+    },
+    {
+      "icon": "/assets/achievements/countries/belarus.png",
+      "code": "tld_by",
+      "title": "Belarus",
+      "description": "Visited a site ending in .by."
+    },
+    {
+      "icon": "/assets/achievements/countries/belgium.png",
+      "code": "tld_be",
+      "title": "Belgium",
+      "description": "Visited a site ending in .be."
+    },
+    {
+      "icon": "/assets/achievements/countries/belize.png",
+      "code": "tld_bz",
+      "title": "Belize",
+      "description": "Visited a site ending in .bz."
+    },
+    {
+      "icon": "/assets/achievements/countries/benin.png",
+      "code": "tld_bj",
+      "title": "Benin",
+      "description": "Visited a site ending in .bj."
+    },
+    {
+      "icon": "/assets/achievements/countries/bhutan.png",
+      "code": "tld_bt",
+      "title": "Bhutan",
+      "description": "Visited a site ending in .bt."
+    },
+    {
+      "icon": "/assets/achievements/countries/bolivia.png",
+      "code": "tld_bo",
+      "title": "Bolivia",
+      "description": "Visited a site ending in .bo."
+    },
+    {
+      "icon": "/assets/achievements/countries/bosnia_and_herzegovina.png",
+      "code": "tld_ba",
+      "title": "Bosnia & Herzegovina",
+      "description": "Visited a site ending in .ba."
+    },
+    {
+      "icon": "/assets/achievements/countries/botswana.png",
+      "code": "tld_bw",
+      "title": "Botswana",
+      "description": "Visited a site ending in .bw."
+    },
+    {
+      "icon": "/assets/achievements/countries/brazil.png",
+      "code": "tld_br",
+      "title": "Brazil",
+      "description": "Visited a site ending in .br."
+    },
+    {
+      "icon": "/assets/achievements/countries/brunei.png",
+      "code": "tld_bn",
+      "title": "Brunei",
+      "description": "Visited a site ending in .bn."
+    },
+    {
+      "icon": "/assets/achievements/countries/bulgaria.png",
+      "code": "tld_bg",
+      "title": "Bulgaria",
+      "description": "Visited a site ending in .bg."
+    },
+    {
+      "icon": "/assets/achievements/countries/burkina_faso.png",
+      "code": "tld_bf",
+      "title": "Burkina Faso",
+      "description": "Visited a site ending in .bf."
+    },
+    {
+      "icon": "/assets/achievements/countries/burundi.png",
+      "code": "tld_bi",
+      "title": "Burundi",
+      "description": "Visited a site ending in .bi."
+    },
+    {
+      "icon": "/assets/achievements/countries/cambodia.png",
+      "code": "tld_kh",
+      "title": "Cambodia",
+      "description": "Visited a site ending in .kh."
+    },
+    {
+      "icon": "/assets/achievements/countries/cameroon.png",
+      "code": "tld_cm",
+      "title": "Cameroon",
+      "description": "Visited a site ending in .cm."
+    },
+    {
+      "icon": "/assets/achievements/countries/canada.png",
+      "code": "tld_ca",
+      "title": "Canada",
+      "description": "Visited a site ending in .ca."
+    },
+    {
+      "icon": "/assets/achievements/countries/cape_verde.png",
+      "code": "tld_cv",
+      "title": "Cape Verde",
+      "description": "Visited a site ending in .cv."
+    },
+    {
+      "icon": "/assets/achievements/countries/central_african_republic.png",
+      "code": "tld_cf",
+      "title": "Central African Republic",
+      "description": "Visited a site ending in .cf."
+    },
+    {
+      "icon": "/assets/achievements/countries/chad.png",
+      "code": "tld_td",
+      "title": "Chad",
+      "description": "Visited a site ending in .td."
+    },
+    {
+      "icon": "/assets/achievements/countries/chile.png",
+      "code": "tld_cl",
+      "title": "Chile",
+      "description": "Visited a site ending in .cl."
+    },
+    {
+      "icon": "/assets/achievements/countries/china.png",
+      "code": "tld_cn",
+      "title": "China",
+      "description": "Visited a site ending in .cn."
+    },
+    {
+      "icon": "/assets/achievements/countries/colombia.png",
+      "code": "tld_co",
+      "title": "Colombia",
+      "description": "Visited a site ending in .co."
+    },
+    {
+      "icon": "/assets/achievements/countries/comoros.png",
+      "code": "tld_km",
+      "title": "Comoros",
+      "description": "Visited a site ending in .km."
+    },
+    {
+      "icon": "/assets/achievements/countries/republic_of_the_congo.png",
+      "code": "tld_cg",
+      "title": "Congo - Brazzaville",
+      "description": "Visited a site ending in .cg."
+    },
+    {
+      "icon": "/assets/achievements/countries/dr_congo.png",
+      "code": "tld_cd",
+      "title": "Congo - Kinshasa",
+      "description": "Visited a site ending in .cd."
+    },
+    {
+      "icon": "/assets/achievements/countries/cook_islands.png",
+      "code": "tld_ck",
+      "title": "Cook Islands",
+      "description": "Visited a site ending in .ck."
+    },
+    {
+      "icon": "/assets/achievements/countries/costa_rica.png",
+      "code": "tld_cr",
+      "title": "Costa Rica",
+      "description": "Visited a site ending in .cr."
+    },
+    {
+      "icon": "/assets/achievements/countries/cote_divoire.png",
+      "code": "tld_ci",
+      "title": "Côte d’Ivoire",
+      "description": "Visited a site ending in .ci."
+    },
+    {
+      "icon": "/assets/achievements/countries/croatia.png",
+      "code": "tld_hr",
+      "title": "Croatia",
+      "description": "Visited a site ending in .hr."
+    },
+    {
+      "icon": "/assets/achievements/countries/cuba.png",
+      "code": "tld_cu",
+      "title": "Cuba",
+      "description": "Visited a site ending in .cu."
+    },
+    {
+      "icon": "/assets/achievements/countries/curacao.png",
+      "code": "tld_cw",
+      "title": "Curaçao",
+      "description": "Visited a site ending in .cw."
+    },
+    {
+      "icon": "/assets/achievements/countries/cyprus.png",
+      "code": "tld_cy",
+      "title": "Cyprus",
+      "description": "Visited a site ending in .cy."
+    },
+    {
+      "icon": "/assets/achievements/countries/czechia.png",
+      "code": "tld_cz",
+      "title": "Czechia",
+      "description": "Visited a site ending in .cz."
+    },
+    {
+      "icon": "/assets/achievements/countries/denmark.png",
+      "code": "tld_dk",
+      "title": "Denmark",
+      "description": "Visited a site ending in .dk."
+    },
+    {
+      "icon": "/assets/achievements/countries/djibouti.png",
+      "code": "tld_dj",
+      "title": "Djibouti",
+      "description": "Visited a site ending in .dj."
+    },
+    {
+      "icon": "/assets/achievements/countries/dominica.png",
+      "code": "tld_dm",
+      "title": "Dominica",
+      "description": "Visited a site ending in .dm."
+    },
+    {
+      "icon": "/assets/achievements/countries/dominican_republic.png",
+      "code": "tld_do",
+      "title": "Dominican Republic",
+      "description": "Visited a site ending in .do."
+    },
+    {
+      "icon": "/assets/achievements/countries/ecuador.png",
+      "code": "tld_ec",
+      "title": "Ecuador",
+      "description": "Visited a site ending in .ec."
+    },
+    {
+      "icon": "/assets/achievements/countries/egypt.png",
+      "code": "tld_eg",
+      "title": "Egypt",
+      "description": "Visited a site ending in .eg."
+    },
+    {
+      "icon": "/assets/achievements/countries/el_salvador.png",
+      "code": "tld_sv",
+      "title": "El Salvador",
+      "description": "Visited a site ending in .sv."
+    },
+    {
+      "icon": "/assets/achievements/countries/equatorial_guinea.png",
+      "code": "tld_gq",
+      "title": "Equatorial Guinea",
+      "description": "Visited a site ending in .gq."
+    },
+    {
+      "icon": "/assets/achievements/countries/eritrea.png",
+      "code": "tld_er",
+      "title": "Eritrea",
+      "description": "Visited a site ending in .er."
+    },
+    {
+      "icon": "/assets/achievements/countries/estonia.png",
+      "code": "tld_ee",
+      "title": "Estonia",
+      "description": "Visited a site ending in .ee."
+    },
+    {
+      "icon": "/assets/achievements/countries/swaziland.png",
+      "code": "tld_sz",
+      "title": "Eswatini",
+      "description": "Visited a site ending in .sz."
+    },
+    {
+      "icon": "/assets/achievements/countries/ethiopia.png",
+      "code": "tld_et",
+      "title": "Ethiopia",
+      "description": "Visited a site ending in .et."
+    },
+    {
+      "icon": "/assets/achievements/countries/faroe_islands.png",
+      "code": "tld_fo",
+      "title": "Faroe Islands",
+      "description": "Visited a site ending in .fo."
+    },
+    {
+      "icon": "/assets/achievements/countries/fiji.png",
+      "code": "tld_fj",
+      "title": "Fiji",
+      "description": "Visited a site ending in .fj."
+    },
+    {
+      "icon": "/assets/achievements/countries/finland.png",
+      "code": "tld_fi",
+      "title": "Finland",
+      "description": "Visited a site ending in .fi."
+    },
+    {
+      "icon": "/assets/achievements/countries/france.png",
+      "code": "tld_fr",
+      "title": "France",
+      "description": "Visited a site ending in .fr."
+    },
+    {
+      "icon": "/assets/achievements/countries/french_polynesia.png",
+      "code": "tld_pf",
+      "title": "French Polynesia",
+      "description": "Visited a site ending in .pf."
+    },
+    {
+      "icon": "/assets/achievements/countries/gabon.png",
+      "code": "tld_ga",
+      "title": "Gabon",
+      "description": "Visited a site ending in .ga."
+    },
+    {
+      "icon": "/assets/achievements/countries/gambia.png",
+      "code": "tld_gm",
+      "title": "Gambia",
+      "description": "Visited a site ending in .gm."
+    },
+    {
+      "icon": "/assets/achievements/countries/georgia.png",
+      "code": "tld_ge",
+      "title": "Georgia",
+      "description": "Visited a site ending in .ge."
+    },
+    {
+      "icon": "/assets/achievements/countries/germany.png",
+      "code": "tld_de",
+      "title": "Germany",
+      "description": "Visited a site ending in .de."
+    },
+    {
+      "icon": "/assets/achievements/countries/ghana.png",
+      "code": "tld_gh",
+      "title": "Ghana",
+      "description": "Visited a site ending in .gh."
+    },
+    {
+      "icon": "/assets/achievements/countries/greece.png",
+      "code": "tld_gr",
+      "title": "Greece",
+      "description": "Visited a site ending in .gr."
+    },
+    {
+      "icon": "/assets/achievements/countries/greenland.png",
+      "code": "tld_gl",
+      "title": "Greenland",
+      "description": "Visited a site ending in .gl."
+    },
+    {
+      "icon": "/assets/achievements/countries/grenada.png",
+      "code": "tld_gd",
+      "title": "Grenada",
+      "description": "Visited a site ending in .gd."
+    },
+    {
+      "icon": "/assets/achievements/countries/guatemala.png",
+      "code": "tld_gt",
+      "title": "Guatemala",
+      "description": "Visited a site ending in .gt."
+    },
+    {
+      "icon": "/assets/achievements/countries/guernsey.png",
+      "code": "tld_gg",
+      "title": "Guernsey",
+      "description": "Visited a site ending in .gg."
+    },
+    {
+      "icon": "/assets/achievements/countries/guinea.png",
+      "code": "tld_gn",
+      "title": "Guinea",
+      "description": "Visited a site ending in .gn."
+    },
+    {
+      "icon": "/assets/achievements/countries/guinea_bissau.png",
+      "code": "tld_gw",
+      "title": "Guinea-Bissau",
+      "description": "Visited a site ending in .gw."
+    },
+    {
+      "icon": "/assets/achievements/countries/guyana.png",
+      "code": "tld_gy",
+      "title": "Guyana",
+      "description": "Visited a site ending in .gy."
+    },
+    {
+      "icon": "/assets/achievements/countries/haiti.png",
+      "code": "tld_ht",
+      "title": "Haiti",
+      "description": "Visited a site ending in .ht."
+    },
+    {
+      "icon": "/assets/achievements/countries/honduras.png",
+      "code": "tld_hn",
+      "title": "Honduras",
+      "description": "Visited a site ending in .hn."
+    },
+    {
+      "icon": "/assets/achievements/countries/hong_kong.png",
+      "code": "tld_hk",
+      "title": "Hong Kong SAR China",
+      "description": "Visited a site ending in .hk."
+    },
+    {
+      "icon": "/assets/achievements/countries/hungary.png",
+      "code": "tld_hu",
+      "title": "Hungary",
+      "description": "Visited a site ending in .hu."
+    },
+    {
+      "icon": "/assets/achievements/countries/iceland.png",
+      "code": "tld_is",
+      "title": "Iceland",
+      "description": "Visited a site ending in .is."
+    },
+    {
+      "icon": "/assets/achievements/countries/india.png",
+      "code": "tld_in",
+      "title": "India",
+      "description": "Visited a site ending in .in."
+    },
+    {
+      "icon": "/assets/achievements/countries/indonesia.png",
+      "code": "tld_id",
+      "title": "Indonesia",
+      "description": "Visited a site ending in .id."
+    },
+    {
+      "icon": "/assets/achievements/countries/iran.png",
+      "code": "tld_ir",
+      "title": "Iran",
+      "description": "Visited a site ending in .ir."
+    },
+    {
+      "icon": "/assets/achievements/countries/iraq.png",
+      "code": "tld_iq",
+      "title": "Iraq",
+      "description": "Visited a site ending in .iq."
+    },
+    {
+      "icon": "/assets/achievements/countries/ireland.png",
+      "code": "tld_ie",
+      "title": "Ireland",
+      "description": "Visited a site ending in .ie."
+    },
+    {
+      "icon": "/assets/achievements/countries/isle_of_man.png",
+      "code": "tld_im",
+      "title": "Isle of Man",
+      "description": "Visited a site ending in .im."
+    },
+    {
+      "icon": "/assets/achievements/countries/israel.png",
+      "code": "tld_il",
+      "title": "Israel",
+      "description": "Visited a site ending in .il."
+    },
+    {
+      "icon": "/assets/achievements/countries/italy.png",
+      "code": "tld_it",
+      "title": "Italy",
+      "description": "Visited a site ending in .it."
+    },
+    {
+      "icon": "/assets/achievements/countries/jamaica.png",
+      "code": "tld_jm",
+      "title": "Jamaica",
+      "description": "Visited a site ending in .jm."
+    },
+    {
+      "icon": "/assets/achievements/countries/japan.png",
+      "code": "tld_jp",
+      "title": "Japan",
+      "description": "Visited a site ending in .jp."
+    },
+    {
+      "icon": "/assets/achievements/countries/jersey.png",
+      "code": "tld_je",
+      "title": "Jersey",
+      "description": "Visited a site ending in .je."
+    },
+    {
+      "icon": "/assets/achievements/countries/jordan.png",
+      "code": "tld_jo",
+      "title": "Jordan",
+      "description": "Visited a site ending in .jo."
+    },
+    {
+      "icon": "/assets/achievements/countries/kazakhstan.png",
+      "code": "tld_kz",
+      "title": "Kazakhstan",
+      "description": "Visited a site ending in .kz."
+    },
+    {
+      "icon": "/assets/achievements/countries/kenya.png",
+      "code": "tld_ke",
+      "title": "Kenya",
+      "description": "Visited a site ending in .ke."
+    },
+    {
+      "icon": "/assets/achievements/countries/kiribati.png",
+      "code": "tld_ki",
+      "title": "Kiribati",
+      "description": "Visited a site ending in .ki."
+    },
+    {
+      "icon": "/assets/achievements/countries/kuwait.png",
+      "code": "tld_kw",
+      "title": "Kuwait",
+      "description": "Visited a site ending in .kw."
+    },
+    {
+      "icon": "/assets/achievements/countries/kyrgyzstan.png",
+      "code": "tld_kg",
+      "title": "Kyrgyzstan",
+      "description": "Visited a site ending in .kg."
+    },
+    {
+      "icon": "/assets/achievements/countries/laos.png",
+      "code": "tld_la",
+      "title": "Laos",
+      "description": "Visited a site ending in .la."
+    },
+    {
+      "icon": "/assets/achievements/countries/latvia.png",
+      "code": "tld_lv",
+      "title": "Latvia",
+      "description": "Visited a site ending in .lv."
+    },
+    {
+      "icon": "/assets/achievements/countries/lebanon.png",
+      "code": "tld_lb",
+      "title": "Lebanon",
+      "description": "Visited a site ending in .lb."
+    },
+    {
+      "icon": "/assets/achievements/countries/lesotho.png",
+      "code": "tld_ls",
+      "title": "Lesotho",
+      "description": "Visited a site ending in .ls."
+    },
+    {
+      "icon": "/assets/achievements/countries/liberia.png",
+      "code": "tld_lr",
+      "title": "Liberia",
+      "description": "Visited a site ending in .lr."
+    },
+    {
+      "icon": "/assets/achievements/countries/libya.png",
+      "code": "tld_ly",
+      "title": "Libya",
+      "description": "Visited a site ending in .ly."
+    },
+    {
+      "icon": "/assets/achievements/countries/liechtenstein.png",
+      "code": "tld_li",
+      "title": "Liechtenstein",
+      "description": "Visited a site ending in .li."
+    },
+    {
+      "icon": "/assets/achievements/countries/lithuania.png",
+      "code": "tld_lt",
+      "title": "Lithuania",
+      "description": "Visited a site ending in .lt."
+    },
+    {
+      "icon": "/assets/achievements/countries/luxembourg.png",
+      "code": "tld_lu",
+      "title": "Luxembourg",
+      "description": "Visited a site ending in .lu."
+    },
+    {
+      "icon": "/assets/achievements/countries/madagascar.png",
+      "code": "tld_mg",
+      "title": "Madagascar",
+      "description": "Visited a site ending in .mg."
+    },
+    {
+      "icon": "/assets/achievements/countries/malawi.png",
+      "code": "tld_mw",
+      "title": "Malawi",
+      "description": "Visited a site ending in .mw."
+    },
+    {
+      "icon": "/assets/achievements/countries/malaysia.png",
+      "code": "tld_my",
+      "title": "Malaysia",
+      "description": "Visited a site ending in .my."
+    },
+    {
+      "icon": "/assets/achievements/countries/maldives.png",
+      "code": "tld_mv",
+      "title": "Maldives",
+      "description": "Visited a site ending in .mv."
+    },
+    {
+      "icon": "/assets/achievements/countries/mali.png",
+      "code": "tld_ml",
+      "title": "Mali",
+      "description": "Visited a site ending in .ml."
+    },
+    {
+      "icon": "/assets/achievements/countries/malta.png",
+      "code": "tld_mt",
+      "title": "Malta",
+      "description": "Visited a site ending in .mt."
+    },
+    {
+      "icon": "/assets/achievements/countries/marshall_islands.png",
+      "code": "tld_mh",
+      "title": "Marshall Islands",
+      "description": "Visited a site ending in .mh."
+    },
+    {
+      "icon": "/assets/achievements/countries/mauritania.png",
+      "code": "tld_mr",
+      "title": "Mauritania",
+      "description": "Visited a site ending in .mr."
+    },
+    {
+      "icon": "/assets/achievements/countries/mauritius.png",
+      "code": "tld_mu",
+      "title": "Mauritius",
+      "description": "Visited a site ending in .mu."
+    },
+    {
+      "icon": "/assets/achievements/countries/mexico.png",
+      "code": "tld_mx",
+      "title": "Mexico",
+      "description": "Visited a site ending in .mx."
+    },
+    {
+      "icon": "/assets/achievements/countries/micronesia.png",
+      "code": "tld_fm",
+      "title": "Micronesia",
+      "description": "Visited a site ending in .fm."
+    },
+    {
+      "icon": "/assets/achievements/countries/moldova.png",
+      "code": "tld_md",
+      "title": "Moldova",
+      "description": "Visited a site ending in .md."
+    },
+    {
+      "icon": "/assets/achievements/countries/monaco.png",
+      "code": "tld_mc",
+      "title": "Monaco",
+      "description": "Visited a site ending in .mc."
+    },
+    {
+      "icon": "/assets/achievements/countries/mongolia.png",
+      "code": "tld_mn",
+      "title": "Mongolia",
+      "description": "Visited a site ending in .mn."
+    },
+    {
+      "icon": "/assets/achievements/countries/montenegro.png",
+      "code": "tld_me",
+      "title": "Montenegro",
+      "description": "Visited a site ending in .me."
+    },
+    {
+      "icon": "/assets/achievements/countries/morocco.png",
+      "code": "tld_ma",
+      "title": "Morocco",
+      "description": "Visited a site ending in .ma."
+    },
+    {
+      "icon": "/assets/achievements/countries/mozambique.png",
+      "code": "tld_mz",
+      "title": "Mozambique",
+      "description": "Visited a site ending in .mz."
+    },
+    {
+      "icon": "/assets/achievements/countries/myanmar.png",
+      "code": "tld_mm",
+      "title": "Myanmar (Burma)",
+      "description": "Visited a site ending in .mm."
+    },
+    {
+      "icon": "/assets/achievements/countries/namibia.png",
+      "code": "tld_na",
+      "title": "Namibia",
+      "description": "Visited a site ending in .na."
+    },
+    {
+      "icon": "/assets/achievements/countries/nauru.png",
+      "code": "tld_nr",
+      "title": "Nauru",
+      "description": "Visited a site ending in .nr."
+    },
+    {
+      "icon": "/assets/achievements/countries/nepal.png",
+      "code": "tld_np",
+      "title": "Nepal",
+      "description": "Visited a site ending in .np."
+    },
+    {
+      "icon": "/assets/achievements/countries/netherlands.png",
+      "code": "tld_nl",
+      "title": "Netherlands",
+      "description": "Visited a site ending in .nl."
+    },
+    {
+      "icon": "/assets/achievements/countries/new_zealand.png",
+      "code": "tld_nz",
+      "title": "New Zealand",
+      "description": "Visited a site ending in .nz."
+    },
+    {
+      "icon": "/assets/achievements/countries/nicaragua.png",
+      "code": "tld_ni",
+      "title": "Nicaragua",
+      "description": "Visited a site ending in .ni."
+    },
+    {
+      "icon": "/assets/achievements/countries/niger.png",
+      "code": "tld_ne",
+      "title": "Niger",
+      "description": "Visited a site ending in .ne."
+    },
+    {
+      "icon": "/assets/achievements/countries/nigeria.png",
+      "code": "tld_ng",
+      "title": "Nigeria",
+      "description": "Visited a site ending in .ng."
+    },
+    {
+      "icon": "/assets/achievements/countries/niue.png",
+      "code": "tld_nu",
+      "title": "Niue",
+      "description": "Visited a site ending in .nu."
+    },
+    {
+      "icon": "/assets/achievements/countries/north_korea.png",
+      "code": "tld_kp",
+      "title": "North Korea",
+      "description": "Visited a site ending in .kp."
+    },
+    {
+      "icon": "/assets/achievements/countries/north_macedonia.png",
+      "code": "tld_mk",
+      "title": "North Macedonia",
+      "description": "Visited a site ending in .mk."
+    },
+    {
+      "icon": "/assets/achievements/countries/norway.png",
+      "code": "tld_no",
+      "title": "Norway",
+      "description": "Visited a site ending in .no."
+    },
+    {
+      "icon": "/assets/achievements/countries/oman.png",
+      "code": "tld_om",
+      "title": "Oman",
+      "description": "Visited a site ending in .om."
+    },
+    {
+      "icon": "/assets/achievements/countries/pakistan.png",
+      "code": "tld_pk",
+      "title": "Pakistan",
+      "description": "Visited a site ending in .pk."
+    },
+    {
+      "icon": "/assets/achievements/countries/palau.png",
+      "code": "tld_pw",
+      "title": "Palau",
+      "description": "Visited a site ending in .pw."
+    },
+    {
+      "icon": "/assets/achievements/countries/palestine.png",
+      "code": "tld_ps",
+      "title": "Palestinian Territories",
+      "description": "Visited a site ending in .ps."
+    },
+    {
+      "icon": "/assets/achievements/countries/panama.png",
+      "code": "tld_pa",
+      "title": "Panama",
+      "description": "Visited a site ending in .pa."
+    },
+    {
+      "icon": "/assets/achievements/countries/papua_new_guinea.png",
+      "code": "tld_pg",
+      "title": "Papua New Guinea",
+      "description": "Visited a site ending in .pg."
+    },
+    {
+      "icon": "/assets/achievements/countries/paraguay.png",
+      "code": "tld_py",
+      "title": "Paraguay",
+      "description": "Visited a site ending in .py."
+    },
+    {
+      "icon": "/assets/achievements/countries/peru.png",
+      "code": "tld_pe",
+      "title": "Peru",
+      "description": "Visited a site ending in .pe."
+    },
+    {
+      "icon": "/assets/achievements/countries/philippines.png",
+      "code": "tld_ph",
+      "title": "Philippines",
+      "description": "Visited a site ending in .ph."
+    },
+    {
+      "icon": "/assets/achievements/countries/poland.png",
+      "code": "tld_pl",
+      "title": "Poland",
+      "description": "Visited a site ending in .pl."
+    },
+    {
+      "icon": "/assets/achievements/countries/portugal.png",
+      "code": "tld_pt",
+      "title": "Portugal",
+      "description": "Visited a site ending in .pt."
+    },
+    {
+      "icon": "/assets/achievements/countries/qatar.png",
+      "code": "tld_qa",
+      "title": "Qatar",
+      "description": "Visited a site ending in .qa."
+    },
+    {
+      "icon": "/assets/achievements/countries/romania.png",
+      "code": "tld_ro",
+      "title": "Romania",
+      "description": "Visited a site ending in .ro."
+    },
+    {
+      "icon": "/assets/achievements/countries/russia.png",
+      "code": "tld_ru",
+      "title": "Russia",
+      "description": "Visited a site ending in .ru."
+    },
+    {
+      "icon": "/assets/achievements/countries/rwanda.png",
+      "code": "tld_rw",
+      "title": "Rwanda",
+      "description": "Visited a site ending in .rw."
+    },
+    {
+      "icon": "/assets/achievements/countries/samoa.png",
+      "code": "tld_ws",
+      "title": "Samoa",
+      "description": "Visited a site ending in .ws."
+    },
+    {
+      "icon": "/assets/achievements/countries/san_marino.png",
+      "code": "tld_sm",
+      "title": "San Marino",
+      "description": "Visited a site ending in .sm."
+    },
+    {
+      "icon": "/assets/achievements/countries/sao_tome_and_principe.png",
+      "code": "tld_st",
+      "title": "São Tomé & Príncipe",
+      "description": "Visited a site ending in .st."
+    },
+    {
+      "icon": "/assets/achievements/countries/saudi_arabia.png",
+      "code": "tld_sa",
+      "title": "Saudi Arabia",
+      "description": "Visited a site ending in .sa."
+    },
+    {
+      "icon": "/assets/achievements/countries/senegal.png",
+      "code": "tld_sn",
+      "title": "Senegal",
+      "description": "Visited a site ending in .sn."
+    },
+    {
+      "icon": "/assets/achievements/countries/serbia.png",
+      "code": "tld_rs",
+      "title": "Serbia",
+      "description": "Visited a site ending in .rs."
+    },
+    {
+      "icon": "/assets/achievements/countries/seychelles.png",
+      "code": "tld_sc",
+      "title": "Seychelles",
+      "description": "Visited a site ending in .sc."
+    },
+    {
+      "icon": "/assets/achievements/countries/sierra_leone.png",
+      "code": "tld_sl",
+      "title": "Sierra Leone",
+      "description": "Visited a site ending in .sl."
+    },
+    {
+      "icon": "/assets/achievements/countries/singapore.png",
+      "code": "tld_sg",
+      "title": "Singapore",
+      "description": "Visited a site ending in .sg."
+    },
+    {
+      "icon": "/assets/achievements/countries/sint_maarten.png",
+      "code": "tld_sx",
+      "title": "Sint Maarten",
+      "description": "Visited a site ending in .sx."
+    },
+    {
+      "icon": "/assets/achievements/countries/slovakia.png",
+      "code": "tld_sk",
+      "title": "Slovakia",
+      "description": "Visited a site ending in .sk."
+    },
+    {
+      "icon": "/assets/achievements/countries/slovenia.png",
+      "code": "tld_si",
+      "title": "Slovenia",
+      "description": "Visited a site ending in .si."
+    },
+    {
+      "icon": "/assets/achievements/countries/solomon_islands.png",
+      "code": "tld_sb",
+      "title": "Solomon Islands",
+      "description": "Visited a site ending in .sb."
+    },
+    {
+      "icon": "/assets/achievements/countries/somalia.png",
+      "code": "tld_so",
+      "title": "Somalia",
+      "description": "Visited a site ending in .so."
+    },
+    {
+      "icon": "/assets/achievements/countries/south_africa.png",
+      "code": "tld_za",
+      "title": "South Africa",
+      "description": "Visited a site ending in .za."
+    },
+    {
+      "icon": "/assets/achievements/countries/south_korea.png",
+      "code": "tld_kr",
+      "title": "South Korea",
+      "description": "Visited a site ending in .kr."
+    },
+    {
+      "icon": "/assets/achievements/countries/south_sudan.png",
+      "code": "tld_ss",
+      "title": "South Sudan",
+      "description": "Visited a site ending in .ss."
+    },
+    {
+      "icon": "/assets/achievements/countries/spain.png",
+      "code": "tld_es",
+      "title": "Spain",
+      "description": "Visited a site ending in .es."
+    },
+    {
+      "icon": "/assets/achievements/countries/sri_lanka.png",
+      "code": "tld_lk",
+      "title": "Sri Lanka",
+      "description": "Visited a site ending in .lk."
+    },
+    {
+      "icon": "/assets/achievements/countries/saint_kitts_and_nevis.png",
+      "code": "tld_kn",
+      "title": "St. Kitts & Nevis",
+      "description": "Visited a site ending in .kn."
+    },
+    {
+      "icon": "/assets/achievements/countries/saint_lucia.png",
+      "code": "tld_lc",
+      "title": "St. Lucia",
+      "description": "Visited a site ending in .lc."
+    },
+    {
+      "icon": "/assets/achievements/countries/saint_martin.png",
+      "code": "tld_mf",
+      "title": "St. Martin",
+      "description": "Visited a site ending in .mf."
+    },
+    {
+      "icon": "/assets/achievements/countries/sudan.png",
+      "code": "tld_sd",
+      "title": "Sudan",
+      "description": "Visited a site ending in .sd."
+    },
+    {
+      "icon": "/assets/achievements/countries/suriname.png",
+      "code": "tld_sr",
+      "title": "Suriname",
+      "description": "Visited a site ending in .sr."
+    },
+    {
+      "icon": "/assets/achievements/countries/sweden.png",
+      "code": "tld_se",
+      "title": "Sweden",
+      "description": "Visited a site ending in .se."
+    },
+    {
+      "icon": "/assets/achievements/countries/switzerland.png",
+      "code": "tld_ch",
+      "title": "Switzerland",
+      "description": "Visited a site ending in .ch."
+    },
+    {
+      "icon": "/assets/achievements/countries/syria.png",
+      "code": "tld_sy",
+      "title": "Syria",
+      "description": "Visited a site ending in .sy."
+    },
+    {
+      "icon": "/assets/achievements/countries/taiwan.png",
+      "code": "tld_tw",
+      "title": "Taiwan",
+      "description": "Visited a site ending in .tw."
+    },
+    {
+      "icon": "/assets/achievements/countries/tajikistan.png",
+      "code": "tld_tj",
+      "title": "Tajikistan",
+      "description": "Visited a site ending in .tj."
+    },
+    {
+      "icon": "/assets/achievements/countries/tanzania.png",
+      "code": "tld_tz",
+      "title": "Tanzania",
+      "description": "Visited a site ending in .tz."
+    },
+    {
+      "icon": "/assets/achievements/countries/thailand.png",
+      "code": "tld_th",
+      "title": "Thailand",
+      "description": "Visited a site ending in .th."
+    },
+    {
+      "icon": "/assets/achievements/countries/timor_leste.png",
+      "code": "tld_tl",
+      "title": "Timor-Leste",
+      "description": "Visited a site ending in .tl."
+    },
+    {
+      "icon": "/assets/achievements/countries/togo.png",
+      "code": "tld_tg",
+      "title": "Togo",
+      "description": "Visited a site ending in .tg."
+    },
+    {
+      "icon": "/assets/achievements/countries/tokelau.png",
+      "code": "tld_tk",
+      "title": "Tokelau",
+      "description": "Visited a site ending in .tk."
+    },
+    {
+      "icon": "/assets/achievements/countries/tonga.png",
+      "code": "tld_to",
+      "title": "Tonga",
+      "description": "Visited a site ending in .to."
+    },
+    {
+      "icon": "/assets/achievements/countries/trinidad_and_tobago.png",
+      "code": "tld_tt",
+      "title": "Trinidad & Tobago",
+      "description": "Visited a site ending in .tt."
+    },
+    {
+      "icon": "/assets/achievements/countries/tunisia.png",
+      "code": "tld_tn",
+      "title": "Tunisia",
+      "description": "Visited a site ending in .tn."
+    },
+    {
+      "icon": "/assets/achievements/countries/turkey.png",
+      "code": "tld_tr",
+      "title": "Turkey",
+      "description": "Visited a site ending in .tr."
+    },
+    {
+      "icon": "/assets/achievements/countries/turkmenistan.png",
+      "code": "tld_tm",
+      "title": "Turkmenistan",
+      "description": "Visited a site ending in .tm."
+    },
+    {
+      "icon": "/assets/achievements/countries/tuvalu.png",
+      "code": "tld_tv",
+      "title": "Tuvalu",
+      "description": "Visited a site ending in .tv."
+    },
+    {
+      "icon": "/assets/achievements/countries/uganda.png",
+      "code": "tld_ug",
+      "title": "Uganda",
+      "description": "Visited a site ending in .ug."
+    },
+    {
+      "icon": "/assets/achievements/countries/ukraine.png",
+      "code": "tld_ua",
+      "title": "Ukraine",
+      "description": "Visited a site ending in .ua."
+    },
+    {
+      "icon": "/assets/achievements/countries/united_arab_emirates.png",
+      "code": "tld_ae",
+      "title": "United Arab Emirates",
+      "description": "Visited a site ending in .ae."
+    },
+    {
+      "icon": "/assets/achievements/countries/united_states.png",
+      "code": "tld_us",
+      "title": "United States",
+      "description": "Visited a site ending in .us."
+    },
+    {
+      "icon": "/assets/achievements/countries/uruguay.png",
+      "code": "tld_uy",
+      "title": "Uruguay",
+      "description": "Visited a site ending in .uy."
+    },
+    {
+      "icon": "/assets/achievements/countries/uzbekistan.png",
+      "code": "tld_uz",
+      "title": "Uzbekistan",
+      "description": "Visited a site ending in .uz."
+    },
+    {
+      "icon": "/assets/achievements/countries/vanuatu.png",
+      "code": "tld_vu",
+      "title": "Vanuatu",
+      "description": "Visited a site ending in .vu."
+    },
+    {
+      "icon": "/assets/achievements/countries/vatican_city.png",
+      "code": "tld_va",
+      "title": "Vatican City",
+      "description": "Visited a site ending in .va."
+    },
+    {
+      "icon": "/assets/achievements/countries/venezuela.png",
+      "code": "tld_ve",
+      "title": "Venezuela",
+      "description": "Visited a site ending in .ve."
+    },
+    {
+      "icon": "/assets/achievements/countries/vietnam.png",
+      "code": "tld_vn",
+      "title": "Vietnam",
+      "description": "Visited a site ending in .vn."
+    },
+    {
+      "icon": "/assets/achievements/countries/yemen.png",
+      "code": "tld_ye",
+      "title": "Yemen",
+      "description": "Visited a site ending in .ye."
+    },
+    {
+      "icon": "/assets/achievements/countries/zambia.png",
+      "code": "tld_zm",
+      "title": "Zambia",
+      "description": "Visited a site ending in .zm."
+    },
+    {
+      "icon": "/assets/achievements/countries/zimbabwe.png",
+      "code": "tld_zw",
+      "title": "Zimbabwe",
+      "description": "Visited a site ending in .zw."
     }
   ],
   "slots": 295

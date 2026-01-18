@@ -94,7 +94,7 @@ body {
   z-index: 5;
   flex-wrap: nowrap;
   align-items: center;
-  overflow-x: auto;
+  overflow: visible;
 }
 
 .menubar-spacer {
@@ -528,14 +528,21 @@ body {
 }
 
 .achievement-tile img {
-  max-width: 70%;
-  max-height: 70%;
+  max-width: 85%;
+  max-height: 85%;
   width: auto;
   height: auto;
   display: block;
   object-fit: contain;
   image-rendering: pixelated;
   filter: grayscale(1);
+}
+
+.achievement-tile img[src*="/assets/achievements/countries/"] {
+  max-width: 100%;
+  max-height: 100%;
+  transform: scale(2);
+  transform-origin: center;
 }
 
 .achievement-tile.is-unlocked img {

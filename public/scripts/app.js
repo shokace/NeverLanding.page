@@ -364,6 +364,7 @@ async function logVisit(url) {
       body: JSON.stringify({ url }),
     });
     fetchProgress();
+    document.dispatchEvent(new CustomEvent("achievements-changed"));
   } catch {}
 }
 
