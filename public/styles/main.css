@@ -383,6 +383,13 @@ body {
     inset -1px -1px 0 var(--win-shadow);
 }
 
+.modal-window--large {
+  width: min(860px, 92vw);
+  max-height: 86vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .modal-titlebar {
   background: linear-gradient(90deg, var(--win-blue), var(--win-blue-light));
   color: #fff;
@@ -410,6 +417,10 @@ body {
   padding: 12px;
   display: grid;
   gap: 10px;
+}
+
+.achievements-body {
+  overflow: auto;
 }
 
 .modal-copy {
@@ -473,6 +484,34 @@ body {
     inset 1px 1px 0 var(--win-light),
     inset -1px -1px 0 var(--win-shadow);
   font-size: 0.85rem;
+}
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.achievement-tile {
+  aspect-ratio: 1 / 1;
+  background: #d7d7d7;
+  border: 2px solid #000;
+  box-shadow:
+    inset 1px 1px 0 var(--win-light),
+    inset -1px -1px 0 var(--win-shadow);
+}
+
+.achievement-tile:hover {
+  background: #c8c8c8;
+  box-shadow:
+    inset -1px -1px 0 var(--win-light),
+    inset 2px 2px 0 var(--win-shadow);
+}
+
+@media (max-width: 720px) {
+  .achievements-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 720px) {

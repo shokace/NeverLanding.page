@@ -13,11 +13,17 @@ const loginMenuItem = document.getElementById("login-menu");
 const logoutMenuItem = document.getElementById("logout-menu");
 const shareMenuItem = document.getElementById("share-menu");
 const achievementsMenuItem = document.getElementById("achievements-menu");
+const leaderboardMenuItem = document.getElementById("leaderboard-menu");
 const fullscreenMenuItem = document.getElementById("fullscreen-menu");
 const favoritesAddMenuItem = document.getElementById("favorites-add-menu");
 const favoritesEditMenuItem = document.getElementById("favorites-edit-menu");
 const loginModal = document.getElementById("login-modal");
 const loginClose = loginModal ? loginModal.querySelector(".modal-close") : null;
+const achievementsModal = document.getElementById("achievements-modal");
+const achievementsClose = achievementsModal
+  ? achievementsModal.querySelector(".modal-close")
+  : null;
+const achievementsGrid = document.getElementById("achievements-grid");
 const emailToggle = loginModal ? loginModal.querySelector("[data-action=\"email-login\"]") : null;
 const signupToggle = loginModal ? loginModal.querySelector("[data-action=\"email-signup\"]") : null;
 const emailForm = document.getElementById("email-login");
@@ -84,6 +90,16 @@ function closeLoginModal() {
   if (signupForm) signupForm.classList.add("is-hidden");
 }
 
+function openAchievementsModal() {
+  if (!achievementsModal) return;
+  achievementsModal.classList.remove("is-hidden");
+}
+
+function closeAchievementsModal() {
+  if (!achievementsModal) return;
+  achievementsModal.classList.add("is-hidden");
+}
+
 function setLoginStatus(message) {
   if (!loginStatus) return;
   loginStatus.textContent = message;
@@ -128,6 +144,16 @@ if (loginModal) {
 
 if (loginClose) {
   loginClose.addEventListener("click", closeLoginModal);
+}
+
+if (achievementsModal) {
+  achievementsModal.addEventListener("click", (event) => {
+    if (event.target === achievementsModal) closeAchievementsModal();
+  });
+}
+
+if (achievementsClose) {
+  achievementsClose.addEventListener("click", closeAchievementsModal);
 }
 
 if (emailToggle && emailForm) {
@@ -197,6 +223,13 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && loginModal && !loginModal.classList.contains("is-hidden")) {
     closeLoginModal();
   }
+  if (
+    event.key === "Escape" &&
+    achievementsModal &&
+    !achievementsModal.classList.contains("is-hidden")
+  ) {
+    closeAchievementsModal();
+  }
 });
 
 if (logoutMenuItem) {
@@ -247,7 +280,14 @@ if (fullscreenMenuItem) {
 if (achievementsMenuItem) {
   achievementsMenuItem.addEventListener("click", () => {
     closeMenus();
-    metaEl.textContent = "Achievements coming soon.";
+    openAchievementsModal();
+  });
+}
+
+if (leaderboardMenuItem) {
+  leaderboardMenuItem.addEventListener("click", () => {
+    closeMenus();
+    metaEl.textContent = "Leaderboards coming soon.";
   });
 }
 
@@ -295,6 +335,19 @@ fetch("/api/auth/me")
     setAuthState(data.user);
   })
   .catch(() => {});
+
+if (achievementsGrid && !achievementsGrid.children.length) {
+  const tiles = document.createDocumentFragment();
+  const baseAchievements = 100;
+  const countryCount = 195;
+  const totalTiles = baseAchievements + countryCount;
+  for (let i = 0; i < totalTiles; i += 1) {
+    const tile = document.createElement("div");
+    tile.className = "achievement-tile";
+    tiles.appendChild(tile);
+  }
+  achievementsGrid.appendChild(tiles);
+}
 
 function loadHistory() {
   try {
