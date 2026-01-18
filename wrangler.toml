@@ -7,3 +7,8 @@ enabled = true
 
 [assets]
 directory = "./public"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "neverlanding-dev"
+database_id = "b5b3d4dc-3c7e-4c10-a5ab-798ad77af8ae"

@@ -3,6 +3,7 @@ node_modules/
 
 # Cloudflare Wrangler
 .wrangler/
+.dev.vars
 
 # Logs
 npm-debug.log*
@@ -12,3 +13,6 @@ pnpm-debug.log*
 
 # OS
 .DS_Store
+
+# Local notes
+todo.md
