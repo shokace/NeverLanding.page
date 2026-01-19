@@ -1,6 +1,7 @@
 const achievementsGrid = document.getElementById("achievements-grid");
 const achievementDetailModal = document.getElementById("achievement-detail-modal");
 const achievementDetailText = document.getElementById("achievement-detail-text");
+const achievementDetailTitle = document.getElementById("achievement-detail-title");
 const achievementDetailClose = achievementDetailModal
   ? achievementDetailModal.querySelector(".modal-close")
   : null;
@@ -87,8 +88,11 @@ function applyNotificationBadges() {
   }
 }
 
-function openDetailModal(text) {
+function openDetailModal(title, text) {
   if (!achievementDetailModal || !achievementDetailText) return;
+  if (achievementDetailTitle) {
+    achievementDetailTitle.textContent = title || "Achievement";
+  }
   achievementDetailText.textContent = text;
   achievementDetailModal.classList.remove("is-hidden");
 }
@@ -156,8 +160,9 @@ if (achievementsGrid) {
     if (!tile) return;
     const index = Number(tile.dataset.index || 0);
     const info = achievementData[index];
+    const title = info && info.title ? `${info.title} Achievement` : "Achievement";
     const text = info && info.description ? info.description : "Achievement details coming soon.";
-    openDetailModal(text);
+    openDetailModal(title, text);
   });
 }
 
