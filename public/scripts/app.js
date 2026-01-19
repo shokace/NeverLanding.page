@@ -17,6 +17,7 @@ const leaderboardMenuItem = document.getElementById("leaderboard-menu");
 const fullscreenMenuItem = document.getElementById("fullscreen-menu");
 const favoritesAddMenuItem = document.getElementById("favorites-add-menu");
 const favoritesEditMenuItem = document.getElementById("favorites-edit-menu");
+const aboutMenuItem = document.getElementById("about-menu");
 const landingCounter = document.getElementById("landing-counter");
 const loginModal = document.getElementById("login-modal");
 const loginClose = loginModal ? loginModal.querySelector(".modal-close") : null;
@@ -24,6 +25,8 @@ const achievementsModal = document.getElementById("achievements-modal");
 const achievementsClose = achievementsModal
   ? achievementsModal.querySelector(".modal-close")
   : null;
+const aboutModal = document.getElementById("about-modal");
+const aboutClose = aboutModal ? aboutModal.querySelector(".modal-close") : null;
 const emailToggle = loginModal ? loginModal.querySelector("[data-action=\"email-login\"]") : null;
 const signupToggle = loginModal ? loginModal.querySelector("[data-action=\"email-signup\"]") : null;
 const emailForm = document.getElementById("email-login");
@@ -102,6 +105,16 @@ function closeAchievementsModal() {
   document.dispatchEvent(new CustomEvent("achievements-viewed"));
 }
 
+function openAboutModal() {
+  if (!aboutModal) return;
+  aboutModal.classList.remove("is-hidden");
+}
+
+function closeAboutModal() {
+  if (!aboutModal) return;
+  aboutModal.classList.add("is-hidden");
+}
+
 function setLoginStatus(message) {
   if (!loginStatus) return;
   loginStatus.textContent = message;
@@ -163,6 +176,16 @@ if (achievementsModal) {
 
 if (achievementsClose) {
   achievementsClose.addEventListener("click", closeAchievementsModal);
+}
+
+if (aboutModal) {
+  aboutModal.addEventListener("click", (event) => {
+    if (event.target === aboutModal) closeAboutModal();
+  });
+}
+
+if (aboutClose) {
+  aboutClose.addEventListener("click", closeAboutModal);
 }
 
 if (emailToggle && emailForm) {
@@ -297,6 +320,13 @@ if (leaderboardMenuItem) {
   leaderboardMenuItem.addEventListener("click", () => {
     closeMenus();
     metaEl.textContent = "Leaderboards coming soon.";
+  });
+}
+
+if (aboutMenuItem) {
+  aboutMenuItem.addEventListener("click", () => {
+    closeMenus();
+    openAboutModal();
   });
 }
 

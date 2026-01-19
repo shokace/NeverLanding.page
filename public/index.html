@@ -62,9 +62,8 @@
               Help
             </button>
             <ul class="menu-list" role="menu" aria-label="Help">
-              <li role="menuitem">View Help</li>
               <li role="menuitem">Report Issue</li>
-              <li role="menuitem">About NeverLanding</li>
+              <li role="menuitem" id="about-menu">About NeverLanding</li>
             </ul>
           </div>
           <div class="menubar-spacer"></div>
@@ -202,6 +201,51 @@
         </div>
         <div class="modal-body">
           <p id="achievement-detail-text" class="modal-copy"></p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="about-modal"
+      class="modal is-hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="about-title"
+    >
+      <div class="modal-window modal-window--large">
+        <div class="modal-titlebar">
+          <div id="about-title">About NeverLanding</div>
+          <button class="modal-close" type="button" aria-label="Close about dialog">×</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-copy">
+            <strong>What it is</strong>
+            NeverLanding is a throwback to the early web. It drops you into a random site with
+            a single click, so you can explore the internet in its raw, unpredictable form.
+          </p>
+          <p class="modal-copy">
+            <strong>Why it exists</strong>
+            No ads. No data harvesting. No tracking you around. Just curiosity-driven browsing and
+            the joy of discovering strange personal pages, experiments, and forgotten corners of
+            the web.
+          </p>
+          <p class="modal-copy">
+            <strong>How it feels</strong>
+            Think “TikTok for websites,” but instead of endless videos you get real places made by
+            real people. One click equals one new destination.
+          </p>
+          <p class="modal-copy">
+            <strong>Why sign up</strong>
+            Save interesting sites as bookmarks and favorites, earn achievements and challenges,
+            and track how many sites you have visited — including which countries you have seen
+            on the web.
+          </p>
+          <p class="modal-copy">
+            <strong>The bigger idea</strong>
+            This isn’t about replacing modern platforms. It’s about remembering what made the web
+            exciting in the first place. If you miss wandering the internet just to see what’s out
+            there, you’re in the right place.
+          </p>
         </div>
       </div>
     </div>
