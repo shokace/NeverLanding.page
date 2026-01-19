@@ -4,8 +4,12 @@ const achievementDetailText = document.getElementById("achievement-detail-text")
 const achievementDetailClose = achievementDetailModal
   ? achievementDetailModal.querySelector(".modal-close")
   : null;
+const viewMenuButton = document.getElementById("view-menu-button");
 let achievementData = [];
 let unlockedCodes = new Set();
+let seenCodes = new Set();
+let currentUserId = null;
+const ACHIEVEMENTS_SEEN_KEY = "neverlanding-achievements-seen";
 
 function buildAchievementTiles(total) {
   if (!achievementsGrid) return;
@@ -35,10 +39,52 @@ function applyUnlocks() {
     const index = Number(tile.dataset.index || 0);
     const info = achievementData[index];
     const code = info && info.code ? info.code : "";
-    if (code && unlockedCodes.has(code)) {
-      tile.classList.add("is-unlocked");
-    }
+    tile.classList.toggle("is-unlocked", Boolean(code && unlockedCodes.has(code)));
   });
+  applyNotificationBadges();
+}
+
+function getSeenKey(userId) {
+  return userId ? `${ACHIEVEMENTS_SEEN_KEY}:${userId}` : ACHIEVEMENTS_SEEN_KEY;
+}
+
+function loadSeenCodes(userId) {
+  try {
+    const raw = localStorage.getItem(getSeenKey(userId));
+    const parsed = JSON.parse(raw || "[]");
+    if (!Array.isArray(parsed)) return new Set();
+    return new Set(parsed.map((code) => String(code)));
+  } catch {
+    return new Set();
+  }
+}
+
+function saveSeenCodes() {
+  try {
+    const list = Array.from(seenCodes);
+    localStorage.setItem(getSeenKey(currentUserId), JSON.stringify(list));
+  } catch {}
+}
+
+function applyNotificationBadges() {
+  const unseen = new Set();
+  unlockedCodes.forEach((code) => {
+    if (!seenCodes.has(code)) unseen.add(code);
+  });
+
+  if (achievementsGrid) {
+    const tiles = achievementsGrid.querySelectorAll(".achievement-tile");
+    tiles.forEach((tile) => {
+      const index = Number(tile.dataset.index || 0);
+      const info = achievementData[index];
+      const code = info && info.code ? info.code : "";
+      tile.classList.toggle("is-new", Boolean(code && unseen.has(code)));
+    });
+  }
+
+  if (viewMenuButton) {
+    viewMenuButton.classList.toggle("has-badge", unseen.size > 0);
+  }
 }
 
 function openDetailModal(text) {
@@ -81,12 +127,27 @@ async function refreshUnlocked() {
 }
 
 document.addEventListener("auth-changed", (event) => {
-  if (!event.detail || !event.detail.user) return;
+  if (!event.detail || !event.detail.user) {
+    currentUserId = null;
+    unlockedCodes = new Set();
+    seenCodes = loadSeenCodes(null);
+    applyUnlocks();
+    return;
+  }
+  currentUserId = event.detail.user.id || null;
+  seenCodes = loadSeenCodes(currentUserId);
   refreshUnlocked();
 });
 
 document.addEventListener("achievements-changed", () => {
   refreshUnlocked();
+});
+
+document.addEventListener("achievements-viewed", () => {
+  if (!unlockedCodes.size) return;
+  unlockedCodes.forEach((code) => seenCodes.add(code));
+  saveSeenCodes();
+  applyNotificationBadges();
 });
 
 if (achievementsGrid) {

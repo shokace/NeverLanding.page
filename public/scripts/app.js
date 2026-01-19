@@ -99,6 +99,7 @@ function openAchievementsModal() {
 function closeAchievementsModal() {
   if (!achievementsModal) return;
   achievementsModal.classList.add("is-hidden");
+  document.dispatchEvent(new CustomEvent("achievements-viewed"));
 }
 
 function setLoginStatus(message) {
