@@ -226,11 +226,12 @@ body {
     inset -1px -1px 0 var(--win-shadow);
   font-size: 0.8rem;
   cursor: pointer;
+  min-height: 28px;
 }
 
 .tool-button--compact {
-  width: 30px;
-  min-height: 26px;
+  width: 32px;
+  min-height: 28px;
   padding: 4px;
   justify-content: center;
 }
