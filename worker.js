@@ -634,6 +634,53 @@ export default {
       return jsonResponse({ ok: true }, { status: 201 });
     }
 
+    if (pathname === "/api/favorites" && method === "GET") {
+      if (!env || !env.DB) {
+        return jsonResponse({ error: "Database not configured" }, { status: 500 });
+      }
+      const auth = await requireUser(env, request);
+      if (auth.error) return auth.error;
+      const rows = await env.DB.prepare(
+        "SELECT id, url, title, added_at FROM favorites WHERE user_id = ? ORDER BY added_at DESC"
+      )
+        .bind(auth.user.id)
+        .all();
+      const items = rows && rows.results ? rows.results : [];
+      return jsonResponse({ items }, { status: 200 });
+    }
+
+    if (pathname === "/api/favorites" && method === "POST") {
+      if (!env || !env.DB) {
+        return jsonResponse({ error: "Database not configured" }, { status: 500 });
+      }
+      const auth = await requireUser(env, request);
+      if (auth.error) return auth.error;
+      const body = await readJson(request);
+      if (!body) return jsonResponse({ error: "Invalid JSON" }, { status: 400 });
+      const urlValue = String(body.url || "").trim();
+      const titleValue = String(body.title || "").trim();
+      if (!urlValue) {
+        return jsonResponse({ error: "URL required" }, { status: 400 });
+      }
+      const existing = await env.DB.prepare(
+        "SELECT id FROM favorites WHERE user_id = ? AND url = ?"
+      )
+        .bind(auth.user.id, urlValue)
+        .first();
+      if (existing && existing.id) {
+        await env.DB.prepare("DELETE FROM favorites WHERE id = ?")
+          .bind(existing.id)
+          .run();
+        return jsonResponse({ favorite: false }, { status: 200 });
+      }
+      await env.DB.prepare(
+        "INSERT INTO favorites (user_id, url, title) VALUES (?, ?, ?)"
+      )
+        .bind(auth.user.id, urlValue, titleValue || null)
+        .run();
+      return jsonResponse({ favorite: true }, { status: 201 });
+    }
+
     if (pathname === "/api/progress" && method === "GET") {
       if (!env || !env.DB) {
         return jsonResponse({ error: "Database not configured" }, { status: 500 });

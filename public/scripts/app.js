@@ -17,6 +17,7 @@ const leaderboardMenuItem = document.getElementById("leaderboard-menu");
 const fullscreenMenuItem = document.getElementById("fullscreen-menu");
 const favoritesAddMenuItem = document.getElementById("favorites-add-menu");
 const favoritesEditMenuItem = document.getElementById("favorites-edit-menu");
+const favoriteToggleButton = document.getElementById("favorite-toggle");
 const aboutMenuItem = document.getElementById("about-menu");
 const landingCounter = document.getElementById("landing-counter");
 const loginModal = document.getElementById("login-modal");
@@ -25,6 +26,10 @@ const achievementsModal = document.getElementById("achievements-modal");
 const achievementsClose = achievementsModal
   ? achievementsModal.querySelector(".modal-close")
   : null;
+const favoritesModal = document.getElementById("favorites-modal");
+const favoritesClose = favoritesModal ? favoritesModal.querySelector(".modal-close") : null;
+const favoritesList = document.getElementById("favorites-list");
+const favoritesEmpty = document.getElementById("favorites-empty");
 const aboutModal = document.getElementById("about-modal");
 const aboutClose = aboutModal ? aboutModal.querySelector(".modal-close") : null;
 const emailToggle = loginModal ? loginModal.querySelector("[data-action=\"email-login\"]") : null;
@@ -41,6 +46,9 @@ let history = [];
 let historyIndex = -1;
 let hasStarted = false;
 let currentUser = null;
+let favorites = [];
+let favoritesByUrl = new Map();
+let favoritesPendingRemovals = new Set();
 const HISTORY_KEY = "neverlanding-history";
 const HISTORY_LIMIT = 50;
 const SHARE_PARAM = "url";
@@ -105,6 +113,21 @@ function closeAchievementsModal() {
   document.dispatchEvent(new CustomEvent("achievements-viewed"));
 }
 
+function openFavoritesModal() {
+  if (!favoritesModal) return;
+  favoritesPendingRemovals = new Set();
+  favoritesModal.classList.remove("is-hidden");
+  fetchFavorites();
+}
+
+function closeFavoritesModal() {
+  if (!favoritesModal) return;
+  favoritesModal.classList.add("is-hidden");
+  if (favoritesPendingRemovals.size) {
+    applyFavoriteRemovals();
+  }
+}
+
 function openAboutModal() {
   if (!aboutModal) return;
   aboutModal.classList.remove("is-hidden");
@@ -145,9 +168,135 @@ function setAuthState(user) {
   if (!user && landingCounter) {
     landingCounter.textContent = "Landings: 0";
   }
+  if (user) {
+    fetchFavorites();
+  } else {
+    favorites = [];
+    favoritesByUrl = new Map();
+    renderFavoritesList();
+    updateFavoriteButton();
+  }
   document.dispatchEvent(
     new CustomEvent("auth-changed", { detail: { user: currentUser } })
   );
+}
+
+function renderFavoritesList() {
+  if (!favoritesList || !favoritesEmpty) return;
+  favoritesList.innerHTML = "";
+  if (!favorites.length) {
+    favoritesEmpty.classList.remove("is-hidden");
+    return;
+  }
+  favoritesEmpty.classList.add("is-hidden");
+  const fragment = document.createDocumentFragment();
+  favorites.forEach((item) => {
+    const li = document.createElement("li");
+    const link = document.createElement("a");
+    link.href = item.url || "#";
+    link.textContent = item.title || item.url || "Untitled";
+    if (item.url) {
+      link.dataset.url = item.url;
+    }
+    link.addEventListener("click", (event) => {
+      const targetUrl = link.dataset.url || "";
+      if (!targetUrl) return;
+      event.preventDefault();
+      closeFavoritesModal();
+      applyEntry({ url: targetUrl, crawl: "favorite", at: "" });
+      pushHistory({ url: targetUrl, crawl: "favorite", at: "" });
+    });
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "favorites-toggle is-active";
+    toggle.setAttribute("aria-pressed", "true");
+    toggle.setAttribute("title", "Remove from favorites");
+    toggle.setAttribute("aria-label", "Remove from favorites");
+    toggle.innerHTML = '<span class="favorite-icon" aria-hidden="true"></span>';
+    if (item.url) {
+      toggle.dataset.url = item.url;
+    }
+    toggle.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const targetUrl = toggle.dataset.url || "";
+      if (!targetUrl) return;
+      const isActive = toggle.classList.toggle("is-active");
+      toggle.setAttribute("aria-pressed", isActive ? "true" : "false");
+      if (!isActive) {
+        favoritesPendingRemovals.add(targetUrl);
+        toggle.setAttribute("title", "Restore favorite");
+        toggle.setAttribute("aria-label", "Restore favorite");
+        return;
+      }
+      favoritesPendingRemovals.delete(targetUrl);
+      toggle.setAttribute("title", "Remove from favorites");
+      toggle.setAttribute("aria-label", "Remove from favorites");
+    });
+    li.appendChild(link);
+    li.appendChild(toggle);
+    fragment.appendChild(li);
+  });
+  favoritesList.appendChild(fragment);
+}
+
+function updateFavoriteButton() {
+  if (!favoriteToggleButton) return;
+  const isActive = Boolean(currentUser && currentUrl && favoritesByUrl.has(currentUrl));
+  favoriteToggleButton.classList.toggle("is-active", isActive);
+  favoriteToggleButton.setAttribute("aria-pressed", isActive ? "true" : "false");
+}
+
+async function fetchFavorites() {
+  if (!currentUser) return;
+  try {
+    const res = await fetch("/api/favorites");
+    if (!res.ok) return;
+    const data = await res.json();
+    favorites = Array.isArray(data.items) ? data.items : [];
+    favoritesByUrl = new Map(favorites.map((item) => [item.url, item]));
+    renderFavoritesList();
+    updateFavoriteButton();
+  } catch {}
+}
+
+async function toggleFavorite() {
+  if (!currentUrl) {
+    if (metaEl) metaEl.textContent = "No URL to favorite yet.";
+    return;
+  }
+  if (!currentUser) {
+    setLoginStatus("Sign in to save favorites.");
+    openLoginModal();
+    return;
+  }
+  try {
+    const res = await fetch("/api/favorites", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ url: currentUrl, title: currentUrl }),
+    });
+    if (!res.ok) return;
+    await fetchFavorites();
+  } catch {}
+}
+
+async function applyFavoriteRemovals() {
+  if (!favoritesPendingRemovals.size) return;
+  const removals = Array.from(favoritesPendingRemovals);
+  favoritesPendingRemovals.clear();
+  try {
+    await Promise.all(
+      removals.map((url) =>
+        fetch("/api/favorites", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ url }),
+        })
+      )
+    );
+    await fetchFavorites();
+  } catch {}
 }
 
 if (loginMenuItem) {
@@ -176,6 +325,16 @@ if (achievementsModal) {
 
 if (achievementsClose) {
   achievementsClose.addEventListener("click", closeAchievementsModal);
+}
+
+if (favoritesModal) {
+  favoritesModal.addEventListener("click", (event) => {
+    if (event.target === favoritesModal) closeFavoritesModal();
+  });
+}
+
+if (favoritesClose) {
+  favoritesClose.addEventListener("click", closeFavoritesModal);
 }
 
 if (aboutModal) {
@@ -333,14 +492,19 @@ if (aboutMenuItem) {
 if (favoritesAddMenuItem) {
   favoritesAddMenuItem.addEventListener("click", () => {
     closeMenus();
-    metaEl.textContent = "Favorites coming soon.";
+    toggleFavorite();
   });
 }
 
 if (favoritesEditMenuItem) {
   favoritesEditMenuItem.addEventListener("click", () => {
     closeMenus();
-    metaEl.textContent = "Favorites coming soon.";
+    if (!currentUser) {
+      setLoginStatus("Sign in to view favorites.");
+      openLoginModal();
+      return;
+    }
+    openFavoritesModal();
   });
 }
 
@@ -475,6 +639,7 @@ function applyEntry(entry) {
     loadingEl.classList.remove("is-hidden");
   }
   updateShareParam(currentUrl);
+  updateFavoriteButton();
 }
 
 function pushHistory(entry) {
@@ -531,6 +696,12 @@ async function loadRandom() {
     getButton.disabled = false;
     fetchController = null;
   }
+}
+
+if (favoriteToggleButton) {
+  favoriteToggleButton.addEventListener("click", () => {
+    toggleFavorite();
+  });
 }
 
 getButton.addEventListener("click", loadRandom);
