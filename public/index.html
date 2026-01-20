@@ -3,7 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>NeverLanding</title>
+    <title>Never Landing Page</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%234a90e2'/%3E%3Crect x='2' y='2' width='60' height='60' fill='none' stroke='white' stroke-width='4'/%3E%3C/svg%3E"
+    />
     <link rel="stylesheet" href="/styles/main.css" />
   </head>
   <body>
@@ -12,7 +17,7 @@
         <div class="titlebar">
           <div class="titlebar-left">
             <div class="ie-icon" aria-hidden="true"></div>
-            <div>NeverLanding Page</div>
+            <div>Never Landing Page</div>
           </div>
           <div class="titlebar-controls">
             <div class="control" aria-hidden="true"></div>
@@ -32,10 +37,17 @@
             </ul>
           </div>
           <div class="menu">
-            <button class="menu-button" type="button" aria-haspopup="true" aria-expanded="false">
+            <button
+              id="view-menu-button"
+              class="menu-button"
+              type="button"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
               View
             </button>
             <ul class="menu-list" role="menu" aria-label="View">
+              <li role="menuitem" id="favorites-edit-menu">Favorites</li>
               <li role="menuitem" id="achievements-menu">Achievements</li>
               <li role="menuitem" id="leaderboard-menu">Leaderboard</li>
               <li role="menuitem" id="fullscreen-menu">Full Screen</li>
@@ -43,41 +55,41 @@
           </div>
           <div class="menu">
             <button class="menu-button" type="button" aria-haspopup="true" aria-expanded="false">
-              Favorites
-            </button>
-            <ul class="menu-list" role="menu" aria-label="Favorites">
-              <li role="menuitem" id="favorites-add-menu">Add to Favorites...</li>
-              <li role="menuitem" id="favorites-edit-menu">Edit Favorites...</li>
-              <li role="menuitem">Mystery Portal</li>
-            </ul>
-          </div>
-          <div class="menu">
-            <button class="menu-button" type="button" aria-haspopup="true" aria-expanded="false">
               Help
             </button>
             <ul class="menu-list" role="menu" aria-label="Help">
-              <li role="menuitem">View Help</li>
-              <li role="menuitem">Report Issue</li>
-              <li role="menuitem">About NeverLanding</li>
+              <li role="menuitem" id="report-issue-menu">Report Issue</li>
+              <li role="menuitem" id="about-menu">About NeverLanding</li>
             </ul>
           </div>
+          <div class="menubar-spacer"></div>
+          <div id="landing-counter" class="landing-counter">Landings: 0</div>
         </div>
         <div class="toolbar">
-          <button class="tool-button" type="button" id="back">
-            <span class="tool-icon" aria-hidden="true"></span>
-            Back
+          <button class="tool-button tool-button--compact" type="button" id="back" aria-label="Back" title="Back">
+            <span class="tool-icon tool-icon--back" aria-hidden="true"></span>
           </button>
-          <button class="tool-button" type="button" id="forward">
-            <span class="tool-icon" aria-hidden="true"></span>
-            Forward
+          <button class="tool-button tool-button--compact" type="button" id="forward" aria-label="Forward" title="Forward">
+            <span class="tool-icon tool-icon--forward" aria-hidden="true"></span>
           </button>
           <button class="tool-button" type="button" id="stop">
-            <span class="tool-icon" aria-hidden="true"></span>
+            <span class="tool-icon tool-icon--stop" aria-hidden="true"></span>
             Stop
           </button>
           <button class="tool-button" type="button" id="refresh">
-            <span class="tool-icon" aria-hidden="true"></span>
+            <span class="tool-icon tool-icon--refresh" aria-hidden="true"></span>
             Refresh
+          </button>
+          <div class="toolbar-spacer" aria-hidden="true"></div>
+          <button
+            class="tool-button tool-button--icon"
+            type="button"
+            id="favorite-toggle"
+            aria-pressed="false"
+            aria-label="Toggle favorite"
+            title="Toggle favorite"
+          >
+            <span class="favorite-icon" aria-hidden="true"></span>
           </button>
         </div>
         <div class="address-bar">
@@ -194,6 +206,141 @@
         </div>
         <div class="modal-body">
           <p id="achievement-detail-text" class="modal-copy"></p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="favorites-modal"
+      class="modal is-hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="favorites-title"
+    >
+      <div class="modal-window modal-window--large">
+        <div class="modal-titlebar">
+          <div id="favorites-title">Favorites</div>
+          <button class="modal-close" type="button" aria-label="Close favorites dialog">×</button>
+        </div>
+        <div class="modal-body">
+          <p id="favorites-empty" class="modal-copy favorites-empty is-hidden">
+            You have not saved any favorites yet.
+          </p>
+          <ul id="favorites-list" class="favorites-list" aria-live="polite"></ul>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="share-modal"
+      class="modal is-hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="share-title"
+    >
+      <div class="modal-window modal-window--large">
+        <div class="modal-titlebar">
+          <div id="share-title">Share this Landing</div>
+          <button class="modal-close" type="button" aria-label="Close share dialog">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="share-block">
+            <div class="share-heading">What this link does</div>
+            <p class="modal-copy">
+              This link is already set to the exact site you landed on, so your friend opens the same page.
+            </p>
+          </div>
+          <div class="share-block">
+            <div class="share-heading">Copy the link</div>
+            <div class="share-link-row">
+              <input id="share-link" class="share-link" type="text" readonly />
+              <button id="share-copy" class="modal-button" type="button">Copy</button>
+            </div>
+          </div>
+          <div class="share-block">
+            <div class="share-heading">Send it via</div>
+            <div class="share-icons">
+              <a class="share-icon share-icon--sms" data-share="sms" aria-label="Share via SMS"></a>
+              <a class="share-icon share-icon--x" data-share="x" aria-label="Share on X"></a>
+              <a class="share-icon share-icon--email" data-share="email" aria-label="Share via Email"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="report-issue-modal"
+      class="modal is-hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="report-issue-title"
+    >
+      <div class="modal-window modal-window--small">
+        <div class="modal-titlebar">
+          <div id="report-issue-title">Report an Issue</div>
+          <button class="modal-close" type="button" aria-label="Close report issue dialog">×</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-copy">
+            Thanks for wanting to help! I collect all suggestions and issue reports on GitHub so
+            they stay organized and easy to track.
+          </p>
+          <div class="modal-actions">
+            <a
+              class="modal-button"
+              href="https://github.com/shokace/NeverLanding.page/issues"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Open GitHub Issues
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="about-modal"
+      class="modal is-hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="about-title"
+    >
+      <div class="modal-window modal-window--large">
+        <div class="modal-titlebar">
+          <div id="about-title">About NeverLanding</div>
+          <button class="modal-close" type="button" aria-label="Close about dialog">×</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-copy">
+            <strong>What it is</strong>
+            NeverLanding is a throwback to the early web. It drops you into a random site with
+            a single click, so you can explore the internet in its raw, unpredictable form.
+          </p>
+          <p class="modal-copy">
+            <strong>Why it exists</strong>
+            No ads. No data harvesting. No tracking you around. Just curiosity-driven browsing and
+            the joy of discovering strange personal pages, experiments, and forgotten corners of
+            the web.
+          </p>
+          <p class="modal-copy">
+            <strong>How it feels</strong>
+            Think “TikTok for websites,” but instead of endless videos you get real places made by
+            real people. One click equals one new destination.
+          </p>
+          <p class="modal-copy">
+            <strong>Why sign up</strong>
+            Save interesting sites as bookmarks and favorites, earn achievements and challenges,
+            and track how many sites you have visited — including which countries you have seen
+            on the web.
+          </p>
+          <p class="modal-copy">
+            <strong>The bigger idea</strong>
+            This isn’t about replacing modern platforms. It’s about remembering what made the web
+            exciting in the first place. If you miss wandering the internet just to see what’s out
+            there, you’re in the right place.
+          </p>
         </div>
       </div>
     </div>

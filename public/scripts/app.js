@@ -15,13 +15,31 @@ const shareMenuItem = document.getElementById("share-menu");
 const achievementsMenuItem = document.getElementById("achievements-menu");
 const leaderboardMenuItem = document.getElementById("leaderboard-menu");
 const fullscreenMenuItem = document.getElementById("fullscreen-menu");
-const favoritesAddMenuItem = document.getElementById("favorites-add-menu");
 const favoritesEditMenuItem = document.getElementById("favorites-edit-menu");
+const favoriteToggleButton = document.getElementById("favorite-toggle");
+const aboutMenuItem = document.getElementById("about-menu");
+const reportIssueMenuItem = document.getElementById("report-issue-menu");
+const shareModal = document.getElementById("share-modal");
+const shareClose = shareModal ? shareModal.querySelector(".modal-close") : null;
+const shareLinkInput = document.getElementById("share-link");
+const shareCopyButton = document.getElementById("share-copy");
+const shareIcons = Array.from(document.querySelectorAll(".share-icon"));
+const landingCounter = document.getElementById("landing-counter");
 const loginModal = document.getElementById("login-modal");
 const loginClose = loginModal ? loginModal.querySelector(".modal-close") : null;
 const achievementsModal = document.getElementById("achievements-modal");
 const achievementsClose = achievementsModal
   ? achievementsModal.querySelector(".modal-close")
+  : null;
+const favoritesModal = document.getElementById("favorites-modal");
+const favoritesClose = favoritesModal ? favoritesModal.querySelector(".modal-close") : null;
+const favoritesList = document.getElementById("favorites-list");
+const favoritesEmpty = document.getElementById("favorites-empty");
+const aboutModal = document.getElementById("about-modal");
+const aboutClose = aboutModal ? aboutModal.querySelector(".modal-close") : null;
+const reportIssueModal = document.getElementById("report-issue-modal");
+const reportIssueClose = reportIssueModal
+  ? reportIssueModal.querySelector(".modal-close")
   : null;
 const emailToggle = loginModal ? loginModal.querySelector("[data-action=\"email-login\"]") : null;
 const signupToggle = loginModal ? loginModal.querySelector("[data-action=\"email-signup\"]") : null;
@@ -37,6 +55,16 @@ let history = [];
 let historyIndex = -1;
 let hasStarted = false;
 let currentUser = null;
+let favorites = [];
+let favoritesByUrl = new Map();
+let isLoading = false;
+
+function setStopState(active) {
+  isLoading = active;
+  if (!stopButton) return;
+  stopButton.classList.toggle("is-inactive", !active);
+}
+let favoritesPendingRemovals = new Set();
 const HISTORY_KEY = "neverlanding-history";
 const HISTORY_LIMIT = 50;
 const SHARE_PARAM = "url";
@@ -98,6 +126,71 @@ function openAchievementsModal() {
 function closeAchievementsModal() {
   if (!achievementsModal) return;
   achievementsModal.classList.add("is-hidden");
+  document.dispatchEvent(new CustomEvent("achievements-viewed"));
+}
+
+function openFavoritesModal() {
+  if (!favoritesModal) return;
+  favoritesPendingRemovals = new Set();
+  favoritesModal.classList.remove("is-hidden");
+  fetchFavorites();
+}
+
+function closeFavoritesModal() {
+  if (!favoritesModal) return;
+  favoritesModal.classList.add("is-hidden");
+  if (favoritesPendingRemovals.size) {
+    applyFavoriteRemovals();
+  }
+}
+
+function openAboutModal() {
+  if (!aboutModal) return;
+  aboutModal.classList.remove("is-hidden");
+}
+
+function closeAboutModal() {
+  if (!aboutModal) return;
+  aboutModal.classList.add("is-hidden");
+}
+
+function openShareModal() {
+  if (!shareModal) return;
+  shareModal.classList.remove("is-hidden");
+  updateShareModal();
+}
+
+function closeShareModal() {
+  if (!shareModal) return;
+  shareModal.classList.add("is-hidden");
+}
+
+function updateShareModal() {
+  if (!shareLinkInput) return;
+  const shareUrl = currentUrl ? getShareUrl(currentUrl) : "";
+  shareLinkInput.value = shareUrl;
+  const encodedUrl = encodeURIComponent(shareUrl);
+  const encodedText = encodeURIComponent("Check out this site I found on Never Landing Page:");
+  const targets = {
+    sms: `sms:?&body=${encodedText}%20${encodedUrl}`,
+    x: `https://x.com/intent/tweet?text=${encodedText}%20${encodedUrl}`,
+    email: `mailto:?subject=Never%20Landing%20Page&body=${encodedText}%20${encodedUrl}`,
+  };
+  shareIcons.forEach((icon) => {
+    const key = icon.getAttribute("data-share");
+    if (!key || !targets[key]) return;
+    icon.setAttribute("href", targets[key]);
+  });
+}
+
+function openReportIssueModal() {
+  if (!reportIssueModal) return;
+  reportIssueModal.classList.remove("is-hidden");
+}
+
+function closeReportIssueModal() {
+  if (!reportIssueModal) return;
+  reportIssueModal.classList.add("is-hidden");
 }
 
 function setLoginStatus(message) {
@@ -127,6 +220,138 @@ function setAuthState(user) {
   if (user && metaEl) {
     metaEl.textContent = `Signed in as ${user.username || user.email}.`;
   }
+  if (!user && landingCounter) {
+    landingCounter.textContent = "Landings: 0";
+  }
+  if (user) {
+    fetchFavorites();
+  } else {
+    favorites = [];
+    favoritesByUrl = new Map();
+    renderFavoritesList();
+    updateFavoriteButton();
+  }
+  document.dispatchEvent(
+    new CustomEvent("auth-changed", { detail: { user: currentUser } })
+  );
+}
+
+function renderFavoritesList() {
+  if (!favoritesList || !favoritesEmpty) return;
+  favoritesList.innerHTML = "";
+  if (!favorites.length) {
+    favoritesEmpty.classList.remove("is-hidden");
+    return;
+  }
+  favoritesEmpty.classList.add("is-hidden");
+  const fragment = document.createDocumentFragment();
+  favorites.forEach((item) => {
+    const li = document.createElement("li");
+    const link = document.createElement("a");
+    link.href = item.url || "#";
+    link.textContent = item.title || item.url || "Untitled";
+    if (item.url) {
+      link.dataset.url = item.url;
+    }
+    link.addEventListener("click", (event) => {
+      const targetUrl = link.dataset.url || "";
+      if (!targetUrl) return;
+      event.preventDefault();
+      closeFavoritesModal();
+      applyEntry({ url: targetUrl, crawl: "favorite", at: "" });
+      pushHistory({ url: targetUrl, crawl: "favorite", at: "" });
+    });
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "favorites-toggle is-active";
+    toggle.setAttribute("aria-pressed", "true");
+    toggle.setAttribute("title", "Remove from favorites");
+    toggle.setAttribute("aria-label", "Remove from favorites");
+    toggle.innerHTML = '<span class="favorite-icon" aria-hidden="true"></span>';
+    if (item.url) {
+      toggle.dataset.url = item.url;
+    }
+    toggle.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const targetUrl = toggle.dataset.url || "";
+      if (!targetUrl) return;
+      const isActive = toggle.classList.toggle("is-active");
+      toggle.setAttribute("aria-pressed", isActive ? "true" : "false");
+      if (!isActive) {
+        favoritesPendingRemovals.add(targetUrl);
+        toggle.setAttribute("title", "Restore favorite");
+        toggle.setAttribute("aria-label", "Restore favorite");
+        return;
+      }
+      favoritesPendingRemovals.delete(targetUrl);
+      toggle.setAttribute("title", "Remove from favorites");
+      toggle.setAttribute("aria-label", "Remove from favorites");
+    });
+    li.appendChild(link);
+    li.appendChild(toggle);
+    fragment.appendChild(li);
+  });
+  favoritesList.appendChild(fragment);
+}
+
+function updateFavoriteButton() {
+  if (!favoriteToggleButton) return;
+  const isActive = Boolean(currentUser && currentUrl && favoritesByUrl.has(currentUrl));
+  favoriteToggleButton.classList.toggle("is-active", isActive);
+  favoriteToggleButton.setAttribute("aria-pressed", isActive ? "true" : "false");
+}
+
+async function fetchFavorites() {
+  if (!currentUser) return;
+  try {
+    const res = await fetch("/api/favorites");
+    if (!res.ok) return;
+    const data = await res.json();
+    favorites = Array.isArray(data.items) ? data.items : [];
+    favoritesByUrl = new Map(favorites.map((item) => [item.url, item]));
+    renderFavoritesList();
+    updateFavoriteButton();
+  } catch {}
+}
+
+async function toggleFavorite() {
+  if (!currentUrl) {
+    if (metaEl) metaEl.textContent = "No URL to favorite yet.";
+    return;
+  }
+  if (!currentUser) {
+    setLoginStatus("Sign in to save favorites.");
+    openLoginModal();
+    return;
+  }
+  try {
+    const res = await fetch("/api/favorites", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ url: currentUrl, title: currentUrl }),
+    });
+    if (!res.ok) return;
+    await fetchFavorites();
+  } catch {}
+}
+
+async function applyFavoriteRemovals() {
+  if (!favoritesPendingRemovals.size) return;
+  const removals = Array.from(favoritesPendingRemovals);
+  favoritesPendingRemovals.clear();
+  try {
+    await Promise.all(
+      removals.map((url) =>
+        fetch("/api/favorites", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ url }),
+        })
+      )
+    );
+    await fetchFavorites();
+  } catch {}
 }
 
 if (loginMenuItem) {
@@ -155,6 +380,59 @@ if (achievementsModal) {
 
 if (achievementsClose) {
   achievementsClose.addEventListener("click", closeAchievementsModal);
+}
+
+if (favoritesModal) {
+  favoritesModal.addEventListener("click", (event) => {
+    if (event.target === favoritesModal) closeFavoritesModal();
+  });
+}
+
+if (favoritesClose) {
+  favoritesClose.addEventListener("click", closeFavoritesModal);
+}
+
+if (aboutModal) {
+  aboutModal.addEventListener("click", (event) => {
+    if (event.target === aboutModal) closeAboutModal();
+  });
+}
+
+if (aboutClose) {
+  aboutClose.addEventListener("click", closeAboutModal);
+}
+
+if (reportIssueModal) {
+  reportIssueModal.addEventListener("click", (event) => {
+    if (event.target === reportIssueModal) closeReportIssueModal();
+  });
+}
+
+if (reportIssueClose) {
+  reportIssueClose.addEventListener("click", closeReportIssueModal);
+}
+
+if (shareModal) {
+  shareModal.addEventListener("click", (event) => {
+    if (event.target === shareModal) closeShareModal();
+  });
+}
+
+if (shareClose) {
+  shareClose.addEventListener("click", closeShareModal);
+}
+
+if (shareCopyButton && shareLinkInput) {
+  shareCopyButton.addEventListener("click", async () => {
+    if (!shareLinkInput.value) return;
+    try {
+      await navigator.clipboard.writeText(shareLinkInput.value);
+      shareCopyButton.textContent = "Copied";
+      setTimeout(() => {
+        shareCopyButton.textContent = "Copy";
+      }, 1200);
+    } catch {}
+  });
 }
 
 if (emailToggle && emailForm) {
@@ -247,19 +525,8 @@ if (shareMenuItem) {
     closeMenus();
     if (!currentUrl) {
       metaEl.textContent = "No URL to share yet.";
-      return;
     }
-    const shareUrl = getShareUrl(currentUrl);
-    try {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(shareUrl);
-        metaEl.textContent = "Share link copied to clipboard.";
-      } else {
-        window.prompt("Copy share link:", shareUrl);
-      }
-    } catch {
-      window.prompt("Copy share link:", shareUrl);
-    }
+    openShareModal();
   });
 }
 
@@ -292,17 +559,29 @@ if (leaderboardMenuItem) {
   });
 }
 
-if (favoritesAddMenuItem) {
-  favoritesAddMenuItem.addEventListener("click", () => {
+if (aboutMenuItem) {
+  aboutMenuItem.addEventListener("click", () => {
     closeMenus();
-    metaEl.textContent = "Favorites coming soon.";
+    openAboutModal();
+  });
+}
+
+if (reportIssueMenuItem) {
+  reportIssueMenuItem.addEventListener("click", () => {
+    closeMenus();
+    openReportIssueModal();
   });
 }
 
 if (favoritesEditMenuItem) {
   favoritesEditMenuItem.addEventListener("click", () => {
     closeMenus();
-    metaEl.textContent = "Favorites coming soon.";
+    if (!currentUser) {
+      setLoginStatus("Sign in to view favorites.");
+      openLoginModal();
+      return;
+    }
+    openFavoritesModal();
   });
 }
 
@@ -334,8 +613,19 @@ fetch("/api/auth/me")
   .then((data) => {
     if (!data) return;
     setAuthState(data.user);
+    if (data.user) fetchProgress();
   })
   .catch(() => {});
+
+async function fetchProgress() {
+  if (!landingCounter) return;
+  try {
+    const res = await fetch("/api/progress");
+    if (!res.ok) return;
+    const data = await res.json();
+    landingCounter.textContent = `Landings: ${data.visits || 0}`;
+  } catch {}
+}
 
 async function logVisit(url) {
   if (!currentUser || !url) return;
@@ -345,6 +635,8 @@ async function logVisit(url) {
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ url }),
     });
+    fetchProgress();
+    document.dispatchEvent(new CustomEvent("achievements-changed"));
   } catch {}
 }
 
@@ -420,10 +712,13 @@ function applyEntry(entry) {
   if (entry.at) metaParts.push(entry.at);
   metaEl.textContent = metaParts.join(" - ");
   viewerEl.src = currentUrl || "about:blank";
+  setStopState(Boolean(currentUrl));
   if (!currentUrl && !hasStarted) {
     loadingEl.classList.remove("is-hidden");
   }
   updateShareParam(currentUrl);
+  updateFavoriteButton();
+  updateShareModal();
 }
 
 function pushHistory(entry) {
@@ -448,6 +743,7 @@ async function loadRandom() {
   urlEl.href = "#";
   metaEl.textContent = "";
   viewerEl.src = "about:blank";
+  setStopState(true);
   loadingEl.classList.add("is-hidden");
   throbberEl.classList.remove("is-hidden");
 
@@ -476,10 +772,17 @@ async function loadRandom() {
     metaEl.textContent = "Please try again.";
     throbberEl.classList.add("is-hidden");
     if (!hasStarted) loadingEl.classList.remove("is-hidden");
+    setStopState(false);
   } finally {
     getButton.disabled = false;
     fetchController = null;
   }
+}
+
+if (favoriteToggleButton) {
+  favoriteToggleButton.addEventListener("click", () => {
+    toggleFavorite();
+  });
 }
 
 getButton.addEventListener("click", loadRandom);
@@ -513,6 +816,7 @@ stopButton.addEventListener("click", () => {
       viewerEl.contentWindow.stop();
     }
   } catch {}
+  setStopState(false);
 });
 
 refreshButton.addEventListener("click", () => {
@@ -541,4 +845,5 @@ viewerEl.addEventListener("load", () => {
     loadingEl.classList.add("is-hidden");
     hasStarted = true;
   }
+  setStopState(false);
 });

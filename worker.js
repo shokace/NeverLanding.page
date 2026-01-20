@@ -327,6 +327,44 @@ async function requireUser(env, request) {
   return { user };
 }
 
+function extractTld(urlValue) {
+  if (!urlValue) return null;
+  const raw = String(urlValue).trim();
+  if (!raw) return null;
+  let url;
+  try {
+    url = new URL(raw);
+  } catch {
+    try {
+      url = new URL(`https://${raw}`);
+    } catch {
+      return null;
+    }
+  }
+  const hostname = (url.hostname || "").toLowerCase().replace(/\.$/, "");
+  if (!hostname) return null;
+  const parts = hostname.split(".").filter(Boolean);
+  if (!parts.length) return null;
+  return {
+    tld: parts[parts.length - 1],
+    hasGov: hostname === "gov" || hostname.endsWith(".gov") || hostname.includes(".gov."),
+  };
+}
+
+async function grantAchievement(env, userId, code) {
+  const achievement = await env.DB.prepare(
+    "SELECT id FROM achievements WHERE code = ?"
+  )
+    .bind(code)
+    .first();
+  if (!achievement) return;
+  await env.DB.prepare(
+    "INSERT OR IGNORE INTO user_achievements (id, user_id, achievement_id) VALUES (?, ?, ?)"
+  )
+    .bind(crypto.randomUUID(), userId, achievement.id)
+    .run();
+}
+
 export default {
   async fetch(request, env, ctx) {
     const { method, url } = request;
@@ -373,6 +411,7 @@ export default {
           .bind(userId, email, username, displayName || null, hash, salt, algo)
           .run();
 
+        await grantAchievement(env, userId, "login_first");
         const session = await createSession(env, userId);
         const headers = new Headers();
         setSessionCookie(headers, session.token, SESSION_TTL_DAYS * 24 * 60 * 60, new URL(url));
@@ -403,6 +442,7 @@ export default {
           return jsonResponse({ error: "Invalid credentials" }, { status: 401 });
         }
 
+        await grantAchievement(env, user.id, "login_first");
         const session = await createSession(env, user.id);
         const headers = new Headers();
         setSessionCookie(headers, session.token, SESSION_TTL_DAYS * 24 * 60 * 60, new URL(url));
@@ -432,6 +472,9 @@ export default {
       if (pathname === "/api/auth/me" && method === "GET") {
         const token = readCookie(request, "nl_session");
         const user = await getUserFromSession(env, token);
+        if (user) {
+          await grantAchievement(env, user.id, "login_first");
+        }
         return jsonResponse({ user }, { status: 200 });
       }
 
@@ -441,7 +484,6 @@ export default {
           {
             providers: {
               google: Boolean(providers.google.clientId && providers.google.clientSecret),
-              facebook: Boolean(providers.facebook.clientId && providers.facebook.clientSecret),
               email: true,
             },
           },
@@ -473,12 +515,6 @@ export default {
         if (pathname === "/api/auth/github") {
           if (!providers.github.clientId || !providers.github.clientSecret) {
             return jsonResponse({ error: "GitHub OAuth not configured" }, { status: 501 });
-          }
-          return redirectResponse("/");
-        }
-        if (pathname === "/api/auth/facebook") {
-          if (!providers.facebook.clientId || !providers.facebook.clientSecret) {
-            return jsonResponse({ error: "Facebook OAuth not configured" }, { status: 501 });
           }
           return redirectResponse("/");
         }
@@ -552,12 +588,14 @@ export default {
             .run();
         }
 
+        await grantAchievement(env, userId, "login_first");
         const session = await createSession(env, userId);
         const headers = new Headers();
         clearCookie(headers, "nl_oauth_state", requestUrl);
         setSessionCookie(headers, session.token, SESSION_TTL_DAYS * 24 * 60 * 60, requestUrl);
         return redirectResponse("/", { headers });
       }
+
 
       return jsonResponse({ error: "Not found" }, { status: 404 });
     }
@@ -580,7 +618,61 @@ export default {
       )
         .bind(auth.user.id, urlValue, titleValue || null)
         .run();
+      const tldInfo = extractTld(urlValue);
+      if (tldInfo && tldInfo.tld) {
+        await grantAchievement(env, auth.user.id, `tld_${tldInfo.tld}`);
+        if (tldInfo.hasGov && tldInfo.tld !== "gov") {
+          await grantAchievement(env, auth.user.id, "tld_gov");
+        }
+      }
       return jsonResponse({ ok: true }, { status: 201 });
+    }
+
+    if (pathname === "/api/favorites" && method === "GET") {
+      if (!env || !env.DB) {
+        return jsonResponse({ error: "Database not configured" }, { status: 500 });
+      }
+      const auth = await requireUser(env, request);
+      if (auth.error) return auth.error;
+      const rows = await env.DB.prepare(
+        "SELECT id, url, title, added_at FROM favorites WHERE user_id = ? ORDER BY added_at DESC"
+      )
+        .bind(auth.user.id)
+        .all();
+      const items = rows && rows.results ? rows.results : [];
+      return jsonResponse({ items }, { status: 200 });
+    }
+
+    if (pathname === "/api/favorites" && method === "POST") {
+      if (!env || !env.DB) {
+        return jsonResponse({ error: "Database not configured" }, { status: 500 });
+      }
+      const auth = await requireUser(env, request);
+      if (auth.error) return auth.error;
+      const body = await readJson(request);
+      if (!body) return jsonResponse({ error: "Invalid JSON" }, { status: 400 });
+      const urlValue = String(body.url || "").trim();
+      const titleValue = String(body.title || "").trim();
+      if (!urlValue) {
+        return jsonResponse({ error: "URL required" }, { status: 400 });
+      }
+      const existing = await env.DB.prepare(
+        "SELECT id FROM favorites WHERE user_id = ? AND url = ?"
+      )
+        .bind(auth.user.id, urlValue)
+        .first();
+      if (existing && existing.id) {
+        await env.DB.prepare("DELETE FROM favorites WHERE id = ?")
+          .bind(existing.id)
+          .run();
+        return jsonResponse({ favorite: false }, { status: 200 });
+      }
+      await env.DB.prepare(
+        "INSERT INTO favorites (user_id, url, title) VALUES (?, ?, ?)"
+      )
+        .bind(auth.user.id, urlValue, titleValue || null)
+        .run();
+      return jsonResponse({ favorite: true }, { status: 201 });
     }
 
     if (pathname === "/api/progress" && method === "GET") {
@@ -612,6 +704,24 @@ export default {
         },
         { status: 200 }
       );
+    }
+
+    if (pathname === "/api/achievements/unlocked" && method === "GET") {
+      if (!env || !env.DB) {
+        return jsonResponse({ error: "Database not configured" }, { status: 500 });
+      }
+      const auth = await requireUser(env, request);
+      if (auth.error) return auth.error;
+      const rows = await env.DB.prepare(
+        `SELECT achievements.code as code
+         FROM user_achievements
+         JOIN achievements ON achievements.id = user_achievements.achievement_id
+         WHERE user_achievements.user_id = ?`
+      )
+        .bind(auth.user.id)
+        .all();
+      const codes = rows && rows.results ? rows.results.map((row) => row.code) : [];
+      return jsonResponse({ codes }, { status: 200 });
     }
 
     if (method !== "GET" || pathname !== "/api/random") {
@@ -661,10 +771,6 @@ function providerEnv(env) {
     github: {
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
-    },
-    facebook: {
-      clientId: env.FACEBOOK_CLIENT_ID,
-      clientSecret: env.FACEBOOK_CLIENT_SECRET,
     },
   };
 }
