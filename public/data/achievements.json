@@ -26,7 +26,9 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 05.ico",
-      "description": "Sharing is caring."
+      "description": "Sharing is caring.",
+      "title": "Sharing Is Caring",
+      "code": "share_first"
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 06.ico",
