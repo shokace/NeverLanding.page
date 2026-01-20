@@ -48,6 +48,13 @@ let hasStarted = false;
 let currentUser = null;
 let favorites = [];
 let favoritesByUrl = new Map();
+let isLoading = false;
+
+function setStopState(active) {
+  isLoading = active;
+  if (!stopButton) return;
+  stopButton.classList.toggle("is-inactive", !active);
+}
 let favoritesPendingRemovals = new Set();
 const HISTORY_KEY = "neverlanding-history";
 const HISTORY_LIMIT = 50;
@@ -635,6 +642,7 @@ function applyEntry(entry) {
   if (entry.at) metaParts.push(entry.at);
   metaEl.textContent = metaParts.join(" - ");
   viewerEl.src = currentUrl || "about:blank";
+  setStopState(Boolean(currentUrl));
   if (!currentUrl && !hasStarted) {
     loadingEl.classList.remove("is-hidden");
   }
@@ -664,6 +672,7 @@ async function loadRandom() {
   urlEl.href = "#";
   metaEl.textContent = "";
   viewerEl.src = "about:blank";
+  setStopState(true);
   loadingEl.classList.add("is-hidden");
   throbberEl.classList.remove("is-hidden");
 
@@ -692,6 +701,7 @@ async function loadRandom() {
     metaEl.textContent = "Please try again.";
     throbberEl.classList.add("is-hidden");
     if (!hasStarted) loadingEl.classList.remove("is-hidden");
+    setStopState(false);
   } finally {
     getButton.disabled = false;
     fetchController = null;
@@ -735,6 +745,7 @@ stopButton.addEventListener("click", () => {
       viewerEl.contentWindow.stop();
     }
   } catch {}
+  setStopState(false);
 });
 
 refreshButton.addEventListener("click", () => {
@@ -763,4 +774,5 @@ viewerEl.addEventListener("load", () => {
     loadingEl.classList.add("is-hidden");
     hasStarted = true;
   }
+  setStopState(false);
 });
