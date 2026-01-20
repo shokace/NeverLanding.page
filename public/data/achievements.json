@@ -7,24 +7,30 @@
       "title": "First Login"
     },
     {
-      "icon": "/assets/achievements/Windows98Scaled Icon 02.ico",
-      "description": ""
+      "icon": "/assets/achievements/explorerLevel1.ico",
+      "description": "Visit 100 random sites.",
+      "title": "Explorer Level 1",
+      "code": "explorer_level_1"
     },
     {
-      "icon": "/assets/achievements/Windows98Scaled Icon 03.ico",
-      "description": ""
+      "icon": "/assets/achievements/explorerLevel2.ico",
+      "description": "Visit 2026 random sites.",
+      "title": "Explorer Level 2",
+      "code": "explorer_level_2"
     },
     {
-      "icon": "/assets/achievements/Windows98Scaled Icon 04.ico",
-      "description": ""
+      "icon": "/assets/achievements/explorerLevel3.ico",
+      "description": "???",
+      "title": "Explorer Level 3",
+      "code": "explorer_level_3"
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 05.ico",
-      "description": ""
+      "description": "Sharing is caring."
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 06.ico",
-      "description": ""
+      "description": "You are a .bizniss man."
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 07.ico",

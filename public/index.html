@@ -303,6 +303,29 @@
     </div>
 
     <div
+      id="rate-limit-modal"
+      class="modal is-hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="rate-limit-title"
+    >
+      <div class="modal-window modal-window--small">
+        <div class="modal-titlebar">
+          <div id="rate-limit-title">Slow Down</div>
+          <button class="modal-close" type="button" aria-label="Close warning dialog">×</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-copy">
+            Too many clicks too fast. Please wait a moment before trying again.
+          </p>
+          <div class="modal-actions">
+            <button id="rate-limit-ok" class="modal-button" type="button">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
       id="about-modal"
       class="modal is-hidden"
       role="dialog"

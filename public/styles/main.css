@@ -789,6 +789,7 @@ body {
   position: relative;
 }
 
+
 .achievement-tile img {
   max-width: 85%;
   max-height: 85%;
@@ -804,6 +805,11 @@ body {
   max-width: 100%;
   max-height: 100%;
   transform: scale(2);
+  transform-origin: center;
+}
+
+.achievement-tile img[src$="/assets/achievements/explorerLevel3.ico"] {
+  transform: scale(1.2);
   transform-origin: center;
 }
 
