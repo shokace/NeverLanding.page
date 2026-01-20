@@ -5,7 +5,7 @@ const achievementDetailTitle = document.getElementById("achievement-detail-title
 const achievementDetailClose = achievementDetailModal
   ? achievementDetailModal.querySelector(".modal-close")
   : null;
-const viewMenuButton = document.getElementById("view-menu-button");
+const achievementsMenuButton = document.getElementById("achievements-menu");
 let achievementData = [];
 let unlockedCodes = new Set();
 let seenCodes = new Set();
@@ -83,8 +83,8 @@ function applyNotificationBadges() {
     });
   }
 
-  if (viewMenuButton) {
-    viewMenuButton.classList.toggle("has-badge", unseen.size > 0);
+  if (achievementsMenuButton) {
+    achievementsMenuButton.classList.toggle("has-badge", unseen.size > 0);
   }
 }
 
