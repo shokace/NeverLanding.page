@@ -15,10 +15,15 @@ const shareMenuItem = document.getElementById("share-menu");
 const achievementsMenuItem = document.getElementById("achievements-menu");
 const leaderboardMenuItem = document.getElementById("leaderboard-menu");
 const fullscreenMenuItem = document.getElementById("fullscreen-menu");
-const favoritesAddMenuItem = document.getElementById("favorites-add-menu");
 const favoritesEditMenuItem = document.getElementById("favorites-edit-menu");
 const favoriteToggleButton = document.getElementById("favorite-toggle");
 const aboutMenuItem = document.getElementById("about-menu");
+const reportIssueMenuItem = document.getElementById("report-issue-menu");
+const shareModal = document.getElementById("share-modal");
+const shareClose = shareModal ? shareModal.querySelector(".modal-close") : null;
+const shareLinkInput = document.getElementById("share-link");
+const shareCopyButton = document.getElementById("share-copy");
+const shareIcons = Array.from(document.querySelectorAll(".share-icon"));
 const landingCounter = document.getElementById("landing-counter");
 const loginModal = document.getElementById("login-modal");
 const loginClose = loginModal ? loginModal.querySelector(".modal-close") : null;
@@ -32,6 +37,10 @@ const favoritesList = document.getElementById("favorites-list");
 const favoritesEmpty = document.getElementById("favorites-empty");
 const aboutModal = document.getElementById("about-modal");
 const aboutClose = aboutModal ? aboutModal.querySelector(".modal-close") : null;
+const reportIssueModal = document.getElementById("report-issue-modal");
+const reportIssueClose = reportIssueModal
+  ? reportIssueModal.querySelector(".modal-close")
+  : null;
 const emailToggle = loginModal ? loginModal.querySelector("[data-action=\"email-login\"]") : null;
 const signupToggle = loginModal ? loginModal.querySelector("[data-action=\"email-signup\"]") : null;
 const emailForm = document.getElementById("email-login");
@@ -143,6 +152,45 @@ function openAboutModal() {
 function closeAboutModal() {
   if (!aboutModal) return;
   aboutModal.classList.add("is-hidden");
+}
+
+function openShareModal() {
+  if (!shareModal) return;
+  shareModal.classList.remove("is-hidden");
+  updateShareModal();
+}
+
+function closeShareModal() {
+  if (!shareModal) return;
+  shareModal.classList.add("is-hidden");
+}
+
+function updateShareModal() {
+  if (!shareLinkInput) return;
+  const shareUrl = currentUrl ? getShareUrl(currentUrl) : "";
+  shareLinkInput.value = shareUrl;
+  const encodedUrl = encodeURIComponent(shareUrl);
+  const encodedText = encodeURIComponent("Check out this site I found on Never Landing Page:");
+  const targets = {
+    sms: `sms:?&body=${encodedText}%20${encodedUrl}`,
+    x: `https://x.com/intent/tweet?text=${encodedText}%20${encodedUrl}`,
+    email: `mailto:?subject=Never%20Landing%20Page&body=${encodedText}%20${encodedUrl}`,
+  };
+  shareIcons.forEach((icon) => {
+    const key = icon.getAttribute("data-share");
+    if (!key || !targets[key]) return;
+    icon.setAttribute("href", targets[key]);
+  });
+}
+
+function openReportIssueModal() {
+  if (!reportIssueModal) return;
+  reportIssueModal.classList.remove("is-hidden");
+}
+
+function closeReportIssueModal() {
+  if (!reportIssueModal) return;
+  reportIssueModal.classList.add("is-hidden");
 }
 
 function setLoginStatus(message) {
@@ -354,6 +402,39 @@ if (aboutClose) {
   aboutClose.addEventListener("click", closeAboutModal);
 }
 
+if (reportIssueModal) {
+  reportIssueModal.addEventListener("click", (event) => {
+    if (event.target === reportIssueModal) closeReportIssueModal();
+  });
+}
+
+if (reportIssueClose) {
+  reportIssueClose.addEventListener("click", closeReportIssueModal);
+}
+
+if (shareModal) {
+  shareModal.addEventListener("click", (event) => {
+    if (event.target === shareModal) closeShareModal();
+  });
+}
+
+if (shareClose) {
+  shareClose.addEventListener("click", closeShareModal);
+}
+
+if (shareCopyButton && shareLinkInput) {
+  shareCopyButton.addEventListener("click", async () => {
+    if (!shareLinkInput.value) return;
+    try {
+      await navigator.clipboard.writeText(shareLinkInput.value);
+      shareCopyButton.textContent = "Copied";
+      setTimeout(() => {
+        shareCopyButton.textContent = "Copy";
+      }, 1200);
+    } catch {}
+  });
+}
+
 if (emailToggle && emailForm) {
   emailToggle.addEventListener("click", () => {
     emailForm.classList.toggle("is-hidden");
@@ -444,19 +525,8 @@ if (shareMenuItem) {
     closeMenus();
     if (!currentUrl) {
       metaEl.textContent = "No URL to share yet.";
-      return;
     }
-    const shareUrl = getShareUrl(currentUrl);
-    try {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(shareUrl);
-        metaEl.textContent = "Share link copied to clipboard.";
-      } else {
-        window.prompt("Copy share link:", shareUrl);
-      }
-    } catch {
-      window.prompt("Copy share link:", shareUrl);
-    }
+    openShareModal();
   });
 }
 
@@ -496,10 +566,10 @@ if (aboutMenuItem) {
   });
 }
 
-if (favoritesAddMenuItem) {
-  favoritesAddMenuItem.addEventListener("click", () => {
+if (reportIssueMenuItem) {
+  reportIssueMenuItem.addEventListener("click", () => {
     closeMenus();
-    toggleFavorite();
+    openReportIssueModal();
   });
 }
 
@@ -648,6 +718,7 @@ function applyEntry(entry) {
   }
   updateShareParam(currentUrl);
   updateFavoriteButton();
+  updateShareModal();
 }
 
 function pushHistory(entry) {

@@ -484,7 +484,6 @@ export default {
           {
             providers: {
               google: Boolean(providers.google.clientId && providers.google.clientSecret),
-              facebook: Boolean(providers.facebook.clientId && providers.facebook.clientSecret),
               email: true,
             },
           },
@@ -516,12 +515,6 @@ export default {
         if (pathname === "/api/auth/github") {
           if (!providers.github.clientId || !providers.github.clientSecret) {
             return jsonResponse({ error: "GitHub OAuth not configured" }, { status: 501 });
-          }
-          return redirectResponse("/");
-        }
-        if (pathname === "/api/auth/facebook") {
-          if (!providers.facebook.clientId || !providers.facebook.clientSecret) {
-            return jsonResponse({ error: "Facebook OAuth not configured" }, { status: 501 });
           }
           return redirectResponse("/");
         }
@@ -602,6 +595,7 @@ export default {
         setSessionCookie(headers, session.token, SESSION_TTL_DAYS * 24 * 60 * 60, requestUrl);
         return redirectResponse("/", { headers });
       }
+
 
       return jsonResponse({ error: "Not found" }, { status: 404 });
     }
@@ -777,10 +771,6 @@ function providerEnv(env) {
     github: {
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
-    },
-    facebook: {
-      clientId: env.FACEBOOK_CLIENT_ID,
-      clientSecret: env.FACEBOOK_CLIENT_SECRET,
     },
   };
 }
