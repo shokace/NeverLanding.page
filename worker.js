@@ -295,6 +295,9 @@ async function fillQueue(env, minSize = 1, maxAttempts = 12) {
 }
 
 const SESSION_TTL_DAYS = 30;
+const RATE_LIMIT_WINDOW_MS = 1000;
+const RATE_LIMIT_MAX = 8;
+const rateLimits = new Map();
 
 async function createSession(env, userId) {
   const token = randomToken(32);
@@ -306,6 +309,18 @@ async function createSession(env, userId) {
     .bind(sessionId, userId, token, expiresAt)
     .run();
   return { token, expiresAt };
+}
+
+function allowRateLimit(key) {
+  const now = Date.now();
+  const entry = rateLimits.get(key);
+  if (!entry || now >= entry.resetAt) {
+    rateLimits.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return true;
+  }
+  if (entry.count >= RATE_LIMIT_MAX) return false;
+  entry.count += 1;
+  return true;
 }
 
 async function getUserFromSession(env, token) {
@@ -606,6 +621,9 @@ export default {
       }
       const auth = await requireUser(env, request);
       if (auth.error) return auth.error;
+      if (!allowRateLimit(auth.user.id)) {
+        return jsonResponse({ error: "Too many requests" }, { status: 429 });
+      }
       const body = await readJson(request);
       if (!body) return jsonResponse({ error: "Invalid JSON" }, { status: 400 });
       const urlValue = String(body.url || "").trim();
@@ -618,6 +636,31 @@ export default {
       )
         .bind(auth.user.id, urlValue, titleValue || null)
         .run();
+      const visitsCount = await env.DB.prepare(
+        "SELECT COUNT(*) as count FROM visits WHERE user_id = ?"
+      )
+        .bind(auth.user.id)
+        .first();
+      if (visitsCount && visitsCount.count >= 100) {
+        await grantAchievement(env, auth.user.id, "explorer_level_1");
+      }
+      if (visitsCount && visitsCount.count >= 2026) {
+        await grantAchievement(env, auth.user.id, "explorer_level_2");
+        const totalTld = await env.DB.prepare(
+          "SELECT COUNT(*) as count FROM achievements WHERE code LIKE 'tld_%'"
+        ).first();
+        const userTld = await env.DB.prepare(
+          `SELECT COUNT(DISTINCT achievements.code) as count
+           FROM user_achievements
+           JOIN achievements ON achievements.id = user_achievements.achievement_id
+           WHERE user_achievements.user_id = ? AND achievements.code LIKE 'tld_%'`
+        )
+          .bind(auth.user.id)
+          .first();
+        if (totalTld && userTld && userTld.count >= totalTld.count) {
+          await grantAchievement(env, auth.user.id, "explorer_level_3");
+        }
+      }
       const tldInfo = extractTld(urlValue);
       if (tldInfo && tldInfo.tld) {
         await grantAchievement(env, auth.user.id, `tld_${tldInfo.tld}`);
@@ -722,6 +765,16 @@ export default {
         .all();
       const codes = rows && rows.results ? rows.results.map((row) => row.code) : [];
       return jsonResponse({ codes }, { status: 200 });
+    }
+
+    if (pathname === "/api/achievements/share" && method === "POST") {
+      if (!env || !env.DB) {
+        return jsonResponse({ error: "Database not configured" }, { status: 500 });
+      }
+      const auth = await requireUser(env, request);
+      if (auth.error) return auth.error;
+      await grantAchievement(env, auth.user.id, "share_first");
+      return jsonResponse({ ok: true }, { status: 200 });
     }
 
     if (method !== "GET" || pathname !== "/api/random") {

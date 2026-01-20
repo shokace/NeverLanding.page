@@ -41,6 +41,9 @@ const reportIssueModal = document.getElementById("report-issue-modal");
 const reportIssueClose = reportIssueModal
   ? reportIssueModal.querySelector(".modal-close")
   : null;
+const rateLimitModal = document.getElementById("rate-limit-modal");
+const rateLimitClose = rateLimitModal ? rateLimitModal.querySelector(".modal-close") : null;
+const rateLimitOk = document.getElementById("rate-limit-ok");
 const emailToggle = loginModal ? loginModal.querySelector("[data-action=\"email-login\"]") : null;
 const signupToggle = loginModal ? loginModal.querySelector("[data-action=\"email-signup\"]") : null;
 const emailForm = document.getElementById("email-login");
@@ -191,6 +194,16 @@ function openReportIssueModal() {
 function closeReportIssueModal() {
   if (!reportIssueModal) return;
   reportIssueModal.classList.add("is-hidden");
+}
+
+function openRateLimitModal() {
+  if (!rateLimitModal) return;
+  rateLimitModal.classList.remove("is-hidden");
+}
+
+function closeRateLimitModal() {
+  if (!rateLimitModal) return;
+  rateLimitModal.classList.add("is-hidden");
 }
 
 function setLoginStatus(message) {
@@ -412,6 +425,14 @@ if (reportIssueClose) {
   reportIssueClose.addEventListener("click", closeReportIssueModal);
 }
 
+if (rateLimitClose) {
+  rateLimitClose.addEventListener("click", closeRateLimitModal);
+}
+
+if (rateLimitOk) {
+  rateLimitOk.addEventListener("click", closeRateLimitModal);
+}
+
 if (shareModal) {
   shareModal.addEventListener("click", (event) => {
     if (event.target === shareModal) closeShareModal();
@@ -527,6 +548,9 @@ if (shareMenuItem) {
       metaEl.textContent = "No URL to share yet.";
     }
     openShareModal();
+    if (currentUser) {
+      fetch("/api/achievements/share", { method: "POST" }).catch(() => {});
+    }
   });
 }
 
@@ -630,11 +654,15 @@ async function fetchProgress() {
 async function logVisit(url) {
   if (!currentUser || !url) return;
   try {
-    await fetch("/api/visits", {
+    const res = await fetch("/api/visits", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ url }),
     });
+    if (res.status === 429) {
+      openRateLimitModal();
+      return;
+    }
     fetchProgress();
     document.dispatchEvent(new CustomEvent("achievements-changed"));
   } catch {}

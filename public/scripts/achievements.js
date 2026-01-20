@@ -5,7 +5,7 @@ const achievementDetailTitle = document.getElementById("achievement-detail-title
 const achievementDetailClose = achievementDetailModal
   ? achievementDetailModal.querySelector(".modal-close")
   : null;
-const viewMenuButton = document.getElementById("view-menu-button");
+const achievementsMenuButton = document.getElementById("achievements-menu");
 let achievementData = [];
 let unlockedCodes = new Set();
 let seenCodes = new Set();
@@ -83,8 +83,8 @@ function applyNotificationBadges() {
     });
   }
 
-  if (viewMenuButton) {
-    viewMenuButton.classList.toggle("has-badge", unseen.size > 0);
+  if (achievementsMenuButton) {
+    achievementsMenuButton.classList.toggle("has-badge", unseen.size > 0);
   }
 }
 
@@ -161,7 +161,11 @@ if (achievementsGrid) {
     const index = Number(tile.dataset.index || 0);
     const info = achievementData[index];
     const title = info && info.title ? `${info.title} Achievement` : "Achievement";
-    const text = info && info.description ? info.description : "Achievement details coming soon.";
+    const code = info && info.code ? info.code : "";
+    let text = info && info.description ? info.description : "Achievement details coming soon.";
+    if (code === "explorer_level_3" && unlockedCodes.has(code)) {
+      text = "Visited every country.";
+    } //Only nerds look at the source code to get achievements :)
     openDetailModal(title, text);
   });
 }

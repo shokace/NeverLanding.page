@@ -48,11 +48,13 @@
             </button>
             <ul class="menu-list" role="menu" aria-label="View">
               <li role="menuitem" id="favorites-edit-menu">Favorites</li>
-              <li role="menuitem" id="achievements-menu">Achievements</li>
               <li role="menuitem" id="leaderboard-menu">Leaderboard</li>
               <li role="menuitem" id="fullscreen-menu">Full Screen</li>
             </ul>
           </div>
+          <button class="menu-button" type="button" id="achievements-menu">
+            Achievements
+          </button>
           <div class="menu">
             <button class="menu-button" type="button" aria-haspopup="true" aria-expanded="false">
               Help
@@ -295,6 +297,29 @@
             >
               Open GitHub Issues
             </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="rate-limit-modal"
+      class="modal is-hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="rate-limit-title"
+    >
+      <div class="modal-window modal-window--small">
+        <div class="modal-titlebar">
+          <div id="rate-limit-title">Slow Down</div>
+          <button class="modal-close" type="button" aria-label="Close warning dialog">×</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-copy">
+            Too many clicks too fast. Please wait a moment before trying again.
+          </p>
+          <div class="modal-actions">
+            <button id="rate-limit-ok" class="modal-button" type="button">OK</button>
           </div>
         </div>
       </div>

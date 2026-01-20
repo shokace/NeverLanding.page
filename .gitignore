@@ -16,3 +16,6 @@ pnpm-debug.log*
 
 # Local notes
 todo.md
+
+# SQL migrations (private)
+migrations/*.sql

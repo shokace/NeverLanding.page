@@ -85,7 +85,7 @@ body {
 
 .menubar {
   display: flex;
-  gap: 10px;
+  gap: 6px;
   padding: 4px 8px 3px;
   font-size: 0.85rem;
   background: var(--win-surface);
@@ -136,6 +136,11 @@ body {
   border-color: #000;
   background: var(--win-light);
   outline: none;
+}
+
+.menu-button.is-disabled {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .menu-button.has-badge::after {
@@ -784,6 +789,7 @@ body {
   position: relative;
 }
 
+
 .achievement-tile img {
   max-width: 85%;
   max-height: 85%;
@@ -799,6 +805,11 @@ body {
   max-width: 100%;
   max-height: 100%;
   transform: scale(2);
+  transform-origin: center;
+}
+
+.achievement-tile img[src$="/assets/achievements/explorerLevel3.ico"] {
+  transform: scale(1.2);
   transform-origin: center;
 }
 
