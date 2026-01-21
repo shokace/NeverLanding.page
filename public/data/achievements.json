@@ -32,7 +32,9 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 06.ico",
-      "description": "You are a .bizniss man."
+      "description": "You are a .bizniss man.",
+      "title": "Business Browsing",
+      "code": "tld_biz"
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 07.ico",
