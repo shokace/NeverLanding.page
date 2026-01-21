@@ -227,8 +227,8 @@ function setAuthState(user) {
     logoutMenuItem.setAttribute("aria-disabled", !user ? "true" : "false");
   }
   if (achievementsMenuItem) {
-    achievementsMenuItem.classList.toggle("is-disabled", !user);
-    achievementsMenuItem.setAttribute("aria-disabled", !user ? "true" : "false");
+    achievementsMenuItem.classList.remove("is-disabled");
+    achievementsMenuItem.setAttribute("aria-disabled", "false");
   }
   if (user && metaEl) {
     metaEl.textContent = `Signed in as ${user.username || user.email}.`;
@@ -329,13 +329,13 @@ async function fetchFavorites() {
 }
 
 async function toggleFavorite() {
-  if (!currentUrl) {
-    if (metaEl) metaEl.textContent = "No URL to favorite yet.";
+  if (!currentUser) {
+    setLoginStatus("Create a free account to start!");
+    openLoginModal();
     return;
   }
-  if (!currentUser) {
-    setLoginStatus("Sign in to save favorites.");
-    openLoginModal();
+  if (!currentUrl) {
+    if (metaEl) metaEl.textContent = "No URL to favorite yet.";
     return;
   }
   try {
@@ -573,6 +573,7 @@ if (achievementsMenuItem) {
   achievementsMenuItem.addEventListener("click", () => {
     closeMenus();
     openAchievementsModal();
+    if (!currentUser) openLoginModal();
   });
 }
 
@@ -601,7 +602,7 @@ if (favoritesEditMenuItem) {
   favoritesEditMenuItem.addEventListener("click", () => {
     closeMenus();
     if (!currentUser) {
-      setLoginStatus("Sign in to view favorites.");
+      setLoginStatus("Create a free account to unlock achievements and save favorites.");
       openLoginModal();
       return;
     }
