@@ -523,6 +523,50 @@ body {
   display: none;
 }
 
+.ad-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4f3f1;
+  z-index: 4;
+}
+
+.ad-overlay.is-hidden {
+  display: none;
+}
+
+.ad-card {
+  width: min(560px, 92%);
+  background: #fff;
+  border: 2px solid #000;
+  box-shadow:
+    inset 1px 1px 0 var(--win-light),
+    inset -1px -1px 0 var(--win-shadow),
+    4px 4px 0 rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+  text-align: center;
+}
+
+.ad-title {
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #4a4a4a;
+}
+
+.ad-slot {
+  min-height: 120px;
+}
+
+.ad-hint {
+  font-size: 0.9rem;
+  color: #222;
+}
+
 .embed-note {
   font-size: 0.85rem;
 }

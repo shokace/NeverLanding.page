@@ -9,6 +9,7 @@ const viewerEl = document.getElementById("viewer");
 const embedNoteEl = document.getElementById("embed-note");
 const loadingEl = document.getElementById("loading");
 const throbberEl = document.getElementById("throbber");
+const adOverlayEl = document.getElementById("ad-overlay");
 const loginMenuItem = document.getElementById("login-menu");
 const logoutMenuItem = document.getElementById("logout-menu");
 const shareMenuItem = document.getElementById("share-menu");
@@ -71,7 +72,17 @@ let favoritesPendingRemovals = new Set();
 const HISTORY_KEY = "neverlanding-history";
 const HISTORY_LIMIT = 50;
 const SHARE_PARAM = "url";
+const AD_COUNT_KEY = "neverlanding-ad-count";
+const AD_TARGET_KEY = "neverlanding-ad-target";
+const AD_MIN_PAGES = 10;
+const AD_MAX_PAGES = 15;
 const menus = Array.from(document.querySelectorAll(".menu"));
+let adCount = 0;
+let adTarget = 0;
+let adShowing = false;
+let adCountdownTimer = null;
+let adCountdownRemaining = 0;
+let adGoLabel = "";
 
 function closeMenus(exceptMenu = null) {
   menus.forEach((menu) => {
@@ -766,7 +777,117 @@ function pushHistory(entry) {
   updateForwardButton();
 }
 
+function randomAdTarget() {
+  return Math.floor(Math.random() * (AD_MAX_PAGES - AD_MIN_PAGES + 1)) + AD_MIN_PAGES;
+}
+
+function loadAdState() {
+  try {
+    adCount = Number(localStorage.getItem(AD_COUNT_KEY)) || 0;
+    adTarget = Number(localStorage.getItem(AD_TARGET_KEY)) || 0;
+  } catch {
+    adCount = 0;
+    adTarget = 0;
+  }
+  if (!adTarget) {
+    adTarget = randomAdTarget();
+  }
+}
+
+function saveAdState() {
+  try {
+    localStorage.setItem(AD_COUNT_KEY, String(adCount));
+    localStorage.setItem(AD_TARGET_KEY, String(adTarget));
+  } catch {}
+}
+
+function showAdIntermission() {
+  if (!adOverlayEl) return;
+  adShowing = true;
+  adOverlayEl.classList.remove("is-hidden");
+  adOverlayEl.setAttribute("aria-hidden", "false");
+  viewerEl.src = "about:blank";
+  urlEl.textContent = "Advertisement";
+  urlEl.href = "#";
+  metaEl.textContent = "Press Go to continue.";
+  loadingEl.classList.add("is-hidden");
+  throbberEl.classList.add("is-hidden");
+  setStopState(false);
+  startAdCountdown();
+  if (window.adsbygoogle && Array.isArray(window.adsbygoogle)) {
+    try {
+      window.adsbygoogle.push({});
+    } catch {}
+  }
+}
+
+function hideAdIntermission() {
+  if (!adOverlayEl) return;
+  adShowing = false;
+  stopAdCountdown();
+  adOverlayEl.classList.add("is-hidden");
+  adOverlayEl.setAttribute("aria-hidden", "true");
+}
+
+function startAdCountdown() {
+  if (!getButton) return;
+  stopAdCountdown();
+  adGoLabel = adGoLabel || getButton.textContent;
+  adCountdownRemaining = 5;
+  getButton.disabled = true;
+  getButton.classList.add("is-disabled");
+  updateGoCountdownLabel();
+  adCountdownTimer = window.setInterval(() => {
+    adCountdownRemaining -= 1;
+    if (adCountdownRemaining <= 0) {
+      stopAdCountdown();
+      return;
+    }
+    updateGoCountdownLabel();
+  }, 1000);
+}
+
+function stopAdCountdown() {
+  if (!getButton) return;
+  if (adCountdownTimer) {
+    window.clearInterval(adCountdownTimer);
+    adCountdownTimer = null;
+  }
+  adCountdownRemaining = 0;
+  getButton.textContent = adGoLabel || "Go";
+  getButton.disabled = false;
+  getButton.classList.remove("is-disabled");
+}
+
+function updateGoCountdownLabel() {
+  if (!getButton) return;
+  getButton.textContent = `${adGoLabel || "Go"} (${adCountdownRemaining})`;
+}
+
+function maybeShowAd() {
+  if (!adOverlayEl) return false;
+  if (adShowing) {
+    hideAdIntermission();
+    return false;
+  }
+  if (adCount >= adTarget) {
+    showAdIntermission();
+    adCount = 0;
+    adTarget = randomAdTarget();
+    saveAdState();
+    return true;
+  }
+  return false;
+}
+
+function recordLandingForAds() {
+  adCount += 1;
+  saveAdState();
+}
+
 async function loadRandom() {
+  if (maybeShowAd()) return;
+  if (adShowing) hideAdIntermission();
   getButton.disabled = true;
   urlEl.textContent = "Loading...";
   urlEl.href = "#";
@@ -794,6 +915,7 @@ async function loadRandom() {
     applyEntry(entry);
     if (entry.url) pushHistory(entry);
     if (entry.url) logVisit(entry.url);
+    if (entry.url) recordLandingForAds();
   } catch (err) {
     currentUrl = "";
     urlEl.textContent = "Error loading a URL.";
@@ -857,6 +979,7 @@ refreshButton.addEventListener("click", () => {
 });
 
 loadHistory();
+loadAdState();
 updateBackButton();
 updateForwardButton();
 
