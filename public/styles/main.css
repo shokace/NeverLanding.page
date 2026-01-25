@@ -561,6 +561,10 @@ body {
   z-index: 20;
 }
 
+#login-modal {
+  z-index: 30;
+}
+
 .modal.is-hidden {
   display: none;
 }
