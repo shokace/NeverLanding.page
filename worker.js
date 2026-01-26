@@ -2,13 +2,8 @@ const LIST_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 const LIST_META_URL = "https://tranco-list.eu/api/lists/date/latest";
 const DNS_FILTER_TTL_MS = 24 * 60 * 60 * 1000;
 const DNS_FILTER_URL = "https://family.cloudflare-dns.com/dns-query";
-const R2_KEY_DEFAULT = "tranco/top-1m.csv";
-const R2_META_TTL_MS = 6 * 60 * 60 * 1000;
-const R2_RANGE_BYTES = 64 * 1024;
-const R2_SEEK_BACK_BYTES = 128;
 
 let cachedList = null;
-let cachedR2Meta = null;
 let urlQueue = [];
 let dnsCache = new Map();
 
@@ -189,15 +184,6 @@ async function loadDomainList(listUrl) {
   return cachedList;
 }
 
-function parseCsvDomain(line) {
-  const trimmed = line.trim();
-  if (!trimmed) return null;
-  const comma = trimmed.indexOf(",");
-  if (comma === -1) return null;
-  const domain = trimmed.slice(comma + 1).trim();
-  return domain || null;
-}
-
 function pickRandomUrl(domains) {
   const domain = domains[Math.floor(Math.random() * domains.length)];
   return `https://${domain}`;
@@ -254,59 +240,6 @@ async function isUrlReachable(url) {
   }
 }
 
-async function getR2Meta(env) {
-  if (!env || !env.TRANCO_BUCKET) return null;
-  const now = Date.now();
-  if (cachedR2Meta && now - cachedR2Meta.fetchedAt < R2_META_TTL_MS) {
-    return cachedR2Meta;
-  }
-  const key = env.TRANCO_R2_KEY || R2_KEY_DEFAULT;
-  const head = await env.TRANCO_BUCKET.head(key);
-  if (!head) return null;
-  cachedR2Meta = {
-    size: head.size,
-    etag: head.etag || "",
-    uploaded: head.uploaded || null,
-    fetchedAt: now,
-  };
-  return cachedR2Meta;
-}
-
-async function pickRandomFromR2(env) {
-  if (!env || !env.TRANCO_BUCKET) return null;
-  const meta = await getR2Meta(env);
-  if (!meta || !meta.size) return null;
-  const key = env.TRANCO_R2_KEY || R2_KEY_DEFAULT;
-
-  for (let attempt = 0; attempt < 3; attempt += 1) {
-    const offset = Math.floor(Math.random() * meta.size);
-    const start = offset > R2_SEEK_BACK_BYTES ? offset - R2_SEEK_BACK_BYTES : 0;
-    const obj = await env.TRANCO_BUCKET.get(key, {
-      range: { offset: start, length: R2_RANGE_BYTES },
-    });
-    if (!obj) return null;
-    let text = await obj.text();
-    if (start > 0) {
-      const firstNewline = text.indexOf("\n");
-      if (firstNewline === -1) continue;
-      text = text.slice(firstNewline + 1);
-    }
-    const lines = text.split("\n");
-    for (const line of lines) {
-      const domain = parseCsvDomain(line);
-      if (domain) {
-        const etagTag = meta.etag ? meta.etag.replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 12) : "r2";
-        return {
-          url: `https://${domain}`,
-          crawl: `r2-${etagTag || "r2"}`,
-          source: "R2 Tranco Top 1M",
-        };
-      }
-    }
-  }
-  return null;
-}
-
 async function passesDnsFilter(domain, env) {
   const mode = (env && env.DNS_FILTER) || "family";
   if (mode === "off") return true;
@@ -344,46 +277,19 @@ async function passesDnsFilter(domain, env) {
 
 async function fillQueue(env, minSize = 1, maxAttempts = 12) {
   if (urlQueue.length >= minSize) return;
-  let list = null;
-  let listId = null;
-  let listSource = "Tranco Top 1M";
-  const useR2 = env && env.TRANCO_BUCKET;
-  if (!useR2) {
-    const resolved = await resolveListUrl(env);
-    list = await loadDomainList(resolved.listUrl);
-    listId = resolved.listId;
-  }
+  const { listUrl, listId } = await resolveListUrl(env);
+  const list = await loadDomainList(listUrl);
   let attempts = 0;
 
   while (urlQueue.length < minSize && attempts < maxAttempts) {
     attempts += 1;
-    let candidateInfo = null;
-    if (useR2) {
-      candidateInfo = await pickRandomFromR2(env);
-      if (!candidateInfo) {
-        const resolved = await resolveListUrl(env);
-        list = await loadDomainList(resolved.listUrl);
-        listId = resolved.listId;
-        candidateInfo = {
-          url: pickRandomUrl(list.domains),
-          crawl: `tranco-${listId}`,
-          source: listSource,
-        };
-      }
-    } else if (list) {
-      candidateInfo = {
-        url: pickRandomUrl(list.domains),
-        crawl: `tranco-${listId}`,
-        source: listSource,
-      };
-    }
-    if (!candidateInfo) continue;
-    const hostname = new URL(candidateInfo.url).hostname;
+    const candidate = pickRandomUrl(list.domains);
+    const hostname = new URL(candidate).hostname;
     const dnsOk = await passesDnsFilter(hostname, env);
     if (!dnsOk) continue;
-    const ok = await isUrlReachable(candidateInfo.url);
+    const ok = await isUrlReachable(candidate);
     if (ok) {
-      urlQueue.push(candidateInfo);
+      urlQueue.push({ url: candidate, listId });
     }
   }
 }
@@ -884,8 +790,8 @@ export default {
       }
       const body = {
         url: queued.url,
-        crawl: queued.crawl || "tranco-unknown",
-        source: queued.source || "Tranco Top 1M",
+        crawl: `tranco-${queued.listId}`,
+        source: "Tranco Top 1M",
         at: new Date().toISOString(),
       };
       return jsonResponse(body, {
