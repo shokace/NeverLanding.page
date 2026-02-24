@@ -62,6 +62,8 @@ let currentUser = null;
 let favorites = [];
 let favoritesByUrl = new Map();
 let isLoading = false;
+let prefetchedEntry = null;
+let prefetchPromise = null;
 
 function setStopState(active) {
   isLoading = active;
@@ -76,6 +78,7 @@ const AD_COUNT_KEY = "neverlanding-ad-count";
 const AD_TARGET_KEY = "neverlanding-ad-target";
 const AD_MIN_PAGES = 10;
 const AD_MAX_PAGES = 15;
+const ADS_ENABLED = false;
 const menus = Array.from(document.querySelectorAll(".menu"));
 let adCount = 0;
 let adTarget = 0;
@@ -782,6 +785,15 @@ function randomAdTarget() {
 }
 
 function loadAdState() {
+  if (!ADS_ENABLED) {
+    adCount = 0;
+    adTarget = 0;
+    if (adOverlayEl) {
+      adOverlayEl.classList.add("is-hidden");
+      adOverlayEl.setAttribute("aria-hidden", "true");
+    }
+    return;
+  }
   try {
     adCount = Number(localStorage.getItem(AD_COUNT_KEY)) || 0;
     adTarget = Number(localStorage.getItem(AD_TARGET_KEY)) || 0;
@@ -865,6 +877,7 @@ function updateGoCountdownLabel() {
 }
 
 function maybeShowAd() {
+  if (!ADS_ENABLED) return false;
   if (!adOverlayEl) return false;
   if (adShowing) {
     hideAdIntermission();
@@ -881,8 +894,35 @@ function maybeShowAd() {
 }
 
 function recordLandingForAds() {
+  if (!ADS_ENABLED) return;
   adCount += 1;
   saveAdState();
+}
+
+function normalizeRandomEntry(data) {
+  return {
+    url: data && data.url ? data.url : "",
+    crawl: data && data.crawl ? data.crawl : "",
+    at: data && data.at ? data.at : "",
+  };
+}
+
+async function prefetchRandom() {
+  if (prefetchPromise || prefetchedEntry) return;
+  prefetchPromise = fetch("/api/random", { method: "GET" })
+    .then((res) => {
+      if (!res.ok) throw new Error("Prefetch failed");
+      return res.json();
+    })
+    .then((data) => {
+      prefetchedEntry = normalizeRandomEntry(data);
+    })
+    .catch(() => {
+      prefetchedEntry = null;
+    })
+    .finally(() => {
+      prefetchPromise = null;
+    });
 }
 
 async function loadRandom() {
@@ -898,24 +938,25 @@ async function loadRandom() {
   throbberEl.classList.remove("is-hidden");
 
   try {
-    fetchController = new AbortController();
-    const res = await fetch("/api/random", {
-      method: "GET",
-      signal: fetchController.signal,
-    });
-    if (!res.ok) {
-      throw new Error("Request failed");
+    let entry = prefetchedEntry;
+    prefetchedEntry = null;
+    if (!entry || !entry.url) {
+      fetchController = new AbortController();
+      const res = await fetch("/api/random", {
+        method: "GET",
+        signal: fetchController.signal,
+      });
+      if (!res.ok) {
+        throw new Error("Request failed");
+      }
+      const data = await res.json();
+      entry = normalizeRandomEntry(data);
     }
-    const data = await res.json();
-    const entry = {
-      url: data.url || "",
-      crawl: data.crawl || "",
-      at: data.at || "",
-    };
     applyEntry(entry);
     if (entry.url) pushHistory(entry);
     if (entry.url) logVisit(entry.url);
     if (entry.url) recordLandingForAds();
+    prefetchRandom();
   } catch (err) {
     currentUrl = "";
     urlEl.textContent = "Error loading a URL.";
@@ -982,6 +1023,7 @@ loadHistory();
 loadAdState();
 updateBackButton();
 updateForwardButton();
+prefetchRandom();
 
 const sharedParam = new URLSearchParams(window.location.search).get(SHARE_PARAM);
 const sharedUrl = normalizeSharedUrl(sharedParam);
