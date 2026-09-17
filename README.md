@@ -7,6 +7,11 @@ popularity weighting. Each tab prepares five pages in the background and Go
 displays a loaded page without reloading it. Every candidate passes live adult-content, DNS, redirect,
 HTML, and preview checks.
 
+The address appears above a single navigation row, with Go between Refresh and
+Favorites. New anonymous visitors see a short Go/Favorites introduction once per
+browser (remembered in local storage). Signed-in visitors skip it; signing out does
+not restart it. The gentle button animation respects reduced-motion preferences.
+
 ## Local run
 
 ```sh

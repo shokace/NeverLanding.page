@@ -111,6 +111,12 @@
           <div class="menubar-spacer"></div>
           <div id="landing-counter" class="landing-counter">Landings: 0</div>
         </div>
+        <div class="address-bar">
+          <div class="address-label">Address</div>
+          <div class="address-field">
+            <a id="url" href="#" target="_blank" rel="noopener noreferrer">No URL yet.</a>
+          </div>
+        </div>
         <div class="toolbar">
           <button class="tool-button tool-button--compact" type="button" id="back" aria-label="Back" title="Back">
             <span class="tool-icon tool-icon--back" aria-hidden="true"></span>
@@ -118,37 +124,35 @@
           <button class="tool-button tool-button--compact" type="button" id="forward" aria-label="Forward" title="Forward">
             <span class="tool-icon tool-icon--forward" aria-hidden="true"></span>
           </button>
-          <button class="tool-button" type="button" id="stop">
+          <button class="tool-button" type="button" id="stop" aria-label="Stop" title="Stop">
             <span class="tool-icon tool-icon--stop" aria-hidden="true"></span>
-            Stop
+            <span class="tool-label">Stop</span>
           </button>
-          <button class="tool-button" type="button" id="refresh">
+          <button class="tool-button" type="button" id="refresh" aria-label="Refresh" title="Refresh">
             <span class="tool-icon tool-icon--refresh" aria-hidden="true"></span>
-            Refresh
+            <span class="tool-label">Refresh</span>
           </button>
-          <div class="toolbar-spacer" aria-hidden="true"></div>
+          <button id="get" class="go-button" type="button" title="Go to a random website">Go</button>
           <button
             class="tool-button tool-button--icon"
             type="button"
             id="favorite-toggle"
             aria-pressed="false"
-            aria-label="Toggle favorite"
-            title="Toggle favorite"
+            aria-label="Add to favorites"
+            title="Add to favorites"
           >
             <span class="favorite-icon" aria-hidden="true"></span>
+            <span class="tool-label">Favorites</span>
           </button>
-        </div>
-        <div class="address-bar">
-          <div class="address-label">Address</div>
-          <div class="address-field">
-            <a id="url" href="#" target="_blank" rel="noopener noreferrer">No URL yet.</a>
+          <div id="onboarding-hint" class="onboarding-hint" hidden>
+            <span id="onboarding-text" role="status"></span>
+            <button id="onboarding-dismiss" type="button" aria-label="Dismiss hint" title="Dismiss hint">×</button>
           </div>
-          <button id="get" class="go-button" type="button">Go</button>
         </div>
         <div class="content">
           <div class="viewer">
             <div id="loading" class="loading-overlay" aria-hidden="true">
-              <img src="/go_clippy.png" alt="" />
+              <img id="onboarding-clippy" src="/go_clippy.png" alt="" hidden />
             </div>
             <div id="throbber" class="throbber-overlay is-hidden" aria-hidden="true">
               <img src="/hourglass_throbber.gif" alt="" />

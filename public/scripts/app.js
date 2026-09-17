@@ -67,6 +67,48 @@ let isLoading = false;
 let navigationVersion = 0;
 let viewerTimer = null;
 
+const onboardingHint = document.getElementById("onboarding-hint");
+const onboardingText = document.getElementById("onboarding-text");
+const ONBOARDING_KEY = "neverlanding-introduction-seen";
+let onboardingStep = null;
+
+function dismissOnboarding() {
+  onboardingStep = null;
+  onboardingHint.hidden = true;
+  document.getElementById("onboarding-clippy").hidden = true;
+  getButton.classList.remove("has-hint");
+  favoriteToggleButton.classList.remove("has-hint");
+  getButton.removeAttribute("aria-describedby");
+  favoriteToggleButton.removeAttribute("aria-describedby");
+}
+
+function showOnboarding(step) {
+  dismissOnboarding();
+  onboardingStep = step;
+  onboardingText.textContent = step === "go"
+    ? "Press Go to start exploring a random website."
+    : "Found a keeper? Use the star to save favorites with a free account.";
+  const button = step === "go" ? getButton : favoriteToggleButton;
+  button.classList.add("has-hint");
+  button.setAttribute("aria-describedby", "onboarding-text");
+  onboardingHint.hidden = false;
+  document.getElementById("onboarding-clippy").hidden = step !== "go";
+}
+
+function initializeOnboarding(user) {
+  // Remember registered visitors too, so logging out never starts the tour.
+  if (user) dismissOnboarding();
+  try {
+    const seen = localStorage.getItem(ONBOARDING_KEY);
+    localStorage.setItem(ONBOARDING_KEY, "1");
+    if (!user && !seen && !hasStarted) showOnboarding("go");
+  } catch {
+    // Without persistent storage we cannot guarantee a one-time hint.
+  }
+}
+
+document.getElementById("onboarding-dismiss").addEventListener("click", dismissOnboarding);
+
 function setStopState(active) {
   isLoading = active;
   if (!stopButton) return;
@@ -229,6 +271,7 @@ function setLoginStatus(message) {
 
 function setAuthState(user) {
   currentUser = user || null;
+  initializeOnboarding(currentUser);
   if (loginMenuItem) {
     const loggedIn = Boolean(user);
     loginMenuItem.classList.toggle("is-disabled", loggedIn);
@@ -328,6 +371,9 @@ function updateFavoriteButton() {
   const isActive = Boolean(currentUser && currentUrl && favoritesByUrl.has(currentUrl));
   favoriteToggleButton.classList.toggle("is-active", isActive);
   favoriteToggleButton.setAttribute("aria-pressed", isActive ? "true" : "false");
+  const label = isActive ? "Remove from favorites" : "Add to favorites";
+  favoriteToggleButton.setAttribute("aria-label", label);
+  favoriteToggleButton.title = label;
 }
 
 async function fetchFavorites() {
@@ -973,6 +1019,8 @@ async function loadRandom() {
       pushHistory(entry);
       logVisit(entry.url);
       recordLandingForAds();
+      if (onboardingStep === "go" && !currentUser) showOnboarding("favorite");
+      else dismissOnboarding();
     }
   } catch (error) {
     if (version === navigationVersion) {
@@ -988,6 +1036,7 @@ async function loadRandom() {
 
 if (favoriteToggleButton) {
   favoriteToggleButton.addEventListener("click", () => {
+    dismissOnboarding();
     toggleFavorite();
   });
 }
