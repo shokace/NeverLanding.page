@@ -8,6 +8,7 @@ const achievementDetailClose = achievementDetailModal
 const achievementsMenuButton = document.getElementById("achievements-menu");
 let achievementData = [];
 let unlockedCodes = new Set();
+let unlockedDetails = new Map();
 let seenCodes = new Set();
 let currentUserId = null;
 const ACHIEVEMENTS_SEEN_KEY = "neverlanding-achievements-seen";
@@ -92,12 +93,27 @@ function applyNotificationBadges() {
   }
 }
 
-function openDetailModal(title, text) {
+function openDetailModal(title, text, code) {
   if (!achievementDetailModal || !achievementDetailText) return;
   if (achievementDetailTitle) {
     achievementDetailTitle.textContent = title || "Achievement";
   }
   achievementDetailText.textContent = text;
+  const details = unlockedDetails.get(code);
+  if (unlockedCodes.has(code) && details?.url) {
+    try {
+      const url = new URL(details.url);
+      if (url.protocol === "https:" && !url.username && !url.password) {
+        const link = document.createElement("a");
+        link.href = url.href;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = url.hostname;
+        link.className = "achievement-source";
+        achievementDetailText.append(document.createElement("br"), document.createElement("br"), "Unlocked on: ", link);
+      }
+    } catch {}
+  }
   achievementDetailModal.classList.remove("is-hidden");
 }
 
@@ -134,6 +150,7 @@ async function refreshUnlocked() {
     const data = await res.json();
     if (version !== unlockRequest || userId !== currentUserId) return;
     unlockedCodes = new Set(Array.isArray(data.codes) ? data.codes : []);
+    unlockedDetails = new Map((Array.isArray(data.items) ? data.items : []).map(item => [item.code, item]));
     applyUnlocks();
   } catch {}
 }
@@ -142,11 +159,13 @@ document.addEventListener("auth-changed", (event) => {
   if (!event.detail || !event.detail.user) {
     currentUserId = null;
     unlockedCodes = new Set();
+    unlockedDetails = new Map();
     seenCodes = loadSeenCodes(null);
     applyUnlocks();
     return;
   }
   unlockedCodes = new Set();
+  unlockedDetails = new Map();
   currentUserId = event.detail.user.id || null;
   seenCodes = loadSeenCodes(currentUserId);
   refreshUnlocked();
@@ -172,8 +191,8 @@ if (achievementsGrid) {
     const title = info && info.title ? `${info.title} Achievement` : "Achievement";
     const code = info && info.code ? info.code : "";
     let text = info && info.description ? info.description : "Visit the web to unlock this achievement.";
-    text = `${unlockedCodes.has(code) ? "Unlocked! " : ""}${text}`;
-    openDetailModal(title, text);
+    if (unlockedCodes.has(code)) text = info.unlockedDescription || `Unlocked! ${text}`;
+    openDetailModal(title, text, code);
   });
 }
 

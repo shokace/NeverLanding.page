@@ -32,13 +32,14 @@
     },
     {
       "icon": "/assets/achievements/explorerLevel3.ico",
-      "description": "Visit 2026 random sites and collect every available country flag. Reserved, undelegated TLDs are not required.",
+      "description": "???",
       "title": "Explorer Level 3",
       "code": "explorer_level_3",
       "rule": {
         "type": "passport",
         "value": 2026
-      }
+      },
+      "unlockedDescription": "Visited the 2026th Website"
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 05.ico",

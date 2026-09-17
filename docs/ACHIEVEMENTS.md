@@ -32,3 +32,16 @@ checks old thresholds, every TLD rule, final-flag completion, and migration reru
 
 Flag reference: [IANA Root Zone Database](https://www.iana.org/domains/root/db),
 verified 2026-09-17; [.mf delegation](https://www.iana.org/domains/root/db/mf.html).
+
+New unlocks store their supporting URL in `user_achievements.source_url`. TLD
+awards use the first matching recorded visit; visit milestones use their exact
+numbered landing. A later visit never overwrites an award's original link.
+Login has no triggering website. Existing awards without provenance keep their
+original timestamps and do not display an invented link.
+
+Explorer Level 3 displays `???` while locked and exactly `Visited the 2026th
+Website` after unlocking. Its rule is not disclosed in the achievement dialog.
+
+For subsequent catalog updates, generate a **new** migration, for example
+`npm run achievements:generate -- --migration 0012_catalog_update.sql`.
+Applied migrations must not be rewritten.

@@ -563,7 +563,7 @@ if (shareMenuItem) {
     }
     openShareModal();
     if (currentUser && currentUrl) {
-      fetch("/api/achievements/share", {method: "POST"})
+      fetch("/api/achievements/share", {method: "POST", headers: {"content-type": "application/json"}, body: JSON.stringify({url: currentUrl})})
         .then(res => {if (res.ok) document.dispatchEvent(new CustomEvent("achievements-changed"));})
         .catch(() => {});
     }

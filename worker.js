@@ -1,3 +1,4 @@
+import {publicUrl} from './lib/url.js';
 import {syncAchievements} from './lib/achievements.js';
 
 const LIST_TTL_MS = 30 * 24 * 60 * 60 * 1000;
@@ -822,7 +823,7 @@ export default {
       if (auth.error) return auth.error;
       await syncAchievements(env, auth.user.id);
       const rows = await env.DB.prepare(
-        `SELECT achievements.code as code
+        `SELECT achievements.code as code, user_achievements.source_url as url, user_achievements.earned_at as earnedAt
          FROM user_achievements
          JOIN achievements ON achievements.id = user_achievements.achievement_id
          WHERE user_achievements.user_id = ?`
@@ -830,7 +831,7 @@ export default {
         .bind(auth.user.id)
         .all();
       const codes = rows && rows.results ? rows.results.map((row) => row.code) : [];
-      return jsonResponse({ codes }, { status: 200 });
+      return jsonResponse({codes, items: rows?.results || []}, {status: 200, headers: {"cache-control": "no-store"}});
     }
 
     if (pathname === "/api/achievements/share" && method === "POST") {
@@ -839,7 +840,8 @@ export default {
       }
       const auth = await requireUser(env, request);
       if (auth.error) return auth.error;
-      await grantAchievement(env, auth.user.id, "share_first");
+      const body = await readJson(request);
+      await syncAchievements(env, auth.user.id, {share: true, shareUrl: publicUrl(body?.url)?.href || null});
       return jsonResponse({ ok: true }, { status: 200 });
     }
 
