@@ -10,8 +10,9 @@ The existing `.biz`, login, sharing, and Explorer codes are unchanged.
 - Explorer Level 2: 2026 landings (unchanged).
 - Explorer Level 3: 2026 landings plus all available flag achievements. The final
   flag now counts on the same visit. Unrelated generic TLDs are not countries.
-- `.mf` remains visible and existing earned records are preserved, but it is
-  unavailable and excluded from completion because it is not delegated in DNS.
+- `.mf` has been removed from the displayed catalog because it is not delegated
+  in DNS. It is excluded from completion. Migration 0014 removes the unused
+  definition while preserving any historical earned record that references it.
 - The already-present Saint Vincent and the Grenadines flag awards `.vc`.
 - The already-present Soviet Union flag awards the still-delegated `.su`.
 

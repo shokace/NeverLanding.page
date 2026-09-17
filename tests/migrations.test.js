@@ -26,7 +26,8 @@ assert before==c.execute('SELECT id,user_id,achievement_id,earned_at FROM user_a
 after=dict(c.execute('SELECT code,id FROM achievements'))
 assert all(after[k]==v for k,v in ids.items())
 definitions=json.loads(pathlib.Path('public/data/achievements.json').read_text())['achievements']
-assert {a['code'] for a in definitions}==set(after)
+assert {a['code'] for a in definitions}==set(after)-{'tld_mf'}
+assert 'tld_mf' in after  # Preserve a historical earned record, but never display a retired tile.
 actual=dict(c.execute('SELECT code,description FROM achievements'))
 assert all(actual[a['code']]==a['description'] for a in definitions)
 assert not c.execute('PRAGMA foreign_key_check').fetchall()

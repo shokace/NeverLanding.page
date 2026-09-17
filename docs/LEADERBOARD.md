@@ -74,5 +74,10 @@ Already-open older clients need to reload before new landings can score.
 The footer defaults to only the GitHub link, retaining action confirmations and
 loading/errors when relevant. Discovery source names never appear. Queue diagnostics
 remain hidden, and the old embed notice is removed. Earned achievements have a steady gold glow;
-unseen unlocks pulse until the achievements panel is closed. Reduced-motion users
-get the steady glow without animation.
+new unlocks sparkle continuously during their first viewing session. Opening
+the notification scrolls to the first unseen award. Only tiles actually visible on
+screen are acknowledged when the panel closes (or the page is left). Viewed awards
+are remembered per account in this browser using the existing seen-achievements
+storage; reopening or reloading does not replay them. Off-screen awards stay unread
+and keep their sparkle for a later session. Reduced-motion users get the steady
+glow without animation.

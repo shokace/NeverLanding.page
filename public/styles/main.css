@@ -997,7 +997,9 @@ body {
   box-shadow: inset 0 0 8px #ffdc67, 0 0 5px #dfb633;
 }
 .achievement-tile.is-unlocked:hover { background: #fff9db; }
-.achievement-tile.is-unlocked.is-new {
+.achievement-tile.is-unlocked.is-celebrating {
+  overflow: visible;
+  z-index: 1;
   animation: achievement-glow 2.4s ease-in-out infinite;
 }
 @keyframes achievement-glow {
@@ -1005,9 +1007,35 @@ body {
   50% { box-shadow: inset 0 0 15px #ffd447, 0 0 10px #d99d00; border-color: #765100; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .achievement-tile.is-unlocked.is-new { animation: none; }
+  .achievement-tile.is-unlocked.is-celebrating { animation: none; }
+  .achievement-sparkle { display: none; }
 }
 
 #username-setup-modal { z-index: 40; }
 #username-setup-status:empty { display: none; }
 #username-setup-logout { margin-top: 12px; }
+
+.achievement-sparkle {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  pointer-events: none;
+  background: #fff7a0;
+  filter: drop-shadow(0 0 3px #c28b00);
+  clip-path: polygon(50% 0%, 64% 36%, 100% 50%, 64% 64%, 50% 100%, 36% 64%, 0% 50%, 36% 36%);
+  opacity: 0;
+  animation: achievement-sparkle 1.8s ease-out infinite both;
+  animation-delay: calc(var(--sparkle-index) * 70ms);
+}
+.achievement-sparkle:nth-of-type(1) { left: 8%; top: 12%; --sparkle-x: -10px; --sparkle-y: -12px; }
+.achievement-sparkle:nth-of-type(2) { right: 10%; top: 6%; --sparkle-x: 9px; --sparkle-y: -12px; }
+.achievement-sparkle:nth-of-type(3) { right: 0; top: 42%; --sparkle-x: 12px; --sparkle-y: -2px; }
+.achievement-sparkle:nth-of-type(4) { right: 15%; bottom: 4%; --sparkle-x: 8px; --sparkle-y: 9px; }
+.achievement-sparkle:nth-of-type(5) { left: 12%; bottom: 8%; --sparkle-x: -9px; --sparkle-y: 8px; }
+.achievement-sparkle:nth-of-type(6) { left: 0; top: 44%; --sparkle-x: -12px; --sparkle-y: 0px; }
+@keyframes achievement-sparkle {
+  0% { opacity: 0; transform: scale(.2) rotate(-25deg); }
+  25% { opacity: 1; transform: scale(1.2) rotate(15deg); }
+  65% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--sparkle-x), var(--sparkle-y)) scale(.3) rotate(80deg); }
+}

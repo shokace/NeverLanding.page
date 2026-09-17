@@ -2410,18 +2410,6 @@
       "country": true
     },
     {
-      "icon": "/assets/achievements/countries/saint_martin.png",
-      "code": "tld_mf",
-      "title": "St. Martin",
-      "description": "The .mf country code is reserved for Saint Martin but is not delegated in DNS. This flag is not required for Explorer Level 3. Existing awards are preserved.",
-      "rule": {
-        "type": "tld",
-        "value": "mf"
-      },
-      "country": true,
-      "available": false
-    },
-    {
       "icon": "/assets/achievements/countries/sudan.png",
       "code": "tld_sd",
       "title": "Sudan",
@@ -2785,5 +2773,5 @@
       }
     }
   ],
-  "slots": 257
+  "slots": 256
 }

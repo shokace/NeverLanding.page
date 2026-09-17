@@ -45,6 +45,8 @@ test('passport unlocks on the final country visit without unavailable .mf or unr
   assert.ok(!earnedCodes({visits: 2025, unlocked: countryCodes}).includes('explorer_level_3'));
   assert.ok(earnedCodes({visits: 2026, unlocked: allButLast, urls: [`https://example.${last}`]}).includes('explorer_level_3'));
   assert.ok(!countryCodes.includes('tld_mf'));
+  assert.ok(!definitions.some(a => a.code === 'tld_mf'));
+  assert.ok(!earnedCodes({urls:['https://example.mf/']}).includes('tld_mf'));
   assert.ok(countryCodes.includes('tld_vc'));
 });
 

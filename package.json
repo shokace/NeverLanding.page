@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "wrangler dev",
     "test": "node --test tests/*.test.js",
-    "test:browser": "node tests/browser.mjs && node tests/queue-browser.mjs && node tests/onboarding-browser.mjs && node tests/leaderboard-browser.mjs",
+    "test:browser": "node tests/browser.mjs && node tests/queue-browser.mjs && node tests/onboarding-browser.mjs && node tests/leaderboard-browser.mjs && node tests/achievement-sparkle-browser.mjs",
     "check:catalog": "node tools/check-catalog.mjs",
     "achievements:generate": "python3 tools/generate-achievements.py",
     "test:live": "node tests/live-browser.mjs",

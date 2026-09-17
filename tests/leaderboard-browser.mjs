@@ -90,7 +90,7 @@ try {
   await page.locator('#achievements-menu').click();
   await expect(page.locator('.achievement-tile.is-unlocked')).toHaveCount(2);
   const tile=page.locator('.achievement-tile.is-unlocked').first();
-  assert.equal(await tile.evaluate(n=>getComputedStyle(n).animationName),'achievement-glow');
+  await expect(tile).toHaveCSS('animation-name','achievement-glow');
   assert.notEqual(await tile.evaluate(n=>getComputedStyle(n).boxShadow),'none');
   assert.equal(await page.locator('.achievement-tile:not(.is-unlocked)').first().evaluate(n=>getComputedStyle(n).animationName),'none');
   await page.screenshot({path:'/tmp/neverlanding-achievement-glow.png'});

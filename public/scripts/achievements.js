@@ -1,4 +1,11 @@
 const achievementsGrid = document.getElementById("achievements-grid");
+const achievementsPanel = document.getElementById("achievements-modal");
+const celebratingTiles = new Set();
+const viewedThisSession = new Set();
+let revealPendingUnlock = false;
+const visibleTiles = new IntersectionObserver(() => celebrateVisibleUnlocks(), {
+  root: achievementsGrid?.parentElement, threshold: 0.6,
+});
 const achievementDetailModal = document.getElementById("achievement-detail-modal");
 const achievementDetailText = document.getElementById("achievement-detail-text");
 const achievementDetailTitle = document.getElementById("achievement-detail-title");
@@ -30,11 +37,15 @@ function buildAchievementTiles(total) {
       img.src = info.icon;
       img.alt = "";
       img.loading = "lazy";
+      img.addEventListener("load", () => requestAnimationFrame(celebrateVisibleUnlocks), {once:true});
       tile.appendChild(img);
     }
     tiles.appendChild(tile);
   }
+  stopCelebrations();
+  visibleTiles.disconnect();
   achievementsGrid.replaceChildren(tiles);
+  achievementsGrid.querySelectorAll(".achievement-tile").forEach(tile => visibleTiles.observe(tile));
   applyUnlocks();
 }
 
@@ -74,8 +85,9 @@ function saveSeenCodes() {
 
 function applyNotificationBadges() {
   const unseen = new Set();
+  const displayedCodes = new Set(achievementData.map(info => info.code));
   unlockedCodes.forEach((code) => {
-    if (!seenCodes.has(code)) unseen.add(code);
+    if (displayedCodes.has(code) && !seenCodes.has(code)) unseen.add(code);
   });
 
   if (achievementsGrid) {
@@ -91,7 +103,77 @@ function applyNotificationBadges() {
   if (achievementsMenuButton) {
     achievementsMenuButton.classList.toggle("has-badge", unseen.size > 0);
   }
+  requestAnimationFrame(celebrateVisibleUnlocks);
 }
+
+function stopCelebrations() {
+  for (const tile of celebratingTiles) {
+    tile.classList.remove("is-celebrating");
+    tile.querySelectorAll(".achievement-sparkle").forEach(sparkle => sparkle.remove());
+  }
+  celebratingTiles.clear();
+}
+
+function celebrateVisibleUnlocks() {
+  if (!currentUserId || document.hidden || achievementsPanel.classList.contains("is-hidden") ||
+      !achievementDetailModal.classList.contains("is-hidden")) return;
+  const fresh = [...achievementsGrid.querySelectorAll(".achievement-tile.is-new")];
+  if (revealPendingUnlock && fresh.length) {
+    fresh[0].scrollIntoView({block:"center", behavior:"instant"});
+    revealPendingUnlock = false;
+  }
+  const viewport = achievementsGrid.parentElement.getBoundingClientRect();
+  // Merge persisted state so another tab cannot restart a celebration we saw.
+  seenCodes = new Set([...seenCodes, ...loadSeenCodes(currentUserId)]);
+  for (const tile of fresh) {
+    const box = tile.getBoundingClientRect();
+    const visibleHeight = Math.max(0, Math.min(box.bottom, viewport.bottom) - Math.max(box.top, viewport.top));
+    const visibleWidth = Math.max(0, Math.min(box.right, viewport.right) - Math.max(box.left, viewport.left));
+    const icon = tile.querySelector("img");
+    if (!box.height || !box.width || visibleHeight * visibleWidth / (box.height * box.width) < 0.6 ||
+        (icon && (!icon.complete || !icon.naturalWidth))) continue;
+    const code = achievementData[Number(tile.dataset.index)]?.code;
+    if (!code || !unlockedCodes.has(code) || seenCodes.has(code)) continue;
+    // Seeing a tile qualifies it for acknowledgement when this panel closes.
+    viewedThisSession.add(code);
+    if (celebratingTiles.has(tile) || matchMedia("(prefers-reduced-motion: reduce)").matches) continue;
+    tile.classList.add("is-celebrating");
+    for (let i = 0; i < 6; i++) {
+      const sparkle = document.createElement("span");
+      sparkle.className = "achievement-sparkle";
+      sparkle.setAttribute("aria-hidden", "true");
+      sparkle.style.setProperty("--sparkle-index", i);
+      tile.appendChild(sparkle);
+    }
+    celebratingTiles.add(tile);
+  }
+}
+
+function finishViewingSession() {
+  if (currentUserId && viewedThisSession.size) {
+    seenCodes = new Set([...seenCodes, ...loadSeenCodes(currentUserId), ...viewedThisSession]);
+    saveSeenCodes();
+  }
+  viewedThisSession.clear();
+  revealPendingUnlock = false;
+  stopCelebrations();
+  applyNotificationBadges();
+}
+
+document.addEventListener("achievements-opened", () => {
+  revealPendingUnlock = true;
+  requestAnimationFrame(celebrateVisibleUnlocks);
+});
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) celebrateVisibleUnlocks();
+});
+window.addEventListener("pagehide", finishViewingSession);
+window.addEventListener("storage", event => {
+  if (event.key === getSeenKey(currentUserId)) {
+    seenCodes = new Set([...seenCodes, ...loadSeenCodes(currentUserId)]);
+    applyNotificationBadges();
+  }
+});
 
 function openDetailModal(title, text, code) {
   if (!achievementDetailModal || !achievementDetailText) return;
@@ -120,6 +202,7 @@ function openDetailModal(title, text, code) {
 function closeDetailModal() {
   if (!achievementDetailModal) return;
   achievementDetailModal.classList.add("is-hidden");
+  requestAnimationFrame(celebrateVisibleUnlocks);
 }
 
 async function loadAchievements() {
@@ -156,6 +239,7 @@ async function refreshUnlocked() {
 }
 
 document.addEventListener("auth-changed", (event) => {
+  if ((event.detail?.user?.id || null) !== currentUserId) finishViewingSession();
   if (!event.detail || !event.detail.user) {
     currentUserId = null;
     unlockedCodes = new Set();
@@ -168,6 +252,7 @@ document.addEventListener("auth-changed", (event) => {
   unlockedDetails = new Map();
   currentUserId = event.detail.user.id || null;
   seenCodes = loadSeenCodes(currentUserId);
+  applyUnlocks();
   refreshUnlocked();
 });
 
@@ -175,12 +260,7 @@ document.addEventListener("achievements-changed", () => {
   refreshUnlocked();
 });
 
-document.addEventListener("achievements-viewed", () => {
-  if (!unlockedCodes.size) return;
-  unlockedCodes.forEach((code) => seenCodes.add(code));
-  saveSeenCodes();
-  applyNotificationBadges();
-});
+document.addEventListener("achievements-viewed", finishViewingSession);
 
 if (achievementsGrid) {
   achievementsGrid.addEventListener("click", (event) => {

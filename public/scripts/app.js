@@ -185,6 +185,7 @@ function closeLoginModal() {
 function openAchievementsModal() {
   if (!achievementsModal) return;
   achievementsModal.classList.remove("is-hidden");
+  document.dispatchEvent(new CustomEvent("achievements-opened"));
 }
 
 function closeAchievementsModal() {
