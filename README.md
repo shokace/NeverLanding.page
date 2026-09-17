@@ -1,24 +1,42 @@
 # [NeverLanding.page](https://neverlanding.page)
 
-Super lightweight static frontend + Cloudflare Worker API that returns a random website URL from the Tranco Top 1M list.
+A retro browser game for discovering random websites and collecting TLD
+achievements. Random selection covers the full Tranco Top 1M plus a supplement
+of interesting sites and IANA-sourced registry destinations; there is no
+popularity weighting. Every candidate passes live adult-content, DNS, redirect,
+HTML, and preview checks.
 
 ## Local run
 
-1) Start the Worker (serves API + static assets):
-```bash
-wrangler dev
+```sh
+npm ci
+npx wrangler d1 migrations apply neverlanding-dev --local
+npm run dev
 ```
 
-2) Open `http://localhost:8787` in your browser.
+Open `http://localhost:8787`. Auth secrets belong in the ignored `.dev.vars` file.
+Production uses the versioned R2 CSV selected in `wrangler.toml`. Local development
+falls back to the live Tranco CSV when that R2 object is absent.
 
-## List source
+## Verify
 
-The Worker fetches the latest Tranco list metadata and downloads the Top 1M CSV,
-then caches it in memory for ~30 days.
-You can override the list URL via the `TRANCO_URL` variable.
+```sh
+npm test
+npm run check:catalog
+npm run test:browser   # requires local server and Playwright Chromium
+node tests/integration.mjs  # local D1 only; creates disposable test accounts
+```
 
 ## Deploy
 
-```bash
-wrangler deploy
+```sh
+npx wrangler whoami
+npx wrangler d1 migrations apply neverlanding-dev --remote
+npx wrangler deploy --keep-vars
 ```
+
+Apply migrations before deploying code that uses new columns. Existing earned
+achievements and their IDs are preserved. See [achievement notes](docs/ACHIEVEMENTS.md)
+and [discovery/filtering notes](docs/DISCOVERY.md) for maintenance and verification.
+The deployed CSV's source, list ID, count, and SHA-256 are recorded in
+`public/data/tranco-source.json`; the previous R2 object is retained for rollback.

@@ -1,19 +1,6 @@
-import {publicUrl} from './lib/url.js';
+import {randomLanding} from './lib/discovery.js';
+import {inspectUrl, publicUrl} from './lib/safety.js';
 import {syncAchievements} from './lib/achievements.js';
-
-const LIST_TTL_MS = 30 * 24 * 60 * 60 * 1000;
-const LIST_META_URL = "https://tranco-list.eu/api/lists/date/latest";
-const DNS_FILTER_TTL_MS = 24 * 60 * 60 * 1000;
-const DNS_FILTER_URL = "https://family.cloudflare-dns.com/dns-query";
-const R2_KEY_DEFAULT = "tranco/top-1m.csv";
-const R2_META_TTL_MS = 6 * 60 * 60 * 1000;
-const R2_RANGE_BYTES = 64 * 1024;
-const R2_SEEK_BACK_BYTES = 128;
-
-let cachedList = null;
-let cachedR2Meta = null;
-let urlQueue = [];
-let dnsCache = new Map();
 
 function jsonResponse(body, init = {}) {
   const headers = new Headers(init.headers || {});
@@ -21,7 +8,7 @@ function jsonResponse(body, init = {}) {
   headers.set("access-control-allow-origin", "*");
   headers.set("access-control-allow-methods", "GET, POST, OPTIONS");
   headers.set("access-control-allow-headers", "*");
-  return new Response(JSON.stringify(body), {
+  return new Response(init.status === 204 ? null : JSON.stringify(body), {
     ...init,
     headers,
   });
@@ -133,264 +120,6 @@ async function readJson(request) {
   }
 }
 
-async function resolveListUrl(env) {
-  if (env && env.TRANCO_URL) {
-    return { listUrl: env.TRANCO_URL, listId: "custom" };
-  }
-
-  const res = await fetch(LIST_META_URL, { cf: { cacheTtl: 6 * 60 * 60 } });
-  if (!res.ok) {
-    throw new Error("Failed to fetch Tranco list metadata");
-  }
-  const data = await res.json();
-  if (!data || !data.download) {
-    throw new Error("Tranco metadata missing download URL");
-  }
-  return { listUrl: data.download, listId: data.list_id || "latest" };
-}
-
-async function loadDomainList(listUrl) {
-  const now = Date.now();
-  if (cachedList && now - cachedList.fetchedAt < LIST_TTL_MS) {
-    return cachedList;
-  }
-
-  const res = await fetch(listUrl, {
-    cf: { cacheTtl: 24 * 60 * 60 },
-    headers: {
-      "user-agent": "random-website-worker/1.0",
-      accept: "text/csv",
-    },
-  });
-  
-  if (!res.ok) {
-    throw new Error("Failed to fetch Tranco list");
-  }
-
-  const text = await res.text();
-  const lines = text.split("\n");
-  const domains = [];
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) continue;
-    const parts = trimmed.split(",");
-    if (parts.length < 2) continue;
-    const domain = parts[1].trim();
-    if (domain) domains.push(domain);
-  }
-
-  if (domains.length === 0) {
-    throw new Error("Tranco list empty");
-  }
-
-  cachedList = {
-    domains,
-    fetchedAt: now,
-  };
-
-  return cachedList;
-}
-
-function parseCsvDomain(line) {
-  const trimmed = line.trim();
-  if (!trimmed) return null;
-  const comma = trimmed.indexOf(",");
-  if (comma === -1) return null;
-  const domain = trimmed.slice(comma + 1).trim();
-  return domain || null;
-}
-
-function pickRandomUrl(domains) {
-  const domain = domains[Math.floor(Math.random() * domains.length)];
-  return `https://${domain}`;
-}
-
-async function fetchWithTimeout(url, init, timeoutMs) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-  try {
-    return await fetch(url, { ...init, signal: controller.signal });
-  } finally {
-    clearTimeout(timer);
-  }
-}
-
-function allowsEmbedding(headers) {
-  const xfo = (headers.get("x-frame-options") || "").toLowerCase();
-  if (xfo.includes("deny") || xfo.includes("sameorigin") || xfo.includes("allow-from")) {
-    return false;
-  }
-
-  const csp = (headers.get("content-security-policy") || "").toLowerCase();
-  if (csp.includes("frame-ancestors")) {
-    if (csp.includes("frame-ancestors 'none'")) return false;
-    if (!csp.includes("frame-ancestors *")) return false;
-  }
-
-  return true;
-}
-
-async function isUrlReachable(url) {
-  try {
-    const head = await fetchWithTimeout(
-      url,
-      { method: "HEAD", redirect: "follow" },
-      4000
-    );
-    if (head.ok && allowsEmbedding(head.headers)) return true;
-  } catch {}
-
-  try {
-    const get = await fetchWithTimeout(
-      url,
-      {
-        method: "GET",
-        redirect: "follow",
-        headers: { Range: "bytes=0-0" },
-      },
-      5000
-    );
-    return get.ok && allowsEmbedding(get.headers);
-  } catch {
-    return false;
-  }
-}
-
-async function getR2Meta(env) {
-  if (!env || !env.TRANCO_BUCKET) return null;
-  const now = Date.now();
-  if (cachedR2Meta && now - cachedR2Meta.fetchedAt < R2_META_TTL_MS) {
-    return cachedR2Meta;
-  }
-  const key = env.TRANCO_R2_KEY || R2_KEY_DEFAULT;
-  const head = await env.TRANCO_BUCKET.head(key);
-  if (!head) return null;
-  cachedR2Meta = {
-    size: head.size,
-    etag: head.etag || "",
-    uploaded: head.uploaded || null,
-    fetchedAt: now,
-  };
-  return cachedR2Meta;
-}
-
-async function pickRandomFromR2(env) {
-  if (!env || !env.TRANCO_BUCKET) return null;
-  const meta = await getR2Meta(env);
-  if (!meta || !meta.size) return null;
-  const key = env.TRANCO_R2_KEY || R2_KEY_DEFAULT;
-
-  for (let attempt = 0; attempt < 3; attempt += 1) {
-    const offset = Math.floor(Math.random() * meta.size);
-    const start = offset > R2_SEEK_BACK_BYTES ? offset - R2_SEEK_BACK_BYTES : 0;
-    const obj = await env.TRANCO_BUCKET.get(key, {
-      range: { offset: start, length: R2_RANGE_BYTES },
-    });
-    if (!obj) return null;
-    let text = await obj.text();
-    if (start > 0) {
-      const firstNewline = text.indexOf("\n");
-      if (firstNewline === -1) continue;
-      text = text.slice(firstNewline + 1);
-    }
-    const lines = text.split("\n");
-    for (const line of lines) {
-      const domain = parseCsvDomain(line);
-      if (domain) {
-        const etagTag = meta.etag ? meta.etag.replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 12) : "r2";
-        return {
-          url: `https://${domain}`,
-          crawl: `r2-${etagTag || "r2"}`,
-          source: "R2 Tranco Top 1M",
-        };
-      }
-    }
-  }
-  return null;
-}
-
-async function passesDnsFilter(domain, env) {
-  const mode = (env && env.DNS_FILTER) || "family";
-  if (mode === "off") return true;
-
-  const now = Date.now();
-  const cached = dnsCache.get(domain);
-  if (cached && now - cached.at < DNS_FILTER_TTL_MS) {
-    return cached.ok;
-  }
-
-  try {
-    const url = `${DNS_FILTER_URL}?name=${encodeURIComponent(domain)}&type=A`;
-    const res = await fetch(url, {
-      cf: { cacheTtl: 6 * 60 * 60 },
-      headers: { accept: "application/dns-json" },
-    });
-    if (!res.ok) throw new Error("DNS filter fetch failed");
-
-    const data = await res.json();
-    const answers = Array.isArray(data.Answer) ? data.Answer : [];
-    const ok =
-      data.Status === 0 &&
-      answers.some((answer) => {
-        if (answer.type !== 1) return false;
-        const ip = String(answer.data || "").trim();
-        return ip && ip !== "0.0.0.0" && ip !== "127.0.0.1";
-      });
-
-    dnsCache.set(domain, { ok, at: now });
-    return ok;
-  } catch {
-    return true;
-  }
-}
-
-async function fillQueue(env, minSize = 1, maxAttempts = 12) {
-  if (urlQueue.length >= minSize) return;
-  let list = null;
-  let listId = null;
-  let listSource = "Tranco Top 1M";
-  const useR2 = env && env.TRANCO_BUCKET;
-  if (!useR2) {
-    const resolved = await resolveListUrl(env);
-    list = await loadDomainList(resolved.listUrl);
-    listId = resolved.listId;
-  }
-  let attempts = 0;
-
-  while (urlQueue.length < minSize && attempts < maxAttempts) {
-    attempts += 1;
-    let candidateInfo = null;
-    if (useR2) {
-      candidateInfo = await pickRandomFromR2(env);
-      if (!candidateInfo) {
-        const resolved = await resolveListUrl(env);
-        list = await loadDomainList(resolved.listUrl);
-        listId = resolved.listId;
-        candidateInfo = {
-          url: pickRandomUrl(list.domains),
-          crawl: `tranco-${listId}`,
-          source: listSource,
-        };
-      }
-    } else if (list) {
-      candidateInfo = {
-        url: pickRandomUrl(list.domains),
-        crawl: `tranco-${listId}`,
-        source: listSource,
-      };
-    }
-    if (!candidateInfo) continue;
-    const hostname = new URL(candidateInfo.url).hostname;
-    const dnsOk = await passesDnsFilter(hostname, env);
-    if (!dnsOk) continue;
-    const ok = await isUrlReachable(candidateInfo.url);
-    if (ok) {
-      urlQueue.push(candidateInfo);
-    }
-  }
-}
-
 const SESSION_TTL_DAYS = 30;
 const RATE_LIMIT_WINDOW_MS = 1000;
 const RATE_LIMIT_MAX = 8;
@@ -423,7 +152,7 @@ function allowRateLimit(key) {
 async function getUserFromSession(env, token) {
   if (!token) return null;
   const result = await env.DB.prepare(
-    `SELECT users.id, users.email, users.username, users.display_name, users.avatar_url\n     FROM sessions\n     JOIN users ON users.id = sessions.user_id\n     WHERE sessions.session_token = ? AND sessions.expires_at > datetime('now')`
+    `SELECT users.id, users.email, users.username, users.display_name, users.avatar_url\n     FROM sessions\n     JOIN users ON users.id = sessions.user_id\n     WHERE sessions.session_token = ? AND datetime(sessions.expires_at) > datetime('now')`
   )
     .bind(token)
     .first();
@@ -437,30 +166,6 @@ async function requireUser(env, request) {
     return { error: jsonResponse({ error: "Unauthorized" }, { status: 401 }) };
   }
   return { user };
-}
-
-function extractTld(urlValue) {
-  if (!urlValue) return null;
-  const raw = String(urlValue).trim();
-  if (!raw) return null;
-  let url;
-  try {
-    url = new URL(raw);
-  } catch {
-    try {
-      url = new URL(`https://${raw}`);
-    } catch {
-      return null;
-    }
-  }
-  const hostname = (url.hostname || "").toLowerCase().replace(/\.$/, "");
-  if (!hostname) return null;
-  const parts = hostname.split(".").filter(Boolean);
-  if (!parts.length) return null;
-  return {
-    tld: parts[parts.length - 1],
-    hasGov: hostname === "gov" || hostname.endsWith(".gov") || hostname.includes(".gov."),
-  };
 }
 
 async function grantAchievement(env, userId, code) {
@@ -484,6 +189,13 @@ export default {
 
     if (method === "OPTIONS") {
       return jsonResponse({ ok: true }, { status: 204 });
+    }
+
+    if (pathname === "/api/resolve" && method === "POST") {
+      const body = await readJson(request);
+      const entry = body && await inspectUrl(body.url);
+      if (!entry) return jsonResponse({error: "This page could not pass the safety and preview checks."}, {status: 422});
+      return jsonResponse(entry, {headers: {"cache-control": "no-store"}});
     }
 
     if (pathname.startsWith("/api/auth/")) {
@@ -723,11 +435,10 @@ export default {
       }
       const body = await readJson(request);
       if (!body) return jsonResponse({ error: "Invalid JSON" }, { status: 400 });
-      const urlValue = String(body.url || "").trim();
-      const titleValue = String(body.title || "").trim();
-      if (!urlValue) {
-        return jsonResponse({ error: "URL required" }, { status: 400 });
-      }
+      const parsed = publicUrl(String(body.url || ""));
+      if (!parsed) return jsonResponse({error: "A public HTTPS URL is required"}, {status: 400});
+      const urlValue = parsed.href;
+      const titleValue = String(body.title || "").trim().slice(0, 300);
       await env.DB.prepare(
         "INSERT INTO visits (user_id, url, title) VALUES (?, ?, ?)"
       )
@@ -850,26 +561,12 @@ export default {
     }
 
     try {
-      await fillQueue(env, 1);
-      const queued = urlQueue.shift();
-      if (ctx) ctx.waitUntil(fillQueue(env, 2));
-      if (!queued) {
-        return jsonResponse({ error: "No URL found" }, { status: 502 });
-      }
-      const body = {
-        url: queued.url,
-        crawl: queued.crawl || "tranco-unknown",
-        source: queued.source || "Tranco Top 1M",
-        at: new Date().toISOString(),
-      };
-      return jsonResponse(body, {
-        status: 200,
-        headers: {
-          "cache-control": "public, max-age=1",
-        },
-      });
-    } catch (err) {
-      return jsonResponse({ error: "Upstream failure" }, { status: 502 });
+      const excluded = new URL(url).searchParams.getAll("exclude").slice(0, 30);
+      const entry = await randomLanding(env, excluded, ctx);
+      if (!entry) return jsonResponse({error: "No suitable page found. Please try again."}, {status: 503, headers: {"retry-after": "3", "cache-control": "no-store"}});
+      return jsonResponse(entry, {headers: {"cache-control": "no-store"}});
+    } catch {
+      return jsonResponse({error: "Discovery is temporarily unavailable."}, {status: 503, headers: {"cache-control": "no-store"}});
     }
   },
 };

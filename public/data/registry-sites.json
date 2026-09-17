@@ -1,0 +1,1040 @@
+{
+  "verified": "2026-09-17",
+  "sites": [
+    {
+      "tld": "ad",
+      "host": "www.domini.ad",
+      "source": "https://www.iana.org/domains/root/db/ad.html"
+    },
+    {
+      "tld": "ae",
+      "host": "aeda.ae",
+      "source": "https://www.iana.org/domains/root/db/ae.html"
+    },
+    {
+      "tld": "af",
+      "host": "www.nic.af",
+      "source": "https://www.iana.org/domains/root/db/af.html"
+    },
+    {
+      "tld": "ag",
+      "host": "www.nic.ag",
+      "source": "https://www.iana.org/domains/root/db/ag.html"
+    },
+    {
+      "tld": "al",
+      "host": "akep.al",
+      "source": "https://www.iana.org/domains/root/db/al.html"
+    },
+    {
+      "tld": "ao",
+      "host": "www.dns.ao",
+      "source": "https://www.iana.org/domains/root/db/ao.html"
+    },
+    {
+      "tld": "ar",
+      "host": "nic.ar",
+      "source": "https://www.iana.org/domains/root/db/ar.html"
+    },
+    {
+      "tld": "art",
+      "host": "art.art",
+      "source": "https://www.iana.org/domains/root/db/art.html"
+    },
+    {
+      "tld": "at",
+      "host": "www.nic.at",
+      "source": "https://www.iana.org/domains/root/db/at.html"
+    },
+    {
+      "tld": "au",
+      "host": "www.auda.org.au",
+      "source": "https://www.iana.org/domains/root/db/au.html"
+    },
+    {
+      "tld": "audio",
+      "host": "nic.audio",
+      "source": "https://www.iana.org/domains/root/db/audio.html"
+    },
+    {
+      "tld": "ax",
+      "host": "www.whois.ax",
+      "source": "https://www.iana.org/domains/root/db/ax.html"
+    },
+    {
+      "tld": "az",
+      "host": "www.whois.az",
+      "source": "https://www.iana.org/domains/root/db/az.html"
+    },
+    {
+      "tld": "ba",
+      "host": "www.nic.ba",
+      "source": "https://www.iana.org/domains/root/db/ba.html"
+    },
+    {
+      "tld": "bb",
+      "host": "www.whois.telecoms.gov.bb",
+      "source": "https://www.iana.org/domains/root/db/bb.html"
+    },
+    {
+      "tld": "bd",
+      "host": "bdia.btcl.com.bd",
+      "source": "https://www.iana.org/domains/root/db/bd.html"
+    },
+    {
+      "tld": "be",
+      "host": "www.dnsbelgium.be",
+      "source": "https://www.iana.org/domains/root/db/be.html"
+    },
+    {
+      "tld": "bf",
+      "host": "www.registre.bf",
+      "source": "https://www.iana.org/domains/root/db/bf.html"
+    },
+    {
+      "tld": "bg",
+      "host": "www.register.bg",
+      "source": "https://www.iana.org/domains/root/db/bg.html"
+    },
+    {
+      "tld": "bi",
+      "host": "www.nic.bi",
+      "source": "https://www.iana.org/domains/root/db/bi.html"
+    },
+    {
+      "tld": "biz",
+      "host": "www.nic.biz",
+      "source": "https://www.iana.org/domains/root/db/biz.html"
+    },
+    {
+      "tld": "bj",
+      "host": "www.nic.bj",
+      "source": "https://www.iana.org/domains/root/db/bj.html"
+    },
+    {
+      "tld": "blog",
+      "host": "nic.blog",
+      "source": "https://www.iana.org/domains/root/db/blog.html"
+    },
+    {
+      "tld": "bn",
+      "host": "www.bnnic.bn",
+      "source": "https://www.iana.org/domains/root/db/bn.html"
+    },
+    {
+      "tld": "bo",
+      "host": "www.nic.bo",
+      "source": "https://www.iana.org/domains/root/db/bo.html"
+    },
+    {
+      "tld": "br",
+      "host": "registro.br",
+      "source": "https://www.iana.org/domains/root/db/br.html"
+    },
+    {
+      "tld": "bs",
+      "host": "www.register.bs",
+      "source": "https://www.iana.org/domains/root/db/bs.html"
+    },
+    {
+      "tld": "bt",
+      "host": "www.nic.bt",
+      "source": "https://www.iana.org/domains/root/db/bt.html"
+    },
+    {
+      "tld": "bw",
+      "host": "nic.net.bw",
+      "source": "https://www.iana.org/domains/root/db/bw.html"
+    },
+    {
+      "tld": "by",
+      "host": "cctld.by",
+      "source": "https://www.iana.org/domains/root/db/by.html"
+    },
+    {
+      "tld": "bz",
+      "host": "www.belizenic.bz",
+      "source": "https://www.iana.org/domains/root/db/bz.html"
+    },
+    {
+      "tld": "ca",
+      "host": "www.cira.ca",
+      "source": "https://www.iana.org/domains/root/db/ca.html"
+    },
+    {
+      "tld": "cd",
+      "host": "www.nic.cd",
+      "source": "https://www.iana.org/domains/root/db/cd.html"
+    },
+    {
+      "tld": "cf",
+      "host": "www.dot.cf",
+      "source": "https://www.iana.org/domains/root/db/cf.html"
+    },
+    {
+      "tld": "ch",
+      "host": "www.nic.ch",
+      "source": "https://www.iana.org/domains/root/db/ch.html"
+    },
+    {
+      "tld": "ci",
+      "host": "registry.nic.ci",
+      "source": "https://www.iana.org/domains/root/db/ci.html"
+    },
+    {
+      "tld": "ck",
+      "host": "www.vodafone.co.ck",
+      "source": "https://www.iana.org/domains/root/db/ck.html"
+    },
+    {
+      "tld": "cl",
+      "host": "www.nic.cl",
+      "source": "https://www.iana.org/domains/root/db/cl.html"
+    },
+    {
+      "tld": "cloud",
+      "host": "www.get.cloud",
+      "source": "https://www.iana.org/domains/root/db/cloud.html"
+    },
+    {
+      "tld": "cm",
+      "host": "www.nic.cm",
+      "source": "https://www.iana.org/domains/root/db/cm.html"
+    },
+    {
+      "tld": "cn",
+      "host": "www.cnnic.cn",
+      "source": "https://www.iana.org/domains/root/db/cn.html"
+    },
+    {
+      "tld": "co",
+      "host": "www.registry.co",
+      "source": "https://www.iana.org/domains/root/db/co.html"
+    },
+    {
+      "tld": "com",
+      "host": "www.verisigninc.com",
+      "source": "https://www.iana.org/domains/root/db/com.html"
+    },
+    {
+      "tld": "cr",
+      "host": "www.nic.cr",
+      "source": "https://www.iana.org/domains/root/db/cr.html"
+    },
+    {
+      "tld": "cu",
+      "host": "www.nic.cu",
+      "source": "https://www.iana.org/domains/root/db/cu.html"
+    },
+    {
+      "tld": "cv",
+      "host": "www.dns.cv",
+      "source": "https://www.iana.org/domains/root/db/cv.html"
+    },
+    {
+      "tld": "cw",
+      "host": "www.uoc.cw",
+      "source": "https://www.iana.org/domains/root/db/cw.html"
+    },
+    {
+      "tld": "cy",
+      "host": "www.nic.cy",
+      "source": "https://www.iana.org/domains/root/db/cy.html"
+    },
+    {
+      "tld": "cz",
+      "host": "www.nic.cz",
+      "source": "https://www.iana.org/domains/root/db/cz.html"
+    },
+    {
+      "tld": "de",
+      "host": "www.denic.de",
+      "source": "https://www.iana.org/domains/root/db/de.html"
+    },
+    {
+      "tld": "design",
+      "host": "nic.design",
+      "source": "https://www.iana.org/domains/root/db/design.html"
+    },
+    {
+      "tld": "digital",
+      "host": "www.identity.digital",
+      "source": "https://www.iana.org/domains/root/db/digital.html"
+    },
+    {
+      "tld": "dj",
+      "host": "www.nic.dj",
+      "source": "https://www.iana.org/domains/root/db/dj.html"
+    },
+    {
+      "tld": "dk",
+      "host": "punktum.dk",
+      "source": "https://www.iana.org/domains/root/db/dk.html"
+    },
+    {
+      "tld": "dm",
+      "host": "www.nic.dm",
+      "source": "https://www.iana.org/domains/root/db/dm.html"
+    },
+    {
+      "tld": "do",
+      "host": "www.nic.do",
+      "source": "https://www.iana.org/domains/root/db/do.html"
+    },
+    {
+      "tld": "download",
+      "host": "nic.download",
+      "source": "https://www.iana.org/domains/root/db/download.html"
+    },
+    {
+      "tld": "dz",
+      "host": "www.nic.dz",
+      "source": "https://www.iana.org/domains/root/db/dz.html"
+    },
+    {
+      "tld": "ec",
+      "host": "www.nic.ec",
+      "source": "https://www.iana.org/domains/root/db/ec.html"
+    },
+    {
+      "tld": "eco",
+      "host": "go.eco",
+      "source": "https://www.iana.org/domains/root/db/eco.html"
+    },
+    {
+      "tld": "edu",
+      "host": "www.educause.edu",
+      "source": "https://www.iana.org/domains/root/db/edu.html"
+    },
+    {
+      "tld": "ee",
+      "host": "www.internet.ee",
+      "source": "https://www.iana.org/domains/root/db/ee.html"
+    },
+    {
+      "tld": "eg",
+      "host": "www.egregistry.eg",
+      "source": "https://www.iana.org/domains/root/db/eg.html"
+    },
+    {
+      "tld": "es",
+      "host": "www.nic.es",
+      "source": "https://www.iana.org/domains/root/db/es.html"
+    },
+    {
+      "tld": "et",
+      "host": "www.ethiotelecom.et",
+      "source": "https://www.iana.org/domains/root/db/et.html"
+    },
+    {
+      "tld": "fi",
+      "host": "domain.fi",
+      "source": "https://www.iana.org/domains/root/db/fi.html"
+    },
+    {
+      "tld": "fj",
+      "host": "www.domains.fj",
+      "source": "https://www.iana.org/domains/root/db/fj.html"
+    },
+    {
+      "tld": "fm",
+      "host": "www.dot.fm",
+      "source": "https://www.iana.org/domains/root/db/fm.html"
+    },
+    {
+      "tld": "fo",
+      "host": "www.nic.fo",
+      "source": "https://www.iana.org/domains/root/db/fo.html"
+    },
+    {
+      "tld": "fr",
+      "host": "www.nic.fr",
+      "source": "https://www.iana.org/domains/root/db/fr.html"
+    },
+    {
+      "tld": "game",
+      "host": "nic.game",
+      "source": "https://www.iana.org/domains/root/db/game.html"
+    },
+    {
+      "tld": "gd",
+      "host": "nic.gd",
+      "source": "https://www.iana.org/domains/root/db/gd.html"
+    },
+    {
+      "tld": "ge",
+      "host": "nic.ge",
+      "source": "https://www.iana.org/domains/root/db/ge.html"
+    },
+    {
+      "tld": "gg",
+      "host": "www.nic.gg",
+      "source": "https://www.iana.org/domains/root/db/gg.html"
+    },
+    {
+      "tld": "gh",
+      "host": "www.nic.gh",
+      "source": "https://www.iana.org/domains/root/db/gh.html"
+    },
+    {
+      "tld": "gl",
+      "host": "www.nic.gl",
+      "source": "https://www.iana.org/domains/root/db/gl.html"
+    },
+    {
+      "tld": "gm",
+      "host": "www.nic.gm",
+      "source": "https://www.iana.org/domains/root/db/gm.html"
+    },
+    {
+      "tld": "gn",
+      "host": "ande.gov.gn",
+      "source": "https://www.iana.org/domains/root/db/gn.html"
+    },
+    {
+      "tld": "gq",
+      "host": "www.dominio.gq",
+      "source": "https://www.iana.org/domains/root/db/gq.html"
+    },
+    {
+      "tld": "gr",
+      "host": "www.gr",
+      "source": "https://www.iana.org/domains/root/db/gr.html"
+    },
+    {
+      "tld": "gt",
+      "host": "www.gt",
+      "source": "https://www.iana.org/domains/root/db/gt.html"
+    },
+    {
+      "tld": "gy",
+      "host": "registry.gy",
+      "source": "https://www.iana.org/domains/root/db/gy.html"
+    },
+    {
+      "tld": "help",
+      "host": "nic.help",
+      "source": "https://www.iana.org/domains/root/db/help.html"
+    },
+    {
+      "tld": "hk",
+      "host": "www.hkirc.hk",
+      "source": "https://www.iana.org/domains/root/db/hk.html"
+    },
+    {
+      "tld": "hn",
+      "host": "www.nic.hn",
+      "source": "https://www.iana.org/domains/root/db/hn.html"
+    },
+    {
+      "tld": "hr",
+      "host": "www.dns.hr",
+      "source": "https://www.iana.org/domains/root/db/hr.html"
+    },
+    {
+      "tld": "ht",
+      "host": "www.nic.ht",
+      "source": "https://www.iana.org/domains/root/db/ht.html"
+    },
+    {
+      "tld": "hu",
+      "host": "www.domain.hu",
+      "source": "https://www.iana.org/domains/root/db/hu.html"
+    },
+    {
+      "tld": "id",
+      "host": "pandi.id",
+      "source": "https://www.iana.org/domains/root/db/id.html"
+    },
+    {
+      "tld": "ie",
+      "host": "www.weare.ie",
+      "source": "https://www.iana.org/domains/root/db/ie.html"
+    },
+    {
+      "tld": "il",
+      "host": "www.isoc.org.il",
+      "source": "https://www.iana.org/domains/root/db/il.html"
+    },
+    {
+      "tld": "im",
+      "host": "www.nic.im",
+      "source": "https://www.iana.org/domains/root/db/im.html"
+    },
+    {
+      "tld": "in",
+      "host": "registry.in",
+      "source": "https://www.iana.org/domains/root/db/in.html"
+    },
+    {
+      "tld": "iq",
+      "host": "registrar.cmc.iq",
+      "source": "https://www.iana.org/domains/root/db/iq.html"
+    },
+    {
+      "tld": "ir",
+      "host": "www.nic.ir",
+      "source": "https://www.iana.org/domains/root/db/ir.html"
+    },
+    {
+      "tld": "is",
+      "host": "www.isnic.is",
+      "source": "https://www.iana.org/domains/root/db/is.html"
+    },
+    {
+      "tld": "it",
+      "host": "www.nic.it",
+      "source": "https://www.iana.org/domains/root/db/it.html"
+    },
+    {
+      "tld": "je",
+      "host": "www.nic.je",
+      "source": "https://www.iana.org/domains/root/db/je.html"
+    },
+    {
+      "tld": "jo",
+      "host": "www.dns.jo",
+      "source": "https://www.iana.org/domains/root/db/jo.html"
+    },
+    {
+      "tld": "jp",
+      "host": "jprs.jp",
+      "source": "https://www.iana.org/domains/root/db/jp.html"
+    },
+    {
+      "tld": "ke",
+      "host": "www.kenic.or.ke",
+      "source": "https://www.iana.org/domains/root/db/ke.html"
+    },
+    {
+      "tld": "kg",
+      "host": "www.cctld.kg",
+      "source": "https://www.iana.org/domains/root/db/kg.html"
+    },
+    {
+      "tld": "kh",
+      "host": "www.trc.gov.kh",
+      "source": "https://www.iana.org/domains/root/db/kh.html"
+    },
+    {
+      "tld": "ki",
+      "host": "www.nic.ki",
+      "source": "https://www.iana.org/domains/root/db/ki.html"
+    },
+    {
+      "tld": "km",
+      "host": "www.domaine.km",
+      "source": "https://www.iana.org/domains/root/db/km.html"
+    },
+    {
+      "tld": "kp",
+      "host": "www.star.co.kp",
+      "source": "https://www.iana.org/domains/root/db/kp.html"
+    },
+    {
+      "tld": "kr",
+      "host": "www.nic.or.kr",
+      "source": "https://www.iana.org/domains/root/db/kr.html"
+    },
+    {
+      "tld": "kw",
+      "host": "www.nic.kw",
+      "source": "https://www.iana.org/domains/root/db/kw.html"
+    },
+    {
+      "tld": "kz",
+      "host": "www.nic.kz",
+      "source": "https://www.iana.org/domains/root/db/kz.html"
+    },
+    {
+      "tld": "la",
+      "host": "www.la",
+      "source": "https://www.iana.org/domains/root/db/la.html"
+    },
+    {
+      "tld": "lb",
+      "host": "www.lbdr.org.lb",
+      "source": "https://www.iana.org/domains/root/db/lb.html"
+    },
+    {
+      "tld": "lc",
+      "host": "www.nic.lc",
+      "source": "https://www.iana.org/domains/root/db/lc.html"
+    },
+    {
+      "tld": "li",
+      "host": "www.nic.li",
+      "source": "https://www.iana.org/domains/root/db/li.html"
+    },
+    {
+      "tld": "lk",
+      "host": "www.domains.lk",
+      "source": "https://www.iana.org/domains/root/db/lk.html"
+    },
+    {
+      "tld": "ls",
+      "host": "www.nic.ls",
+      "source": "https://www.iana.org/domains/root/db/ls.html"
+    },
+    {
+      "tld": "lt",
+      "host": "www.domreg.lt",
+      "source": "https://www.iana.org/domains/root/db/lt.html"
+    },
+    {
+      "tld": "lu",
+      "host": "www.dns.lu",
+      "source": "https://www.iana.org/domains/root/db/lu.html"
+    },
+    {
+      "tld": "lv",
+      "host": "www.nic.lv",
+      "source": "https://www.iana.org/domains/root/db/lv.html"
+    },
+    {
+      "tld": "ly",
+      "host": "wsm.ltt.ly",
+      "source": "https://www.iana.org/domains/root/db/ly.html"
+    },
+    {
+      "tld": "ma",
+      "host": "www.registre.ma",
+      "source": "https://www.iana.org/domains/root/db/ma.html"
+    },
+    {
+      "tld": "mc",
+      "host": "www.nic.mc",
+      "source": "https://www.iana.org/domains/root/db/mc.html"
+    },
+    {
+      "tld": "md",
+      "host": "www.nic.md",
+      "source": "https://www.iana.org/domains/root/db/md.html"
+    },
+    {
+      "tld": "me",
+      "host": "www.domain.me",
+      "source": "https://www.iana.org/domains/root/db/me.html"
+    },
+    {
+      "tld": "mg",
+      "host": "www.nic.mg",
+      "source": "https://www.iana.org/domains/root/db/mg.html"
+    },
+    {
+      "tld": "mh",
+      "host": "www.nic.net.mh",
+      "source": "https://www.iana.org/domains/root/db/mh.html"
+    },
+    {
+      "tld": "mk",
+      "host": "marnet.mk",
+      "source": "https://www.iana.org/domains/root/db/mk.html"
+    },
+    {
+      "tld": "ml",
+      "host": "www.nic.ml",
+      "source": "https://www.iana.org/domains/root/db/ml.html"
+    },
+    {
+      "tld": "mm",
+      "host": "www.ptd.gov.mm",
+      "source": "https://www.iana.org/domains/root/db/mm.html"
+    },
+    {
+      "tld": "mn",
+      "host": "www.nic.mn",
+      "source": "https://www.iana.org/domains/root/db/mn.html"
+    },
+    {
+      "tld": "mr",
+      "host": "www.nic.mr",
+      "source": "https://www.iana.org/domains/root/db/mr.html"
+    },
+    {
+      "tld": "mt",
+      "host": "www.nic.org.mt",
+      "source": "https://www.iana.org/domains/root/db/mt.html"
+    },
+    {
+      "tld": "mu",
+      "host": "www.nic.mu",
+      "source": "https://www.iana.org/domains/root/db/mu.html"
+    },
+    {
+      "tld": "music",
+      "host": "nic.music",
+      "source": "https://www.iana.org/domains/root/db/music.html"
+    },
+    {
+      "tld": "mw",
+      "host": "www.registrar.mw",
+      "source": "https://www.iana.org/domains/root/db/mw.html"
+    },
+    {
+      "tld": "mx",
+      "host": "www.registry.mx",
+      "source": "https://www.iana.org/domains/root/db/mx.html"
+    },
+    {
+      "tld": "my",
+      "host": "www.mynic.my",
+      "source": "https://www.iana.org/domains/root/db/my.html"
+    },
+    {
+      "tld": "na",
+      "host": "www.na-nic.com.na",
+      "source": "https://www.iana.org/domains/root/db/na.html"
+    },
+    {
+      "tld": "ne",
+      "host": "www.intnet.ne",
+      "source": "https://www.iana.org/domains/root/db/ne.html"
+    },
+    {
+      "tld": "ng",
+      "host": "www.nira.org.ng",
+      "source": "https://www.iana.org/domains/root/db/ng.html"
+    },
+    {
+      "tld": "ni",
+      "host": "www.nic.ni",
+      "source": "https://www.iana.org/domains/root/db/ni.html"
+    },
+    {
+      "tld": "nl",
+      "host": "www.sidn.nl",
+      "source": "https://www.iana.org/domains/root/db/nl.html"
+    },
+    {
+      "tld": "no",
+      "host": "www.norid.no",
+      "source": "https://www.iana.org/domains/root/db/no.html"
+    },
+    {
+      "tld": "np",
+      "host": "www.mos.com.np",
+      "source": "https://www.iana.org/domains/root/db/np.html"
+    },
+    {
+      "tld": "nr",
+      "host": "www.cenpac.net.nr",
+      "source": "https://www.iana.org/domains/root/db/nr.html"
+    },
+    {
+      "tld": "nz",
+      "host": "www.dnc.org.nz",
+      "source": "https://www.iana.org/domains/root/db/nz.html"
+    },
+    {
+      "tld": "om",
+      "host": "www.registry.om",
+      "source": "https://www.iana.org/domains/root/db/om.html"
+    },
+    {
+      "tld": "org",
+      "host": "publicinterestregistry.org",
+      "source": "https://www.iana.org/domains/root/db/org.html"
+    },
+    {
+      "tld": "pa",
+      "host": "www.nic.pa",
+      "source": "https://www.iana.org/domains/root/db/pa.html"
+    },
+    {
+      "tld": "pe",
+      "host": "www.nic.pe",
+      "source": "https://www.iana.org/domains/root/db/pe.html"
+    },
+    {
+      "tld": "ph",
+      "host": "dot.ph",
+      "source": "https://www.iana.org/domains/root/db/ph.html"
+    },
+    {
+      "tld": "pk",
+      "host": "www.pknic.net.pk",
+      "source": "https://www.iana.org/domains/root/db/pk.html"
+    },
+    {
+      "tld": "pl",
+      "host": "www.dns.pl",
+      "source": "https://www.iana.org/domains/root/db/pl.html"
+    },
+    {
+      "tld": "ps",
+      "host": "www.pnina.ps",
+      "source": "https://www.iana.org/domains/root/db/ps.html"
+    },
+    {
+      "tld": "pt",
+      "host": "www.dns.pt",
+      "source": "https://www.iana.org/domains/root/db/pt.html"
+    },
+    {
+      "tld": "pw",
+      "host": "www.registry.pw",
+      "source": "https://www.iana.org/domains/root/db/pw.html"
+    },
+    {
+      "tld": "py",
+      "host": "www.nic.py",
+      "source": "https://www.iana.org/domains/root/db/py.html"
+    },
+    {
+      "tld": "qa",
+      "host": "www.cra.gov.qa",
+      "source": "https://www.iana.org/domains/root/db/qa.html"
+    },
+    {
+      "tld": "ro",
+      "host": "www.rotld.ro",
+      "source": "https://www.iana.org/domains/root/db/ro.html"
+    },
+    {
+      "tld": "rs",
+      "host": "www.rnids.rs",
+      "source": "https://www.iana.org/domains/root/db/rs.html"
+    },
+    {
+      "tld": "ru",
+      "host": "www.cctld.ru",
+      "source": "https://www.iana.org/domains/root/db/ru.html"
+    },
+    {
+      "tld": "rw",
+      "host": "registry.ricta.org.rw",
+      "source": "https://www.iana.org/domains/root/db/rw.html"
+    },
+    {
+      "tld": "sa",
+      "host": "www.nic.net.sa",
+      "source": "https://www.iana.org/domains/root/db/sa.html"
+    },
+    {
+      "tld": "sb",
+      "host": "www.nic.net.sb",
+      "source": "https://www.iana.org/domains/root/db/sb.html"
+    },
+    {
+      "tld": "sc",
+      "host": "www.nic.sc",
+      "source": "https://www.iana.org/domains/root/db/sc.html"
+    },
+    {
+      "tld": "sd",
+      "host": "www.isoc.sd",
+      "source": "https://www.iana.org/domains/root/db/sd.html"
+    },
+    {
+      "tld": "se",
+      "host": "www.internetstiftelsen.se",
+      "source": "https://www.iana.org/domains/root/db/se.html"
+    },
+    {
+      "tld": "security",
+      "host": "nic.security",
+      "source": "https://www.iana.org/domains/root/db/security.html"
+    },
+    {
+      "tld": "sg",
+      "host": "www.sgnic.sg",
+      "source": "https://www.iana.org/domains/root/db/sg.html"
+    },
+    {
+      "tld": "si",
+      "host": "www.registry.si",
+      "source": "https://www.iana.org/domains/root/db/si.html"
+    },
+    {
+      "tld": "sk",
+      "host": "www.sk-nic.sk",
+      "source": "https://www.iana.org/domains/root/db/sk.html"
+    },
+    {
+      "tld": "sl",
+      "host": "www.nic.sl",
+      "source": "https://www.iana.org/domains/root/db/sl.html"
+    },
+    {
+      "tld": "sm",
+      "host": "www.nic.sm",
+      "source": "https://www.iana.org/domains/root/db/sm.html"
+    },
+    {
+      "tld": "sn",
+      "host": "www.cctld.sn",
+      "source": "https://www.iana.org/domains/root/db/sn.html"
+    },
+    {
+      "tld": "so",
+      "host": "www.nic.so",
+      "source": "https://www.iana.org/domains/root/db/so.html"
+    },
+    {
+      "tld": "sr",
+      "host": "isp.datasur.sr",
+      "source": "https://www.iana.org/domains/root/db/sr.html"
+    },
+    {
+      "tld": "ss",
+      "host": "nic.ss",
+      "source": "https://www.iana.org/domains/root/db/ss.html"
+    },
+    {
+      "tld": "st",
+      "host": "www.nic.st",
+      "source": "https://www.iana.org/domains/root/db/st.html"
+    },
+    {
+      "tld": "sv",
+      "host": "www.svnet.sv",
+      "source": "https://www.iana.org/domains/root/db/sv.html"
+    },
+    {
+      "tld": "sx",
+      "host": "registry.sx",
+      "source": "https://www.iana.org/domains/root/db/sx.html"
+    },
+    {
+      "tld": "sy",
+      "host": "tld.sy",
+      "source": "https://www.iana.org/domains/root/db/sy.html"
+    },
+    {
+      "tld": "sz",
+      "host": "www.sispa.org.sz",
+      "source": "https://www.iana.org/domains/root/db/sz.html"
+    },
+    {
+      "tld": "td",
+      "host": "www.nic.td",
+      "source": "https://www.iana.org/domains/root/db/td.html"
+    },
+    {
+      "tld": "tg",
+      "host": "www.nic.tg",
+      "source": "https://www.iana.org/domains/root/db/tg.html"
+    },
+    {
+      "tld": "th",
+      "host": "www.thnic.co.th",
+      "source": "https://www.iana.org/domains/root/db/th.html"
+    },
+    {
+      "tld": "tj",
+      "host": "www.nic.tj",
+      "source": "https://www.iana.org/domains/root/db/tj.html"
+    },
+    {
+      "tld": "tk",
+      "host": "www.dot.tk",
+      "source": "https://www.iana.org/domains/root/db/tk.html"
+    },
+    {
+      "tld": "tl",
+      "host": "www.nic.tl",
+      "source": "https://www.iana.org/domains/root/db/tl.html"
+    },
+    {
+      "tld": "tm",
+      "host": "www.nic.tm",
+      "source": "https://www.iana.org/domains/root/db/tm.html"
+    },
+    {
+      "tld": "tn",
+      "host": "whois.ati.tn",
+      "source": "https://www.iana.org/domains/root/db/tn.html"
+    },
+    {
+      "tld": "to",
+      "host": "www.tonic.to",
+      "source": "https://www.iana.org/domains/root/db/to.html"
+    },
+    {
+      "tld": "tr",
+      "host": "www.trabis.gov.tr",
+      "source": "https://www.iana.org/domains/root/db/tr.html"
+    },
+    {
+      "tld": "tt",
+      "host": "www.nic.tt",
+      "source": "https://www.iana.org/domains/root/db/tt.html"
+    },
+    {
+      "tld": "tv",
+      "host": "turnon.tv",
+      "source": "https://www.iana.org/domains/root/db/tv.html"
+    },
+    {
+      "tld": "tw",
+      "host": "rs.twnic.net.tw",
+      "source": "https://www.iana.org/domains/root/db/tw.html"
+    },
+    {
+      "tld": "tz",
+      "host": "karibu.tz",
+      "source": "https://www.iana.org/domains/root/db/tz.html"
+    },
+    {
+      "tld": "ua",
+      "host": "www.hostmaster.ua",
+      "source": "https://www.iana.org/domains/root/db/ua.html"
+    },
+    {
+      "tld": "ug",
+      "host": "www.registry.co.ug",
+      "source": "https://www.iana.org/domains/root/db/ug.html"
+    },
+    {
+      "tld": "uk",
+      "host": "www.nic.uk",
+      "source": "https://www.iana.org/domains/root/db/uk.html"
+    },
+    {
+      "tld": "us",
+      "host": "www.nic.us",
+      "source": "https://www.iana.org/domains/root/db/us.html"
+    },
+    {
+      "tld": "uy",
+      "host": "www.nic.org.uy",
+      "source": "https://www.iana.org/domains/root/db/uy.html"
+    },
+    {
+      "tld": "uz",
+      "host": "www.cctld.uz",
+      "source": "https://www.iana.org/domains/root/db/uz.html"
+    },
+    {
+      "tld": "ve",
+      "host": "nic.ve",
+      "source": "https://www.iana.org/domains/root/db/ve.html"
+    },
+    {
+      "tld": "vn",
+      "host": "www.vnnic.vn",
+      "source": "https://www.iana.org/domains/root/db/vn.html"
+    },
+    {
+      "tld": "vu",
+      "host": "www.hello.vu",
+      "source": "https://www.iana.org/domains/root/db/vu.html"
+    },
+    {
+      "tld": "ws",
+      "host": "www.website.ws",
+      "source": "https://www.iana.org/domains/root/db/ws.html"
+    },
+    {
+      "tld": "za",
+      "host": "www.zadna.org.za",
+      "source": "https://www.iana.org/domains/root/db/za.html"
+    },
+    {
+      "tld": "zm",
+      "host": "registry.zicta.zm",
+      "source": "https://www.iana.org/domains/root/db/zm.html"
+    }
+  ]
+}
