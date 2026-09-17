@@ -980,7 +980,6 @@ body {
 .leaderboard-window { width: min(600px, 92vw); }
 .leaderboard-body { min-height: 0; display: flex; flex-direction: column; gap: 10px; }
 .leaderboard-body .modal-copy { margin: 0; }
-.leaderboard-privacy { color: #404040; font-size: 12px; }
 #leaderboard-status:empty { display: none; }
 .leaderboard-scroll { overflow: auto; min-height: 0; max-height: 55vh; }
 .leaderboard-table { width: 100%; border-collapse: collapse; background: #fff; font-size: 14px; }
