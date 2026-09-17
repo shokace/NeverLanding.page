@@ -181,13 +181,10 @@
               allow="autoplay 'none'; camera 'none'; microphone 'none'; geolocation 'none'"
             ></iframe>
           </div>
-          <div id="embed-note" class="embed-note">
-            Some sites block embeds. Press link if frame is blank.
-          </div>
         </div>
+        <span id="queue-status" hidden></span>
         <div class="statusbar">
-          <span id="meta" class="status-left">Waiting for your first click.</span>
-          <span id="queue-status" class="queue-status" role="status">Preparing pages…</span>
+          <span id="meta" class="status-left" role="status"></span>
           <a
             class="status-link"
             href="https://github.com/shokace"
@@ -238,7 +235,8 @@
             </label>
             <label class="field">
               <span>Username</span>
-              <input name="username" type="text" autocomplete="username" required />
+              <input name="username" type="text" autocomplete="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_\-]+" aria-describedby="username-help" required />
+              <small id="username-help">Public on the leaderboard. Use letters, numbers, _ or -; never your email.</small>
             </label>
             <label class="field">
               <span>Password</span>
@@ -250,6 +248,23 @@
       </div>
     </div>
 
+    <div id="username-setup-modal" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="username-setup-title">
+      <div class="modal-window">
+        <div class="modal-titlebar"><span id="username-setup-title">Choose your username</span></div>
+        <div class="modal-body">
+          <p class="modal-copy">Choose a username to continue playing. This name and your visit total will appear on the leaderboard. Your email stays private.</p>
+          <form id="username-setup-form" class="email-login">
+            <label class="field"><span>Username</span>
+              <input name="username" type="text" autocomplete="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_\-]+" aria-describedby="username-setup-help" required />
+            </label>
+            <small id="username-setup-help">3–24 letters, numbers, underscores, or hyphens. No email addresses.</small>
+            <p id="username-setup-status" role="status"></p>
+            <button class="modal-button" type="submit">Save username</button>
+          </form>
+          <button id="username-setup-logout" class="modal-button" type="button">Sign out</button>
+        </div>
+      </div>
+    </div>
     <div
       id="achievements-modal"
       class="modal is-hidden"
@@ -288,6 +303,27 @@
       </div>
     </div>
 
+    <div id="leaderboard-modal" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="leaderboard-title">
+      <div class="modal-window modal-window--large leaderboard-window">
+        <div class="modal-titlebar">
+          <span id="leaderboard-title">Leaderboard</span>
+          <button class="modal-close" type="button" aria-label="Close leaderboard">×</button>
+        </div>
+        <div class="modal-body leaderboard-body">
+          <p class="modal-copy">The top 100 explorers by total websites visited. Tied scores share a rank.</p>
+          <p class="modal-copy leaderboard-privacy">Only usernames and visit totals are public. Updates about once a minute.</p>
+          <p id="leaderboard-status" role="status">Loading leaderboard…</p>
+          <div class="leaderboard-scroll" tabindex="0" aria-label="Leaderboard results">
+            <table class="leaderboard-table" hidden>
+              <caption class="visually-hidden">Explorers ranked by total websites visited</caption>
+              <thead><tr><th scope="col">Rank</th><th scope="col">Username</th><th scope="col">Visits</th></tr></thead>
+              <tbody id="leaderboard-rows"></tbody>
+            </table>
+          </div>
+          <button id="leaderboard-refresh" class="modal-button" type="button">Refresh</button>
+        </div>
+      </div>
+    </div>
     <div
       id="favorites-modal"
       class="modal is-hidden"

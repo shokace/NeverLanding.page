@@ -25,14 +25,14 @@ await page.route('**/*', async route => {
   if (url.pathname === '/api/random') {
     if (failNext) {failNext = false; return route.fulfill({status:503,json:{error:'Temporary outage'}});}
     const next = duplicate ? serial : ++serial;
-    return route.fulfill({json:{url:`https://page${next}.queue.test/`,source:'Browser fixture'}});
+    return route.fulfill({json:{url:`https://page${next}.queue.test/`,source:'Browser fixture',visitToken:`fixture_${next}`}});
   }
   if (url.pathname === '/api/resolve') return route.fulfill({json:{url: request.postDataJSON().url}});
   if (url.pathname === '/api/auth/me') return route.fulfill({json:{user:{id:'browser-test',username:'Explorer'}}});
   if (url.pathname === '/api/auth/providers') return route.fulfill({json:{providers:{email:true}}});
   if (url.pathname === '/api/favorites') return route.fulfill({json:{items:[]}});
   if (url.pathname === '/api/progress') return route.fulfill({json:{visits}});
-  if (url.pathname === '/api/visits') {visits++; return route.fulfill({status:201,json:{ok:true}});}
+  if (url.pathname === '/api/visits') {const body=request.postDataJSON();assert.equal(body.visitToken,`fixture_${new URL(body.url).hostname.match(/^page(\d+)/)[1]}`);visits++; return route.fulfill({status:201,json:{ok:true}});}
   if (url.pathname === '/api/achievements/unlocked') return route.fulfill({json:{codes:['login_first','tld_biz', ...(unlockExplorer ? ['explorer_level_3'] : [])],items:[{code:'tld_biz',url:'https://first.example.biz/'},{code:'explorer_level_3',url:'https://milestone.example.org/'}]}});
   if (url.pathname === '/api/achievements/share') return route.fulfill({json:{ok:true}});
   return route.continue();

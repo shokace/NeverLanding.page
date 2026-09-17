@@ -1,4 +1,5 @@
 import { LandingQueue } from "./landing-queue.js";
+import { openLeaderboard } from "./leaderboard.js";
 
 const getButton = document.getElementById("get");
 const backButton = document.getElementById("back");
@@ -8,7 +9,6 @@ const refreshButton = document.getElementById("refresh");
 const urlEl = document.getElementById("url");
 const metaEl = document.getElementById("meta");
 let viewerEl = document.getElementById("viewer");
-const embedNoteEl = document.getElementById("embed-note");
 const loadingEl = document.getElementById("loading");
 const throbberEl = document.getElementById("throbber");
 const adOverlayEl = document.getElementById("ad-overlay");
@@ -29,6 +29,9 @@ const shareCopyButton = document.getElementById("share-copy");
 const shareIcons = Array.from(document.querySelectorAll(".share-icon"));
 const landingCounter = document.getElementById("landing-counter");
 const loginModal = document.getElementById("login-modal");
+const usernameSetupModal = document.getElementById("username-setup-modal");
+const usernameSetupForm = document.getElementById("username-setup-form");
+const usernameSetupStatus = document.getElementById("username-setup-status");
 const loginClose = loginModal ? loginModal.querySelector(".modal-close") : null;
 const achievementsModal = document.getElementById("achievements-modal");
 const achievementsClose = achievementsModal
@@ -272,13 +275,17 @@ function setLoginStatus(message) {
 function setAuthState(user) {
   currentUser = user || null;
   initializeOnboarding(currentUser);
+  const needsUsername = Boolean(user && (user.needsUsername || !user.username));
+  usernameSetupModal.classList.toggle("is-hidden", !needsUsername);
+  getButton.disabled = needsUsername || isLoading;
+  if (needsUsername) usernameSetupForm.elements.username.focus();
   if (loginMenuItem) {
     const loggedIn = Boolean(user);
     loginMenuItem.classList.toggle("is-disabled", loggedIn);
     loginMenuItem.classList.toggle("is-truncated", loggedIn);
     loginMenuItem.setAttribute("aria-disabled", loggedIn ? "true" : "false");
     loginMenuItem.textContent = loggedIn
-      ? `Logged in as ${user.username || user.email || "user"}`
+      ? `Logged in as ${user.username || "player"}`
       : "Login";
   }
   if (logoutMenuItem) {
@@ -288,9 +295,6 @@ function setAuthState(user) {
   if (achievementsMenuItem) {
     achievementsMenuItem.classList.remove("is-disabled");
     achievementsMenuItem.setAttribute("aria-disabled", "false");
-  }
-  if (user && metaEl) {
-    metaEl.textContent = `Signed in as ${user.username || user.email}.`;
   }
   if (!user && landingCounter) {
     landingCounter.textContent = "Landings: 0";
@@ -330,7 +334,7 @@ function renderFavoritesList() {
       if (!targetUrl) return;
       event.preventDefault();
       closeFavoritesModal();
-      applyEntry({url: targetUrl, crawl: "favorite"}).then(ok => {if (ok) pushHistory({url: targetUrl, crawl: "favorite"});});
+      applyEntry({url: targetUrl, crawl: "favorite"}, "Opened favorite").then(ok => {if (ok) pushHistory({url: targetUrl, crawl: "favorite"});});
     });
     const toggle = document.createElement("button");
     toggle.type = "button";
@@ -595,10 +599,40 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+usernameSetupForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  const userId = currentUser?.id;
+  const submit = usernameSetupForm.querySelector("[type=submit]");
+  submit.disabled = true;
+  usernameSetupStatus.textContent = "Saving…";
+  try {
+    const response = await fetch("/api/account/username", {method:"POST", headers:{"content-type":"application/json"}, body:JSON.stringify({username:usernameSetupForm.elements.username.value})});
+    const data = await response.json();
+    if (currentUser?.id !== userId) return;
+    if (!response.ok) {usernameSetupStatus.textContent = data.error || "Unable to save your username."; return;}
+    usernameSetupStatus.textContent = "";
+    setAuthState({...currentUser, username:data.username, needsUsername:false});
+    metaEl.textContent = "Username saved.";
+    fetchProgress();
+    getButton.focus();
+  } catch {usernameSetupStatus.textContent = "Unable to save your username. Please try again.";}
+  finally {submit.disabled = false;}
+});
+usernameSetupModal.addEventListener("keydown", event => {
+  if (event.key === "Escape") {event.preventDefault();event.stopPropagation();}
+  if (event.key === "Tab") {
+    const focusable = [...usernameSetupModal.querySelectorAll("input,button:not(:disabled)")];
+    const first = focusable[0], last = focusable.at(-1);
+    if (event.shiftKey && document.activeElement === first) {event.preventDefault();last.focus();}
+    else if (!event.shiftKey && document.activeElement === last) {event.preventDefault();first.focus();}
+  }
+});
+document.getElementById("username-setup-logout").addEventListener("click", () => logoutMenuItem.click());
+
 if (logoutMenuItem) {
   logoutMenuItem.addEventListener("click", async () => {
     closeMenus();
-    await fetch("/api/auth/logout", { method: "POST" });
+    await fetch("/api/auth/logout", { method: "POST", headers: {"content-type":"application/json"}, body: "{}" });
     metaEl.textContent = "Signed out.";
     setAuthState(null);
   });
@@ -645,7 +679,7 @@ if (achievementsMenuItem) {
 if (leaderboardMenuItem) {
   leaderboardMenuItem.addEventListener("click", () => {
     closeMenus();
-    metaEl.textContent = "Leaderboards coming soon.";
+    openLeaderboard();
   });
 }
 
@@ -717,13 +751,13 @@ async function fetchProgress() {
   } catch {}
 }
 
-async function logVisit(url) {
+async function logVisit(url, visitToken) {
   if (!currentUser || !url) return;
   try {
     const res = await fetch("/api/visits", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ url }),
+      body: JSON.stringify({ url, visitToken }),
     });
     if (res.status === 429) {
       openRateLimitModal();
@@ -807,7 +841,8 @@ function finishViewerLoad() {
   setStopState(false);
 }
 
-async function applyEntry(entry) {
+async function applyEntry(entry, status = "") {
+  metaEl.textContent = "Loading…";
   const version = ++navigationVersion;
   try {
     if (!entry.frame) {
@@ -822,7 +857,7 @@ async function applyEntry(entry) {
     currentUrl = entry.url;
     urlEl.textContent = currentUrl;
     urlEl.href = currentUrl;
-    metaEl.textContent = entry.source || entry.crawl || "Happy exploring.";
+    metaEl.textContent = status;
     clearTimeout(viewerTimer);
     if (entry.frame) {
       viewerEl.remove();
@@ -1002,7 +1037,7 @@ const landingQueue = new LandingQueue({
 });
 
 async function loadRandom() {
-  if (getButton.disabled || maybeShowAd()) return;
+  if (getButton.disabled || currentUser?.needsUsername || maybeShowAd()) return;
   if (adShowing) hideAdIntermission();
   const controller = new AbortController();
   fetchController = controller;
@@ -1011,13 +1046,13 @@ async function loadRandom() {
   setStopState(true);
   loadingEl.classList.add("is-hidden");
   throbberEl.classList.remove("is-hidden");
-  if (!landingQueue.readyCount) metaEl.textContent = "Preparing your next landing…";
+  metaEl.textContent = "Loading…";
   try {
     const entry = await landingQueue.take(controller.signal);
     if (controller.signal.aborted || version !== navigationVersion) {entry.frame.remove(); return;}
     if (await applyEntry(entry)) {
       pushHistory(entry);
-      logVisit(entry.url);
+      logVisit(entry.url, entry.visitToken);
       recordLandingForAds();
       if (onboardingStep === "go" && !currentUser) showOnboarding("favorite");
       else dismissOnboarding();
@@ -1030,7 +1065,7 @@ async function loadRandom() {
       setStopState(false);
     }
   } finally {
-    if (fetchController === controller) {fetchController = null; getButton.disabled = false;}
+    if (fetchController === controller) {fetchController = null; getButton.disabled = Boolean(currentUser?.needsUsername);}
   }
 }
 
@@ -1044,7 +1079,7 @@ if (favoriteToggleButton) {
 getButton.addEventListener("click", loadRandom);
 async function navigateHistory(index) {
   if (index < 0 || index >= history.length) return;
-  if (await applyEntry(history[index])) {
+  if (await applyEntry(history[index], index < historyIndex ? "Previous landing" : "Next landing")) {
     historyIndex = index;
     saveHistory();
     updateBackButton();
@@ -1068,7 +1103,7 @@ stopButton.addEventListener("click", () => {
 });
 
 refreshButton.addEventListener("click", () => {
-  if (currentUrl) applyEntry({url: currentUrl, source: "Refreshed landing"});
+  if (currentUrl) applyEntry({url: currentUrl}, "Refreshed landing");
 });
 
 loadHistory();
@@ -1080,7 +1115,7 @@ landingQueue.start();
 const sharedParam = new URLSearchParams(window.location.search).get(SHARE_PARAM);
 const sharedUrl = normalizeSharedUrl(sharedParam);
 if (sharedUrl) {
-  applyEntry({url: sharedUrl, crawl: "shared link"}).then(ok => {if (ok) pushHistory({url: sharedUrl, crawl: "shared link"});});
+  applyEntry({url: sharedUrl, crawl: "shared link"}, "Opened shared landing").then(ok => {if (ok) pushHistory({url: sharedUrl, crawl: "shared link"});});
 }
 
 viewerEl.addEventListener("load", finishViewerLoad);

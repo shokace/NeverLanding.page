@@ -561,10 +561,6 @@ body {
   color: #222;
 }
 
-.embed-note {
-  font-size: 0.85rem;
-}
-
 .statusbar {
   border-top: 2px solid #000;
   padding: 6px 8px;
@@ -971,3 +967,48 @@ body {
   .toolbar .tool-button { width: 32px; padding: 4px; justify-content: center; }
   .toolbar .go-button { flex: 1; }
 }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.leaderboard-window { width: min(600px, 92vw); }
+.leaderboard-body { min-height: 0; display: flex; flex-direction: column; gap: 10px; }
+.leaderboard-body .modal-copy { margin: 0; }
+.leaderboard-privacy { color: #404040; font-size: 12px; }
+#leaderboard-status:empty { display: none; }
+.leaderboard-scroll { overflow: auto; min-height: 0; max-height: 55vh; }
+.leaderboard-table { width: 100%; border-collapse: collapse; background: #fff; font-size: 14px; }
+.leaderboard-table th { background: #000080; color: #fff; position: sticky; top: 0; }
+.leaderboard-table th, .leaderboard-table td { padding: 8px; text-align: left; border: 1px solid #808080; }
+.leaderboard-table td:nth-child(2) { overflow-wrap: anywhere; }
+.leaderboard-table th:last-child, .leaderboard-table td:last-child { text-align: right; }
+.leaderboard-table tbody tr:nth-child(even) { background: #f0f0f0; }
+#leaderboard-refresh { align-self: flex-end; }
+.statusbar .status-link { margin-left: auto; }
+
+.achievement-tile.is-unlocked {
+  border-color: #9c7000;
+  background: #fff3bf;
+  box-shadow: inset 0 0 8px #ffdc67, 0 0 5px #dfb633;
+}
+.achievement-tile.is-unlocked:hover { background: #fff9db; }
+.achievement-tile.is-unlocked.is-new {
+  animation: achievement-glow 2.4s ease-in-out infinite;
+}
+@keyframes achievement-glow {
+  0%, 100% { box-shadow: inset 0 0 8px #ffdc67, 0 0 5px #dfb633; }
+  50% { box-shadow: inset 0 0 15px #ffd447, 0 0 10px #d99d00; border-color: #765100; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .achievement-tile.is-unlocked.is-new { animation: none; }
+}
+
+#username-setup-modal { z-index: 40; }
+#username-setup-status:empty { display: none; }
+#username-setup-logout { margin-top: 12px; }

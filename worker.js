@@ -1,13 +1,14 @@
 import {randomLanding} from './lib/discovery.js';
 import {inspectUrl, publicUrl} from './lib/safety.js';
 import {syncAchievements} from './lib/achievements.js';
+import {issueVisitReceipt, verifyVisitReceipt} from './lib/visit-receipts.js';
+import {leaderboardResponse, isPublicUsername} from './lib/leaderboard.js';
 
 function jsonResponse(body, init = {}) {
   const headers = new Headers(init.headers || {});
   headers.set("content-type", "application/json; charset=utf-8");
-  headers.set("access-control-allow-origin", "*");
-  headers.set("access-control-allow-methods", "GET, POST, OPTIONS");
-  headers.set("access-control-allow-headers", "*");
+  if (!headers.has("cache-control")) headers.set("cache-control", "no-store");
+  headers.set("x-content-type-options", "nosniff");
   return new Response(init.status === 204 ? null : JSON.stringify(body), {
     ...init,
     headers,
@@ -113,11 +114,25 @@ function clearSessionCookie(headers, requestUrl) {
 }
 
 async function readJson(request) {
+  const limit = 16384;
+  if (Number(request.headers.get("content-length")) > limit || !request.body) return null;
+  const reader = request.body.getReader();
+  const chunks = [];
+  let size = 0;
   try {
-    return await request.json();
-  } catch {
-    return null;
-  }
+    while (true) {
+      const {done, value} = await reader.read();
+      if (done) break;
+      size += value.length;
+      if (size > limit) return null;
+      chunks.push(value);
+    }
+    const bytes = new Uint8Array(size);
+    let offset = 0;
+    for (const chunk of chunks) {bytes.set(chunk, offset); offset += chunk.length;}
+    return JSON.parse(new TextDecoder().decode(bytes));
+  } catch {return null;}
+  finally {await reader.cancel().catch(() => {});}
 }
 
 const SESSION_TTL_DAYS = 30;
@@ -156,15 +171,16 @@ async function getUserFromSession(env, token) {
   )
     .bind(token)
     .first();
-  return result || null;
+  return result ? {...result, needsUsername: !isPublicUsername(result.username)} : null;
 }
 
-async function requireUser(env, request) {
+async function requireUser(env, request, {allowIncomplete = false} = {}) {
   const token = readCookie(request, "nl_session");
   const user = await getUserFromSession(env, token);
   if (!user) {
     return { error: jsonResponse({ error: "Unauthorized" }, { status: 401 }) };
   }
+  if (user.needsUsername && !allowIncomplete) return {error:jsonResponse({error:"Choose a username to continue",code:"USERNAME_REQUIRED"},{status:403})};
   return { user };
 }
 
@@ -187,6 +203,20 @@ export default {
     const { method, url } = request;
     const { pathname } = new URL(url);
 
+    if (method === "POST") {
+      const origin = request.headers.get("origin");
+      if ((origin && origin !== new URL(url).origin) || request.headers.get("sec-fetch-site") === "cross-site") {
+        return jsonResponse({error:"Cross-site requests are not allowed"}, {status:403});
+      }
+      if (!/^application\/json(?:;|$)/i.test(request.headers.get("content-type") || "")) {
+        return jsonResponse({error:"JSON is required"}, {status:415});
+      }
+    }
+
+    if (pathname === "/api/leaderboard" && method === "GET") {
+      return leaderboardResponse(env, request, ctx);
+    }
+
     if (method === "OPTIONS") {
       return jsonResponse({ ok: true }, { status: 204 });
     }
@@ -196,6 +226,26 @@ export default {
       const entry = body && await inspectUrl(body.url);
       if (!entry) return jsonResponse({error: "This page could not pass the safety and preview checks."}, {status: 422});
       return jsonResponse(entry, {headers: {"cache-control": "no-store"}});
+    }
+
+    if (pathname === "/api/account/username" && method === "POST") {
+      const auth = await requireUser(env, request, {allowIncomplete:true});
+      if (auth.error) return auth.error;
+      const body = await readJson(request);
+      const username = typeof body?.username === "string" ? body.username.trim() : "";
+      if (!isPublicUsername(username) || username.length < 3 || username.length > 24) {
+        return jsonResponse({error:"Use 3–24 letters, numbers, underscores, or hyphens. Email addresses are not usernames."}, {status:400});
+      }
+      if (!auth.user.needsUsername) return jsonResponse({error:"This account already has a username"}, {status:409});
+      try {
+        const updated = await env.DB.prepare(`UPDATE users SET username = ?, updated_at = datetime('now') WHERE id = ? AND (username IS NULL OR length(username) NOT BETWEEN 1 AND 32 OR username GLOB '*[^A-Za-z0-9_-]*')`)
+          .bind(username, auth.user.id).run();
+        if (!updated.meta.changes) return jsonResponse({error:"This account already has a username"}, {status:409});
+      } catch (error) {
+        if (String(error).includes("UNIQUE constraint failed")) return jsonResponse({error:"That username is already taken. Choose another."}, {status:409});
+        return jsonResponse({error:"Your username could not be saved. Please try again."}, {status:503});
+      }
+      return jsonResponse({username});
     }
 
     if (pathname.startsWith("/api/auth/")) {
@@ -213,12 +263,15 @@ export default {
         if (!email || !username || !password) {
           return jsonResponse({ error: "Email, username, and password required" }, { status: 400 });
         }
+        if (!isPublicUsername(username) || username.length < 3 || username.length > 24) {
+          return jsonResponse({error:"Choose a username of 3–24 letters, numbers, underscores, or hyphens. Do not use an email address."}, {status:400});
+        }
         if (password.length < 8) {
           return jsonResponse({ error: "Password must be at least 8 characters" }, { status: 400 });
         }
 
         const existing = await env.DB.prepare(
-          "SELECT id FROM users WHERE email = ? OR username = ?"
+          "SELECT id FROM users WHERE email = ? OR username = ? COLLATE NOCASE"
         )
           .bind(email, username)
           .first();
@@ -228,12 +281,17 @@ export default {
 
         const userId = crypto.randomUUID();
         const { hash, salt, algo } = await hashPassword(password);
-        await env.DB.prepare(
+        try {
+          await env.DB.prepare(
           `INSERT INTO users (id, email, username, display_name, password_hash, password_salt, password_algo, password_updated_at)
            VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))`
         )
           .bind(userId, email, username, displayName || null, hash, salt, algo)
           .run();
+        } catch (error) {
+          if (String(error).includes("UNIQUE constraint failed")) return jsonResponse({error:"Email or username already in use"}, {status:409});
+          return jsonResponse({error:"Sign up is temporarily unavailable"}, {status:503});
+        }
 
         await grantAchievement(env, userId, "login_first");
         const session = await createSession(env, userId);
@@ -276,6 +334,7 @@ export default {
               id: user.id,
               email: user.email,
               username: user.username,
+              needsUsername: !isPublicUsername(user.username),
               displayName: user.display_name || null,
             },
           },
@@ -387,8 +446,8 @@ export default {
 
         let userId = existingAccount ? existingAccount.user_id : null;
         if (!userId) {
-          const usernameBase = email.split("@")[0] || displayName || "user";
-          const username = await ensureUniqueUsername(env, usernameBase);
+          // Google profile names and email addresses are never public usernames.
+          const username = null;
           userId = crypto.randomUUID();
           await env.DB.prepare(
             "INSERT INTO users (id, email, username, display_name, avatar_url) VALUES (?, ?, ?, ?, ?)"
@@ -438,12 +497,19 @@ export default {
       const parsed = publicUrl(String(body.url || ""));
       if (!parsed) return jsonResponse({error: "A public HTTPS URL is required"}, {status: 400});
       const urlValue = parsed.href;
-      const titleValue = String(body.title || "").trim().slice(0, 300);
-      await env.DB.prepare(
-        "INSERT INTO visits (user_id, url, title) VALUES (?, ?, ?)"
-      )
-        .bind(auth.user.id, urlValue, titleValue || null)
-        .run();
+      const receipt = await verifyVisitReceipt(env.VISIT_SIGNING_KEY, body.visitToken, urlValue, auth.user.id);
+      if (!receipt) return jsonResponse({error:"A valid landing receipt is required. Reload the game and try again."}, {status:403});
+      // Unique receipt IDs and the insert-time limit work across Worker instances.
+      const inserted = await env.DB.prepare(`
+        INSERT OR IGNORE INTO visits (user_id, url, title, visit_token_id)
+        SELECT ?, ?, ?, ? WHERE (
+          SELECT COUNT(*) FROM visits WHERE user_id = ? AND visited_at >= datetime('now', '-1 second')
+        ) < 8
+      `).bind(auth.user.id, urlValue, urlValue, receipt.id, auth.user.id).run();
+      if (!inserted.meta.changes) {
+        const used = await env.DB.prepare('SELECT 1 AS used FROM visits WHERE visit_token_id = ?').bind(receipt.id).first();
+        return jsonResponse({error:used ? "This landing was already counted" : "Too many requests"}, {status:used ? 409 : 429});
+      }
       await syncAchievements(env, auth.user.id);
       return jsonResponse({ ok: true }, { status: 201 });
     }
@@ -564,7 +630,9 @@ export default {
       const excluded = new URL(url).searchParams.getAll("exclude").slice(0, 30);
       const entry = await randomLanding(env, excluded, ctx);
       if (!entry) return jsonResponse({error: "No suitable page found. Please try again."}, {status: 503, headers: {"retry-after": "3", "cache-control": "no-store"}});
-      return jsonResponse(entry, {headers: {"cache-control": "no-store"}});
+      const user = await getUserFromSession(env, readCookie(request, "nl_session"));
+      const visitToken = await issueVisitReceipt(env.VISIT_SIGNING_KEY, entry.url, user?.id || null);
+      return jsonResponse({...entry, visitToken}, {headers: {"cache-control": "no-store"}});
     } catch {
       return jsonResponse({error: "Discovery is temporarily unavailable."}, {status: 503, headers: {"cache-control": "no-store"}});
     }
@@ -595,20 +663,6 @@ function providerEnv(env) {
 
 function getBaseUrl(requestUrl) {
   return `${requestUrl.protocol}//${requestUrl.host}`;
-}
-
-async function ensureUniqueUsername(env, base) {
-  const normalized = base.replace(/[^a-zA-Z0-9_]/g, "").toLowerCase() || "user";
-  let candidate = normalized.slice(0, 24);
-  let suffix = 0;
-  while (true) {
-    const existing = await env.DB.prepare("SELECT id FROM users WHERE username = ?")
-      .bind(candidate)
-      .first();
-    if (!existing) return candidate;
-    suffix += 1;
-    candidate = `${normalized.slice(0, 20)}${suffix}`.slice(0, 24);
-  }
 }
 
 async function fetchGoogleProfile(accessToken) {
