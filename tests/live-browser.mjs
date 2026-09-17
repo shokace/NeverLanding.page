@@ -1,6 +1,5 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
-import fs from 'node:fs';
 const site = process.env.SITE_URL || 'http://127.0.0.1:8787';
 const api = process.env.API_URL || 'https://neverlanding.page';
 const browser=await chromium.launch({headless:true});
@@ -25,12 +24,15 @@ try {
  await page.waitForFunction(()=>document.querySelector('#url').textContent.startsWith('https://'));
  const activation=Date.now()-first;
  const activeSrc=await page.locator('#viewer').getAttribute('src');
- const frame=page.frames().find(frame=>frame.url()===activeSrc);
+ // Client-side routers can add a fragment or path without reloading the iframe.
+ // Follow the displayed element's browsing context instead of an exact URL match.
+ const frame=await (await page.locator('#viewer').elementHandle()).contentFrame();
  const frames=page.frames().filter(frame=>frame.parentFrame()===page.mainFrame() && queued.includes(frame.url())).map(frame=>({url:frame.url()}));
  const bodyText = frame ? (await frame.locator('body').innerText({timeout:5000}).catch(()=>'')) : '';
  await page.screenshot({path:'/tmp/neverlanding-live.png'});
- console.log(JSON.stringify({status,fillMs:Date.now()-started,activationMs:activation,queued,activeSrc,bodyPreview:bodyText.slice(0,250),frames,errors}));
- assert.ok(frame,'Displayed frame must contain the expected live destination');
+ console.log(JSON.stringify({status,fillMs:Date.now()-started,activationMs:activation,queued,activeSrc,actualUrl:frame?.url(),bodyPreview:bodyText.slice(0,250),frames,errors}));
+ assert.ok(frame,'Displayed frame must have a browsing context');
+ assert.equal(new URL(frame.url()).origin,new URL(activeSrc).origin,'Displayed frame must contain the expected live destination');
  assert.ok(bodyText.trim().length>10,'Displayed page must contain content');
  assert.deepEqual(errors,[]);
 } finally {await browser.close();}
