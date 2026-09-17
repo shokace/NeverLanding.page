@@ -930,3 +930,6 @@ body {
     width: 100%;
   }
 }
+
+.achievement-tile:focus-visible { outline: 2px dotted #000080; outline-offset: 2px; }
+.achievement-tile.is-unavailable { opacity: .4; }

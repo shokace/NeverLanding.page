@@ -16,10 +16,14 @@ function buildAchievementTiles(total) {
   if (!achievementsGrid) return;
   const tiles = document.createDocumentFragment();
   for (let i = 0; i < total; i += 1) {
-    const tile = document.createElement("div");
+    const tile = document.createElement("button");
+    tile.type = "button";
     tile.className = "achievement-tile";
     tile.dataset.index = String(i);
     const info = achievementData[i];
+    tile.setAttribute("aria-label", info?.title || "Achievement");
+    tile.title = info?.title || "Achievement";
+    tile.classList.toggle("is-unavailable", info?.available === false);
     if (info && info.icon) {
       const img = document.createElement("img");
       img.src = info.icon;
@@ -29,7 +33,7 @@ function buildAchievementTiles(total) {
     }
     tiles.appendChild(tile);
   }
-  achievementsGrid.appendChild(tiles);
+  achievementsGrid.replaceChildren(tiles);
   applyUnlocks();
 }
 
@@ -109,22 +113,26 @@ async function loadAchievements() {
     if (!res.ok) throw new Error("Failed to load achievements");
     const data = await res.json();
     achievementData = Array.isArray(data.achievements) ? data.achievements : [];
-    const total = Number(data.slots) || 0;
+    const total = achievementData.length;
     if (!total) return;
     buildAchievementTiles(total);
   } catch {
-    buildAchievementTiles(295);
+    achievementsGrid.textContent = "Achievements could not load. Reopen this panel to try again.";
   }
 }
 
 loadAchievements();
-refreshUnlocked();
 
+let unlockRequest = 0;
 async function refreshUnlocked() {
+  const version = ++unlockRequest;
+  const userId = currentUserId;
+  if (!userId) return;
   try {
     const res = await fetch("/api/achievements/unlocked");
     if (!res.ok) return;
     const data = await res.json();
+    if (version !== unlockRequest || userId !== currentUserId) return;
     unlockedCodes = new Set(Array.isArray(data.codes) ? data.codes : []);
     applyUnlocks();
   } catch {}
@@ -138,6 +146,7 @@ document.addEventListener("auth-changed", (event) => {
     applyUnlocks();
     return;
   }
+  unlockedCodes = new Set();
   currentUserId = event.detail.user.id || null;
   seenCodes = loadSeenCodes(currentUserId);
   refreshUnlocked();
@@ -162,10 +171,8 @@ if (achievementsGrid) {
     const info = achievementData[index];
     const title = info && info.title ? `${info.title} Achievement` : "Achievement";
     const code = info && info.code ? info.code : "";
-    let text = info && info.description ? info.description : "Achievement details coming soon.";
-    if (code === "explorer_level_3" && unlockedCodes.has(code)) {
-      text = "Visited every country.";
-    } //Only nerds look at the source code to get achievements :)
+    let text = info && info.description ? info.description : "Visit the web to unlock this achievement.";
+    text = `${unlockedCodes.has(code) ? "Unlocked! " : ""}${text}`;
     openDetailModal(title, text);
   });
 }
@@ -188,4 +195,9 @@ document.addEventListener("keydown", (event) => {
   ) {
     closeDetailModal();
   }
+});
+
+if (achievementsMenuButton) achievementsMenuButton.addEventListener("click", () => {
+  if (!achievementData.length) loadAchievements();
+  refreshUnlocked();
 });

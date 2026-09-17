@@ -4,1446 +4,2785 @@
       "icon": "/assets/achievements/Windows98Scaled Icon 01.ico",
       "description": "Log in for the first time.",
       "code": "login_first",
-      "title": "First Login"
+      "title": "First Login",
+      "rule": {
+        "type": "login",
+        "value": 1
+      }
     },
     {
       "icon": "/assets/achievements/explorerLevel1.ico",
       "description": "Visit 100 random sites.",
       "title": "Explorer Level 1",
-      "code": "explorer_level_1"
+      "code": "explorer_level_1",
+      "rule": {
+        "type": "visits",
+        "value": 100
+      }
     },
     {
       "icon": "/assets/achievements/explorerLevel2.ico",
       "description": "Visit 2026 random sites.",
       "title": "Explorer Level 2",
-      "code": "explorer_level_2"
+      "code": "explorer_level_2",
+      "rule": {
+        "type": "visits",
+        "value": 2026
+      }
     },
     {
       "icon": "/assets/achievements/explorerLevel3.ico",
-      "description": "???",
+      "description": "Visit 2026 random sites and collect every available country flag. Reserved, undelegated TLDs are not required.",
       "title": "Explorer Level 3",
-      "code": "explorer_level_3"
+      "code": "explorer_level_3",
+      "rule": {
+        "type": "passport",
+        "value": 2026
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 05.ico",
       "description": "Sharing is caring.",
       "title": "Sharing Is Caring",
-      "code": "share_first"
+      "code": "share_first",
+      "rule": {
+        "type": "share",
+        "value": 1
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 06.ico",
       "description": "You are a .bizniss man.",
       "title": "Business Browsing",
-      "code": "tld_biz"
+      "code": "tld_biz",
+      "rule": {
+        "type": "tld",
+        "value": "biz"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 07.ico",
-      "description": ""
+      "description": "Give the web another life on .eco. Visit a website ending in .eco.",
+      "code": "tld_eco",
+      "title": "Reduce, Reuse, Reload",
+      "rule": {
+        "type": "tld",
+        "value": "eco"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 08.ico",
-      "description": ""
+      "description": "Take the scenic route to .green. Visit a website ending in .green.",
+      "code": "tld_green",
+      "title": "Greener Pastures",
+      "rule": {
+        "type": "tld",
+        "value": "green"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 09.ico",
-      "description": ""
+      "description": "Open the toolbox on .tools. Visit a website ending in .tools.",
+      "code": "tld_tools",
+      "title": "Some Assembly Required",
+      "rule": {
+        "type": "tld",
+        "value": "tools"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 100.ico",
-      "description": ""
+      "description": "Press start on .game. Visit a website ending in .game.",
+      "code": "tld_game",
+      "title": "Player One",
+      "rule": {
+        "type": "tld",
+        "value": "game"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 106.ico",
-      "description": ""
+      "description": "Turn the key on .security. Visit a website ending in .security.",
+      "code": "tld_security",
+      "title": "Lock and Scroll",
+      "rule": {
+        "type": "tld",
+        "value": "security"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 108.ico",
-      "description": ""
+      "description": "Load a little .video nostalgia. Visit a website ending in .video.",
+      "code": "tld_video",
+      "title": "Be Kind, Rewind",
+      "rule": {
+        "type": "tld",
+        "value": "video"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 109.ico",
-      "description": ""
+      "description": "Crash a .events party. Visit a website ending in .events.",
+      "code": "tld_events",
+      "title": "You Are Invited",
+      "rule": {
+        "type": "tld",
+        "value": "events"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 110.ico",
-      "description": ""
+      "description": "Make a connection on .social. Visit a website ending in .social.",
+      "code": "tld_social",
+      "title": "Buddy List",
+      "rule": {
+        "type": "tld",
+        "value": "social"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 111.ico",
-      "description": ""
+      "description": "Find the gears turning on .engineering. Visit a website ending in .engineering.",
+      "code": "tld_engineering",
+      "title": "Works on My Machine",
+      "rule": {
+        "type": "tld",
+        "value": "engineering"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 113.ico",
-      "description": ""
+      "description": "Admire the pixels on .design. Visit a website ending in .design.",
+      "code": "tld_design",
+      "title": "Pixel Perfect",
+      "rule": {
+        "type": "tld",
+        "value": "design"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 122.ico",
-      "description": ""
+      "description": "Boot up a .tech discovery. Visit a website ending in .tech.",
+      "code": "tld_tech",
+      "title": "Future, Meet Floppy",
+      "rule": {
+        "type": "tld",
+        "value": "tech"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 125.ico",
-      "description": ""
+      "description": "Plug into .energy. Visit a website ending in .energy.",
+      "code": "tld_energy",
+      "title": "Fully Charged",
+      "rule": {
+        "type": "tld",
+        "value": "energy"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 126.ico",
-      "description": ""
+      "description": "There is a whole .world out there. Visit a website ending in .world.",
+      "code": "tld_world",
+      "title": "World Wide Wanderer",
+      "rule": {
+        "type": "tld",
+        "value": "world"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 127.ico",
-      "description": ""
+      "description": "Find a happy little .app. Visit a website ending in .app.",
+      "code": "tld_app",
+      "title": "Appy Camper",
+      "rule": {
+        "type": "tld",
+        "value": "app"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 128.ico",
-      "description": ""
+      "description": "Turn the dial to .audio. Visit a website ending in .audio.",
+      "code": "tld_audio",
+      "title": "Sound Check",
+      "rule": {
+        "type": "tld",
+        "value": "audio"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 13.ico",
-      "description": ""
+      "description": "Find the missing .info. Visit a website ending in .info.",
+      "code": "tld_info",
+      "title": "Read the Manual",
+      "rule": {
+        "type": "tld",
+        "value": "info"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 131.ico",
-      "description": ""
+      "description": "Drop into .chat. Visit a website ending in .chat.",
+      "code": "tld_chat",
+      "title": "You Have Company",
+      "rule": {
+        "type": "tld",
+        "value": "chat"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 14.ico",
-      "description": ""
+      "description": "Make time for .watch. Visit a website ending in .watch.",
+      "code": "tld_watch",
+      "title": "Just a Second",
+      "rule": {
+        "type": "tld",
+        "value": "watch"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 15.ico",
-      "description": ""
+      "description": "Unlock a .codes discovery. Visit a website ending in .codes.",
+      "code": "tld_codes",
+      "title": "Secret Decoder Ring",
+      "rule": {
+        "type": "tld",
+        "value": "codes"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 16.ico",
-      "description": ""
+      "description": "Land on a .site worth seeing. Visit a website ending in .site.",
+      "code": "tld_site",
+      "title": "Site Unseen",
+      "rule": {
+        "type": "tld",
+        "value": "site"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 17.ico",
-      "description": ""
+      "description": "Step through a .digital doorway. Visit a website ending in .digital.",
+      "code": "tld_digital",
+      "title": "Digital Native",
+      "rule": {
+        "type": "tld",
+        "value": "digital"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 34.ico",
-      "description": ""
+      "description": "Open a fresh chapter on .news. Visit a website ending in .news.",
+      "code": "tld_news",
+      "title": "New Folder, New Story",
+      "rule": {
+        "type": "tld",
+        "value": "news"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 35.ico",
-      "description": ""
+      "description": "Paint your journey with .art. Visit a website ending in .art.",
+      "code": "tld_art",
+      "title": "Happy Little Pixels",
+      "rule": {
+        "type": "tld",
+        "value": "art"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 43.ico",
-      "description": ""
+      "description": "Cast your browser into .net. Visit a website ending in .net.",
+      "code": "tld_net",
+      "title": "Caught in the Net",
+      "rule": {
+        "type": "tld",
+        "value": "net"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 52.ico",
-      "description": ""
+      "description": "Find a .download destination; no download required. Visit a website ending in .download.",
+      "code": "tld_download",
+      "title": "Please Insert Disc",
+      "rule": {
+        "type": "tld",
+        "value": "download"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 55.ico",
-      "description": ""
+      "description": "See what makes .systems tick. Visit a website ending in .systems.",
+      "code": "tld_systems",
+      "title": "All Systems Go",
+      "rule": {
+        "type": "tld",
+        "value": "systems"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 59.ico",
-      "description": ""
+      "description": "Find your groove on .music. Visit a website ending in .music.",
+      "code": "tld_music",
+      "title": "Now That Is What I Call Surfing",
+      "rule": {
+        "type": "tld",
+        "value": "music"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 63.ico",
-      "description": ""
+      "description": "Discover a .software destination. Visit a website ending in .software.",
+      "code": "tld_software",
+      "title": "Windows of Opportunity",
+      "rule": {
+        "type": "tld",
+        "value": "software"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 70.ico",
-      "description": ""
+      "description": "Browse the classic .com neighborhood. Visit a website ending in .com.",
+      "code": "tld_com",
+      "title": "Window Shopping",
+      "rule": {
+        "type": "tld",
+        "value": "com"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 71.ico",
-      "description": ""
+      "description": "Visit the builders on .dev. Visit a website ending in .dev.",
+      "code": "tld_dev",
+      "title": "Under Construction",
+      "rule": {
+        "type": "tld",
+        "value": "dev"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 76.ico",
-      "description": ""
+      "description": "Read a page from .blog. Visit a website ending in .blog.",
+      "code": "tld_blog",
+      "title": "Dear Internet Diary",
+      "rule": {
+        "type": "tld",
+        "value": "blog"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 83.ico",
-      "description": ""
+      "description": "Float into .cloud. Visit a website ending in .cloud.",
+      "code": "tld_cloud",
+      "title": "Head in the Clouds",
+      "rule": {
+        "type": "tld",
+        "value": "cloud"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 84.ico",
-      "description": ""
+      "description": "It looks like you are visiting .help. Visit a website ending in .help.",
+      "code": "tld_help",
+      "title": "Clippy Would Be Proud",
+      "rule": {
+        "type": "tld",
+        "value": "help"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 85.ico",
-      "description": ""
+      "description": "Get a little wiser on .edu. Visit a website ending in .edu.",
+      "code": "tld_edu",
+      "title": "Honor Roll",
+      "rule": {
+        "type": "tld",
+        "value": "edu"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 86.ico",
-      "description": ""
+      "description": "Find your way to .org. Visit a website ending in .org.",
+      "code": "tld_org",
+      "title": "Organized Adventure",
+      "rule": {
+        "type": "tld",
+        "value": "org"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 88.ico",
-      "description": ""
+      "description": "Launch into .space. Visit a website ending in .space.",
+      "code": "tld_space",
+      "title": "Out of This Browser",
+      "rule": {
+        "type": "tld",
+        "value": "space"
+      }
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 97.ico",
-      "description": ""
+      "description": "Unpack a .zip website; no file download required. Visit a website ending in .zip.",
+      "code": "tld_zip",
+      "title": "Compressed Adventure",
+      "rule": {
+        "type": "tld",
+        "value": "zip"
+      }
+    },
+    {
+      "icon": "/assets/achievements/Windows98Scaled Icon 03.ico",
+      "code": "tld_network",
+      "title": "LAN Party",
+      "description": "Find your people on .network. Visit a website ending in .network.",
+      "rule": {
+        "type": "tld",
+        "value": "network"
+      }
+    },
+    {
+      "icon": "/assets/achievements/Windows98Scaled Icon 02.ico",
+      "code": "tld_computer",
+      "title": "Boot Camp",
+      "description": "A fresh boot into .computer. Visit a website ending in .computer.",
+      "rule": {
+        "type": "tld",
+        "value": "computer"
+      }
     },
     {
       "icon": "/assets/achievements/countries/united_kingdom.png",
       "code": "tld_uk",
       "title": "United Kingdom",
-      "description": "Visited a site ending in .uk."
+      "description": "Visited a site ending in .uk.",
+      "rule": {
+        "type": "tld",
+        "value": "uk"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/afghanistan.png",
       "code": "tld_af",
       "title": "Afghanistan",
-      "description": "Visited a site ending in .af."
+      "description": "Visited a site ending in .af.",
+      "rule": {
+        "type": "tld",
+        "value": "af"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/aland_islands.png",
       "code": "tld_ax",
       "title": "Åland Islands",
-      "description": "Visited a site ending in .ax."
+      "description": "Visited a site ending in .ax.",
+      "rule": {
+        "type": "tld",
+        "value": "ax"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/albania.png",
       "code": "tld_al",
       "title": "Albania",
-      "description": "Visited a site ending in .al."
+      "description": "Visited a site ending in .al.",
+      "rule": {
+        "type": "tld",
+        "value": "al"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/algeria.png",
       "code": "tld_dz",
       "title": "Algeria",
-      "description": "Visited a site ending in .dz."
+      "description": "Visited a site ending in .dz.",
+      "rule": {
+        "type": "tld",
+        "value": "dz"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/andorra.png",
       "code": "tld_ad",
       "title": "Andorra",
-      "description": "Visited a site ending in .ad."
+      "description": "Visited a site ending in .ad.",
+      "rule": {
+        "type": "tld",
+        "value": "ad"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/angola.png",
       "code": "tld_ao",
       "title": "Angola",
-      "description": "Visited a site ending in .ao."
+      "description": "Visited a site ending in .ao.",
+      "rule": {
+        "type": "tld",
+        "value": "ao"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/antigua_and_barbuda.png",
       "code": "tld_ag",
       "title": "Antigua & Barbuda",
-      "description": "Visited a site ending in .ag."
+      "description": "Visited a site ending in .ag.",
+      "rule": {
+        "type": "tld",
+        "value": "ag"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/argentina.png",
       "code": "tld_ar",
       "title": "Argentina",
-      "description": "Visited a site ending in .ar."
+      "description": "Visited a site ending in .ar.",
+      "rule": {
+        "type": "tld",
+        "value": "ar"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/armenia.png",
       "code": "tld_am",
       "title": "Armenia",
-      "description": "Visited a site ending in .am."
+      "description": "Visited a site ending in .am.",
+      "rule": {
+        "type": "tld",
+        "value": "am"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/aruba.png",
       "code": "tld_aw",
       "title": "Aruba",
-      "description": "Visited a site ending in .aw."
+      "description": "Visited a site ending in .aw.",
+      "rule": {
+        "type": "tld",
+        "value": "aw"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/australia.png",
       "code": "tld_au",
       "title": "Australia",
-      "description": "Visited a site ending in .au."
+      "description": "Visited a site ending in .au.",
+      "rule": {
+        "type": "tld",
+        "value": "au"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/austria.png",
       "code": "tld_at",
       "title": "Austria",
-      "description": "Visited a site ending in .at."
+      "description": "Visited a site ending in .at.",
+      "rule": {
+        "type": "tld",
+        "value": "at"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/azerbaijan.png",
       "code": "tld_az",
       "title": "Azerbaijan",
-      "description": "Visited a site ending in .az."
+      "description": "Visited a site ending in .az.",
+      "rule": {
+        "type": "tld",
+        "value": "az"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/bahamas.png",
       "code": "tld_bs",
       "title": "Bahamas",
-      "description": "Visited a site ending in .bs."
+      "description": "Visited a site ending in .bs.",
+      "rule": {
+        "type": "tld",
+        "value": "bs"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/bahrain.png",
       "code": "tld_bh",
       "title": "Bahrain",
-      "description": "Visited a site ending in .bh."
+      "description": "Visited a site ending in .bh.",
+      "rule": {
+        "type": "tld",
+        "value": "bh"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/bangladesh.png",
       "code": "tld_bd",
       "title": "Bangladesh",
-      "description": "Visited a site ending in .bd."
+      "description": "Visited a site ending in .bd.",
+      "rule": {
+        "type": "tld",
+        "value": "bd"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/barbados.png",
       "code": "tld_bb",
       "title": "Barbados",
-      "description": "Visited a site ending in .bb."
+      "description": "Visited a site ending in .bb.",
+      "rule": {
+        "type": "tld",
+        "value": "bb"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/belarus.png",
       "code": "tld_by",
       "title": "Belarus",
-      "description": "Visited a site ending in .by."
+      "description": "Visited a site ending in .by.",
+      "rule": {
+        "type": "tld",
+        "value": "by"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/belgium.png",
       "code": "tld_be",
       "title": "Belgium",
-      "description": "Visited a site ending in .be."
+      "description": "Visited a site ending in .be.",
+      "rule": {
+        "type": "tld",
+        "value": "be"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/belize.png",
       "code": "tld_bz",
       "title": "Belize",
-      "description": "Visited a site ending in .bz."
+      "description": "Visited a site ending in .bz.",
+      "rule": {
+        "type": "tld",
+        "value": "bz"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/benin.png",
       "code": "tld_bj",
       "title": "Benin",
-      "description": "Visited a site ending in .bj."
+      "description": "Visited a site ending in .bj.",
+      "rule": {
+        "type": "tld",
+        "value": "bj"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/bhutan.png",
       "code": "tld_bt",
       "title": "Bhutan",
-      "description": "Visited a site ending in .bt."
+      "description": "Visited a site ending in .bt.",
+      "rule": {
+        "type": "tld",
+        "value": "bt"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/bolivia.png",
       "code": "tld_bo",
       "title": "Bolivia",
-      "description": "Visited a site ending in .bo."
+      "description": "Visited a site ending in .bo.",
+      "rule": {
+        "type": "tld",
+        "value": "bo"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/bosnia_and_herzegovina.png",
       "code": "tld_ba",
       "title": "Bosnia & Herzegovina",
-      "description": "Visited a site ending in .ba."
+      "description": "Visited a site ending in .ba.",
+      "rule": {
+        "type": "tld",
+        "value": "ba"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/botswana.png",
       "code": "tld_bw",
       "title": "Botswana",
-      "description": "Visited a site ending in .bw."
+      "description": "Visited a site ending in .bw.",
+      "rule": {
+        "type": "tld",
+        "value": "bw"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/brazil.png",
       "code": "tld_br",
       "title": "Brazil",
-      "description": "Visited a site ending in .br."
+      "description": "Visited a site ending in .br.",
+      "rule": {
+        "type": "tld",
+        "value": "br"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/brunei.png",
       "code": "tld_bn",
       "title": "Brunei",
-      "description": "Visited a site ending in .bn."
+      "description": "Visited a site ending in .bn.",
+      "rule": {
+        "type": "tld",
+        "value": "bn"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/bulgaria.png",
       "code": "tld_bg",
       "title": "Bulgaria",
-      "description": "Visited a site ending in .bg."
+      "description": "Visited a site ending in .bg.",
+      "rule": {
+        "type": "tld",
+        "value": "bg"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/burkina_faso.png",
       "code": "tld_bf",
       "title": "Burkina Faso",
-      "description": "Visited a site ending in .bf."
+      "description": "Visited a site ending in .bf.",
+      "rule": {
+        "type": "tld",
+        "value": "bf"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/burundi.png",
       "code": "tld_bi",
       "title": "Burundi",
-      "description": "Visited a site ending in .bi."
+      "description": "Visited a site ending in .bi.",
+      "rule": {
+        "type": "tld",
+        "value": "bi"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/cambodia.png",
       "code": "tld_kh",
       "title": "Cambodia",
-      "description": "Visited a site ending in .kh."
+      "description": "Visited a site ending in .kh.",
+      "rule": {
+        "type": "tld",
+        "value": "kh"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/cameroon.png",
       "code": "tld_cm",
       "title": "Cameroon",
-      "description": "Visited a site ending in .cm."
+      "description": "Visited a site ending in .cm.",
+      "rule": {
+        "type": "tld",
+        "value": "cm"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/canada.png",
       "code": "tld_ca",
       "title": "Canada",
-      "description": "Visited a site ending in .ca."
+      "description": "Visited a site ending in .ca.",
+      "rule": {
+        "type": "tld",
+        "value": "ca"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/cape_verde.png",
       "code": "tld_cv",
       "title": "Cape Verde",
-      "description": "Visited a site ending in .cv."
+      "description": "Visited a site ending in .cv.",
+      "rule": {
+        "type": "tld",
+        "value": "cv"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/central_african_republic.png",
       "code": "tld_cf",
       "title": "Central African Republic",
-      "description": "Visited a site ending in .cf."
+      "description": "Visited a site ending in .cf.",
+      "rule": {
+        "type": "tld",
+        "value": "cf"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/chad.png",
       "code": "tld_td",
       "title": "Chad",
-      "description": "Visited a site ending in .td."
+      "description": "Visited a site ending in .td.",
+      "rule": {
+        "type": "tld",
+        "value": "td"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/chile.png",
       "code": "tld_cl",
       "title": "Chile",
-      "description": "Visited a site ending in .cl."
+      "description": "Visited a site ending in .cl.",
+      "rule": {
+        "type": "tld",
+        "value": "cl"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/china.png",
       "code": "tld_cn",
       "title": "China",
-      "description": "Visited a site ending in .cn."
+      "description": "Visited a site ending in .cn.",
+      "rule": {
+        "type": "tld",
+        "value": "cn"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/colombia.png",
       "code": "tld_co",
       "title": "Colombia",
-      "description": "Visited a site ending in .co."
+      "description": "Visited a site ending in .co.",
+      "rule": {
+        "type": "tld",
+        "value": "co"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/comoros.png",
       "code": "tld_km",
       "title": "Comoros",
-      "description": "Visited a site ending in .km."
+      "description": "Visited a site ending in .km.",
+      "rule": {
+        "type": "tld",
+        "value": "km"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/republic_of_the_congo.png",
       "code": "tld_cg",
       "title": "Congo - Brazzaville",
-      "description": "Visited a site ending in .cg."
+      "description": "Visited a site ending in .cg.",
+      "rule": {
+        "type": "tld",
+        "value": "cg"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/dr_congo.png",
       "code": "tld_cd",
       "title": "Congo - Kinshasa",
-      "description": "Visited a site ending in .cd."
+      "description": "Visited a site ending in .cd.",
+      "rule": {
+        "type": "tld",
+        "value": "cd"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/cook_islands.png",
       "code": "tld_ck",
       "title": "Cook Islands",
-      "description": "Visited a site ending in .ck."
+      "description": "Visited a site ending in .ck.",
+      "rule": {
+        "type": "tld",
+        "value": "ck"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/costa_rica.png",
       "code": "tld_cr",
       "title": "Costa Rica",
-      "description": "Visited a site ending in .cr."
+      "description": "Visited a site ending in .cr.",
+      "rule": {
+        "type": "tld",
+        "value": "cr"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/cote_divoire.png",
       "code": "tld_ci",
       "title": "Côte d’Ivoire",
-      "description": "Visited a site ending in .ci."
+      "description": "Visited a site ending in .ci.",
+      "rule": {
+        "type": "tld",
+        "value": "ci"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/croatia.png",
       "code": "tld_hr",
       "title": "Croatia",
-      "description": "Visited a site ending in .hr."
+      "description": "Visited a site ending in .hr.",
+      "rule": {
+        "type": "tld",
+        "value": "hr"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/cuba.png",
       "code": "tld_cu",
       "title": "Cuba",
-      "description": "Visited a site ending in .cu."
+      "description": "Visited a site ending in .cu.",
+      "rule": {
+        "type": "tld",
+        "value": "cu"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/curacao.png",
       "code": "tld_cw",
       "title": "Curaçao",
-      "description": "Visited a site ending in .cw."
+      "description": "Visited a site ending in .cw.",
+      "rule": {
+        "type": "tld",
+        "value": "cw"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/cyprus.png",
       "code": "tld_cy",
       "title": "Cyprus",
-      "description": "Visited a site ending in .cy."
+      "description": "Visited a site ending in .cy.",
+      "rule": {
+        "type": "tld",
+        "value": "cy"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/czechia.png",
       "code": "tld_cz",
       "title": "Czechia",
-      "description": "Visited a site ending in .cz."
+      "description": "Visited a site ending in .cz.",
+      "rule": {
+        "type": "tld",
+        "value": "cz"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/denmark.png",
       "code": "tld_dk",
       "title": "Denmark",
-      "description": "Visited a site ending in .dk."
+      "description": "Visited a site ending in .dk.",
+      "rule": {
+        "type": "tld",
+        "value": "dk"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/djibouti.png",
       "code": "tld_dj",
       "title": "Djibouti",
-      "description": "Visited a site ending in .dj."
+      "description": "Visited a site ending in .dj.",
+      "rule": {
+        "type": "tld",
+        "value": "dj"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/dominica.png",
       "code": "tld_dm",
       "title": "Dominica",
-      "description": "Visited a site ending in .dm."
+      "description": "Visited a site ending in .dm.",
+      "rule": {
+        "type": "tld",
+        "value": "dm"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/dominican_republic.png",
       "code": "tld_do",
       "title": "Dominican Republic",
-      "description": "Visited a site ending in .do."
+      "description": "Visited a site ending in .do.",
+      "rule": {
+        "type": "tld",
+        "value": "do"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/ecuador.png",
       "code": "tld_ec",
       "title": "Ecuador",
-      "description": "Visited a site ending in .ec."
+      "description": "Visited a site ending in .ec.",
+      "rule": {
+        "type": "tld",
+        "value": "ec"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/egypt.png",
       "code": "tld_eg",
       "title": "Egypt",
-      "description": "Visited a site ending in .eg."
+      "description": "Visited a site ending in .eg.",
+      "rule": {
+        "type": "tld",
+        "value": "eg"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/el_salvador.png",
       "code": "tld_sv",
       "title": "El Salvador",
-      "description": "Visited a site ending in .sv."
+      "description": "Visited a site ending in .sv.",
+      "rule": {
+        "type": "tld",
+        "value": "sv"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/equatorial_guinea.png",
       "code": "tld_gq",
       "title": "Equatorial Guinea",
-      "description": "Visited a site ending in .gq."
+      "description": "Visited a site ending in .gq.",
+      "rule": {
+        "type": "tld",
+        "value": "gq"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/eritrea.png",
       "code": "tld_er",
       "title": "Eritrea",
-      "description": "Visited a site ending in .er."
+      "description": "Visited a site ending in .er.",
+      "rule": {
+        "type": "tld",
+        "value": "er"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/estonia.png",
       "code": "tld_ee",
       "title": "Estonia",
-      "description": "Visited a site ending in .ee."
+      "description": "Visited a site ending in .ee.",
+      "rule": {
+        "type": "tld",
+        "value": "ee"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/swaziland.png",
       "code": "tld_sz",
       "title": "Eswatini",
-      "description": "Visited a site ending in .sz."
+      "description": "Visited a site ending in .sz.",
+      "rule": {
+        "type": "tld",
+        "value": "sz"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/ethiopia.png",
       "code": "tld_et",
       "title": "Ethiopia",
-      "description": "Visited a site ending in .et."
+      "description": "Visited a site ending in .et.",
+      "rule": {
+        "type": "tld",
+        "value": "et"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/faroe_islands.png",
       "code": "tld_fo",
       "title": "Faroe Islands",
-      "description": "Visited a site ending in .fo."
+      "description": "Visited a site ending in .fo.",
+      "rule": {
+        "type": "tld",
+        "value": "fo"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/fiji.png",
       "code": "tld_fj",
       "title": "Fiji",
-      "description": "Visited a site ending in .fj."
+      "description": "Visited a site ending in .fj.",
+      "rule": {
+        "type": "tld",
+        "value": "fj"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/finland.png",
       "code": "tld_fi",
       "title": "Finland",
-      "description": "Visited a site ending in .fi."
+      "description": "Visited a site ending in .fi.",
+      "rule": {
+        "type": "tld",
+        "value": "fi"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/france.png",
       "code": "tld_fr",
       "title": "France",
-      "description": "Visited a site ending in .fr."
+      "description": "Visited a site ending in .fr.",
+      "rule": {
+        "type": "tld",
+        "value": "fr"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/french_polynesia.png",
       "code": "tld_pf",
       "title": "French Polynesia",
-      "description": "Visited a site ending in .pf."
+      "description": "Visited a site ending in .pf.",
+      "rule": {
+        "type": "tld",
+        "value": "pf"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/gabon.png",
       "code": "tld_ga",
       "title": "Gabon",
-      "description": "Visited a site ending in .ga."
+      "description": "Visited a site ending in .ga.",
+      "rule": {
+        "type": "tld",
+        "value": "ga"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/gambia.png",
       "code": "tld_gm",
       "title": "Gambia",
-      "description": "Visited a site ending in .gm."
+      "description": "Visited a site ending in .gm.",
+      "rule": {
+        "type": "tld",
+        "value": "gm"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/georgia.png",
       "code": "tld_ge",
       "title": "Georgia",
-      "description": "Visited a site ending in .ge."
+      "description": "Visited a site ending in .ge.",
+      "rule": {
+        "type": "tld",
+        "value": "ge"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/germany.png",
       "code": "tld_de",
       "title": "Germany",
-      "description": "Visited a site ending in .de."
+      "description": "Visited a site ending in .de.",
+      "rule": {
+        "type": "tld",
+        "value": "de"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/ghana.png",
       "code": "tld_gh",
       "title": "Ghana",
-      "description": "Visited a site ending in .gh."
+      "description": "Visited a site ending in .gh.",
+      "rule": {
+        "type": "tld",
+        "value": "gh"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/greece.png",
       "code": "tld_gr",
       "title": "Greece",
-      "description": "Visited a site ending in .gr."
+      "description": "Visited a site ending in .gr.",
+      "rule": {
+        "type": "tld",
+        "value": "gr"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/greenland.png",
       "code": "tld_gl",
       "title": "Greenland",
-      "description": "Visited a site ending in .gl."
+      "description": "Visited a site ending in .gl.",
+      "rule": {
+        "type": "tld",
+        "value": "gl"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/grenada.png",
       "code": "tld_gd",
       "title": "Grenada",
-      "description": "Visited a site ending in .gd."
+      "description": "Visited a site ending in .gd.",
+      "rule": {
+        "type": "tld",
+        "value": "gd"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/guatemala.png",
       "code": "tld_gt",
       "title": "Guatemala",
-      "description": "Visited a site ending in .gt."
+      "description": "Visited a site ending in .gt.",
+      "rule": {
+        "type": "tld",
+        "value": "gt"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/guernsey.png",
       "code": "tld_gg",
       "title": "Guernsey",
-      "description": "Visited a site ending in .gg."
+      "description": "Visited a site ending in .gg.",
+      "rule": {
+        "type": "tld",
+        "value": "gg"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/guinea.png",
       "code": "tld_gn",
       "title": "Guinea",
-      "description": "Visited a site ending in .gn."
+      "description": "Visited a site ending in .gn.",
+      "rule": {
+        "type": "tld",
+        "value": "gn"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/guinea_bissau.png",
       "code": "tld_gw",
       "title": "Guinea-Bissau",
-      "description": "Visited a site ending in .gw."
+      "description": "Visited a site ending in .gw.",
+      "rule": {
+        "type": "tld",
+        "value": "gw"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/guyana.png",
       "code": "tld_gy",
       "title": "Guyana",
-      "description": "Visited a site ending in .gy."
+      "description": "Visited a site ending in .gy.",
+      "rule": {
+        "type": "tld",
+        "value": "gy"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/haiti.png",
       "code": "tld_ht",
       "title": "Haiti",
-      "description": "Visited a site ending in .ht."
+      "description": "Visited a site ending in .ht.",
+      "rule": {
+        "type": "tld",
+        "value": "ht"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/honduras.png",
       "code": "tld_hn",
       "title": "Honduras",
-      "description": "Visited a site ending in .hn."
+      "description": "Visited a site ending in .hn.",
+      "rule": {
+        "type": "tld",
+        "value": "hn"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/hong_kong.png",
       "code": "tld_hk",
       "title": "Hong Kong SAR China",
-      "description": "Visited a site ending in .hk."
+      "description": "Visited a site ending in .hk.",
+      "rule": {
+        "type": "tld",
+        "value": "hk"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/hungary.png",
       "code": "tld_hu",
       "title": "Hungary",
-      "description": "Visited a site ending in .hu."
+      "description": "Visited a site ending in .hu.",
+      "rule": {
+        "type": "tld",
+        "value": "hu"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/iceland.png",
       "code": "tld_is",
       "title": "Iceland",
-      "description": "Visited a site ending in .is."
+      "description": "Visited a site ending in .is.",
+      "rule": {
+        "type": "tld",
+        "value": "is"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/india.png",
       "code": "tld_in",
       "title": "India",
-      "description": "Visited a site ending in .in."
+      "description": "Visited a site ending in .in.",
+      "rule": {
+        "type": "tld",
+        "value": "in"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/indonesia.png",
       "code": "tld_id",
       "title": "Indonesia",
-      "description": "Visited a site ending in .id."
+      "description": "Visited a site ending in .id.",
+      "rule": {
+        "type": "tld",
+        "value": "id"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/iran.png",
       "code": "tld_ir",
       "title": "Iran",
-      "description": "Visited a site ending in .ir."
+      "description": "Visited a site ending in .ir.",
+      "rule": {
+        "type": "tld",
+        "value": "ir"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/iraq.png",
       "code": "tld_iq",
       "title": "Iraq",
-      "description": "Visited a site ending in .iq."
+      "description": "Visited a site ending in .iq.",
+      "rule": {
+        "type": "tld",
+        "value": "iq"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/ireland.png",
       "code": "tld_ie",
       "title": "Ireland",
-      "description": "Visited a site ending in .ie."
+      "description": "Visited a site ending in .ie.",
+      "rule": {
+        "type": "tld",
+        "value": "ie"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/isle_of_man.png",
       "code": "tld_im",
       "title": "Isle of Man",
-      "description": "Visited a site ending in .im."
+      "description": "Visited a site ending in .im.",
+      "rule": {
+        "type": "tld",
+        "value": "im"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/israel.png",
       "code": "tld_il",
       "title": "Israel",
-      "description": "Visited a site ending in .il."
+      "description": "Visited a site ending in .il.",
+      "rule": {
+        "type": "tld",
+        "value": "il"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/italy.png",
       "code": "tld_it",
       "title": "Italy",
-      "description": "Visited a site ending in .it."
+      "description": "Visited a site ending in .it.",
+      "rule": {
+        "type": "tld",
+        "value": "it"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/jamaica.png",
       "code": "tld_jm",
       "title": "Jamaica",
-      "description": "Visited a site ending in .jm."
+      "description": "Visited a site ending in .jm.",
+      "rule": {
+        "type": "tld",
+        "value": "jm"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/japan.png",
       "code": "tld_jp",
       "title": "Japan",
-      "description": "Visited a site ending in .jp."
+      "description": "Visited a site ending in .jp.",
+      "rule": {
+        "type": "tld",
+        "value": "jp"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/jersey.png",
       "code": "tld_je",
       "title": "Jersey",
-      "description": "Visited a site ending in .je."
+      "description": "Visited a site ending in .je.",
+      "rule": {
+        "type": "tld",
+        "value": "je"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/jordan.png",
       "code": "tld_jo",
       "title": "Jordan",
-      "description": "Visited a site ending in .jo."
+      "description": "Visited a site ending in .jo.",
+      "rule": {
+        "type": "tld",
+        "value": "jo"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/kazakhstan.png",
       "code": "tld_kz",
       "title": "Kazakhstan",
-      "description": "Visited a site ending in .kz."
+      "description": "Visited a site ending in .kz.",
+      "rule": {
+        "type": "tld",
+        "value": "kz"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/kenya.png",
       "code": "tld_ke",
       "title": "Kenya",
-      "description": "Visited a site ending in .ke."
+      "description": "Visited a site ending in .ke.",
+      "rule": {
+        "type": "tld",
+        "value": "ke"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/kiribati.png",
       "code": "tld_ki",
       "title": "Kiribati",
-      "description": "Visited a site ending in .ki."
+      "description": "Visited a site ending in .ki.",
+      "rule": {
+        "type": "tld",
+        "value": "ki"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/kuwait.png",
       "code": "tld_kw",
       "title": "Kuwait",
-      "description": "Visited a site ending in .kw."
+      "description": "Visited a site ending in .kw.",
+      "rule": {
+        "type": "tld",
+        "value": "kw"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/kyrgyzstan.png",
       "code": "tld_kg",
       "title": "Kyrgyzstan",
-      "description": "Visited a site ending in .kg."
+      "description": "Visited a site ending in .kg.",
+      "rule": {
+        "type": "tld",
+        "value": "kg"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/laos.png",
       "code": "tld_la",
       "title": "Laos",
-      "description": "Visited a site ending in .la."
+      "description": "Visited a site ending in .la.",
+      "rule": {
+        "type": "tld",
+        "value": "la"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/latvia.png",
       "code": "tld_lv",
       "title": "Latvia",
-      "description": "Visited a site ending in .lv."
+      "description": "Visited a site ending in .lv.",
+      "rule": {
+        "type": "tld",
+        "value": "lv"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/lebanon.png",
       "code": "tld_lb",
       "title": "Lebanon",
-      "description": "Visited a site ending in .lb."
+      "description": "Visited a site ending in .lb.",
+      "rule": {
+        "type": "tld",
+        "value": "lb"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/lesotho.png",
       "code": "tld_ls",
       "title": "Lesotho",
-      "description": "Visited a site ending in .ls."
+      "description": "Visited a site ending in .ls.",
+      "rule": {
+        "type": "tld",
+        "value": "ls"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/liberia.png",
       "code": "tld_lr",
       "title": "Liberia",
-      "description": "Visited a site ending in .lr."
+      "description": "Visited a site ending in .lr.",
+      "rule": {
+        "type": "tld",
+        "value": "lr"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/libya.png",
       "code": "tld_ly",
       "title": "Libya",
-      "description": "Visited a site ending in .ly."
+      "description": "Visited a site ending in .ly.",
+      "rule": {
+        "type": "tld",
+        "value": "ly"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/liechtenstein.png",
       "code": "tld_li",
       "title": "Liechtenstein",
-      "description": "Visited a site ending in .li."
+      "description": "Visited a site ending in .li.",
+      "rule": {
+        "type": "tld",
+        "value": "li"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/lithuania.png",
       "code": "tld_lt",
       "title": "Lithuania",
-      "description": "Visited a site ending in .lt."
+      "description": "Visited a site ending in .lt.",
+      "rule": {
+        "type": "tld",
+        "value": "lt"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/luxembourg.png",
       "code": "tld_lu",
       "title": "Luxembourg",
-      "description": "Visited a site ending in .lu."
+      "description": "Visited a site ending in .lu.",
+      "rule": {
+        "type": "tld",
+        "value": "lu"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/madagascar.png",
       "code": "tld_mg",
       "title": "Madagascar",
-      "description": "Visited a site ending in .mg."
+      "description": "Visited a site ending in .mg.",
+      "rule": {
+        "type": "tld",
+        "value": "mg"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/malawi.png",
       "code": "tld_mw",
       "title": "Malawi",
-      "description": "Visited a site ending in .mw."
+      "description": "Visited a site ending in .mw.",
+      "rule": {
+        "type": "tld",
+        "value": "mw"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/malaysia.png",
       "code": "tld_my",
       "title": "Malaysia",
-      "description": "Visited a site ending in .my."
+      "description": "Visited a site ending in .my.",
+      "rule": {
+        "type": "tld",
+        "value": "my"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/maldives.png",
       "code": "tld_mv",
       "title": "Maldives",
-      "description": "Visited a site ending in .mv."
+      "description": "Visited a site ending in .mv.",
+      "rule": {
+        "type": "tld",
+        "value": "mv"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/mali.png",
       "code": "tld_ml",
       "title": "Mali",
-      "description": "Visited a site ending in .ml."
+      "description": "Visited a site ending in .ml.",
+      "rule": {
+        "type": "tld",
+        "value": "ml"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/malta.png",
       "code": "tld_mt",
       "title": "Malta",
-      "description": "Visited a site ending in .mt."
+      "description": "Visited a site ending in .mt.",
+      "rule": {
+        "type": "tld",
+        "value": "mt"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/marshall_islands.png",
       "code": "tld_mh",
       "title": "Marshall Islands",
-      "description": "Visited a site ending in .mh."
+      "description": "Visited a site ending in .mh.",
+      "rule": {
+        "type": "tld",
+        "value": "mh"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/mauritania.png",
       "code": "tld_mr",
       "title": "Mauritania",
-      "description": "Visited a site ending in .mr."
+      "description": "Visited a site ending in .mr.",
+      "rule": {
+        "type": "tld",
+        "value": "mr"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/mauritius.png",
       "code": "tld_mu",
       "title": "Mauritius",
-      "description": "Visited a site ending in .mu."
+      "description": "Visited a site ending in .mu.",
+      "rule": {
+        "type": "tld",
+        "value": "mu"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/mexico.png",
       "code": "tld_mx",
       "title": "Mexico",
-      "description": "Visited a site ending in .mx."
+      "description": "Visited a site ending in .mx.",
+      "rule": {
+        "type": "tld",
+        "value": "mx"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/micronesia.png",
       "code": "tld_fm",
       "title": "Micronesia",
-      "description": "Visited a site ending in .fm."
+      "description": "Visited a site ending in .fm.",
+      "rule": {
+        "type": "tld",
+        "value": "fm"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/moldova.png",
       "code": "tld_md",
       "title": "Moldova",
-      "description": "Visited a site ending in .md."
+      "description": "Visited a site ending in .md.",
+      "rule": {
+        "type": "tld",
+        "value": "md"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/monaco.png",
       "code": "tld_mc",
       "title": "Monaco",
-      "description": "Visited a site ending in .mc."
+      "description": "Visited a site ending in .mc.",
+      "rule": {
+        "type": "tld",
+        "value": "mc"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/mongolia.png",
       "code": "tld_mn",
       "title": "Mongolia",
-      "description": "Visited a site ending in .mn."
+      "description": "Visited a site ending in .mn.",
+      "rule": {
+        "type": "tld",
+        "value": "mn"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/montenegro.png",
       "code": "tld_me",
       "title": "Montenegro",
-      "description": "Visited a site ending in .me."
+      "description": "Visited a site ending in .me.",
+      "rule": {
+        "type": "tld",
+        "value": "me"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/morocco.png",
       "code": "tld_ma",
       "title": "Morocco",
-      "description": "Visited a site ending in .ma."
+      "description": "Visited a site ending in .ma.",
+      "rule": {
+        "type": "tld",
+        "value": "ma"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/mozambique.png",
       "code": "tld_mz",
       "title": "Mozambique",
-      "description": "Visited a site ending in .mz."
+      "description": "Visited a site ending in .mz.",
+      "rule": {
+        "type": "tld",
+        "value": "mz"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/myanmar.png",
       "code": "tld_mm",
       "title": "Myanmar (Burma)",
-      "description": "Visited a site ending in .mm."
+      "description": "Visited a site ending in .mm.",
+      "rule": {
+        "type": "tld",
+        "value": "mm"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/namibia.png",
       "code": "tld_na",
       "title": "Namibia",
-      "description": "Visited a site ending in .na."
+      "description": "Visited a site ending in .na.",
+      "rule": {
+        "type": "tld",
+        "value": "na"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/nauru.png",
       "code": "tld_nr",
       "title": "Nauru",
-      "description": "Visited a site ending in .nr."
+      "description": "Visited a site ending in .nr.",
+      "rule": {
+        "type": "tld",
+        "value": "nr"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/nepal.png",
       "code": "tld_np",
       "title": "Nepal",
-      "description": "Visited a site ending in .np."
+      "description": "Visited a site ending in .np.",
+      "rule": {
+        "type": "tld",
+        "value": "np"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/netherlands.png",
       "code": "tld_nl",
       "title": "Netherlands",
-      "description": "Visited a site ending in .nl."
+      "description": "Visited a site ending in .nl.",
+      "rule": {
+        "type": "tld",
+        "value": "nl"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/new_zealand.png",
       "code": "tld_nz",
       "title": "New Zealand",
-      "description": "Visited a site ending in .nz."
+      "description": "Visited a site ending in .nz.",
+      "rule": {
+        "type": "tld",
+        "value": "nz"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/nicaragua.png",
       "code": "tld_ni",
       "title": "Nicaragua",
-      "description": "Visited a site ending in .ni."
+      "description": "Visited a site ending in .ni.",
+      "rule": {
+        "type": "tld",
+        "value": "ni"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/niger.png",
       "code": "tld_ne",
       "title": "Niger",
-      "description": "Visited a site ending in .ne."
+      "description": "Visited a site ending in .ne.",
+      "rule": {
+        "type": "tld",
+        "value": "ne"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/nigeria.png",
       "code": "tld_ng",
       "title": "Nigeria",
-      "description": "Visited a site ending in .ng."
+      "description": "Visited a site ending in .ng.",
+      "rule": {
+        "type": "tld",
+        "value": "ng"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/niue.png",
       "code": "tld_nu",
       "title": "Niue",
-      "description": "Visited a site ending in .nu."
+      "description": "Visited a site ending in .nu.",
+      "rule": {
+        "type": "tld",
+        "value": "nu"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/north_korea.png",
       "code": "tld_kp",
       "title": "North Korea",
-      "description": "Visited a site ending in .kp."
+      "description": "Visited a site ending in .kp.",
+      "rule": {
+        "type": "tld",
+        "value": "kp"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/north_macedonia.png",
       "code": "tld_mk",
       "title": "North Macedonia",
-      "description": "Visited a site ending in .mk."
+      "description": "Visited a site ending in .mk.",
+      "rule": {
+        "type": "tld",
+        "value": "mk"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/norway.png",
       "code": "tld_no",
       "title": "Norway",
-      "description": "Visited a site ending in .no."
+      "description": "Visited a site ending in .no.",
+      "rule": {
+        "type": "tld",
+        "value": "no"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/oman.png",
       "code": "tld_om",
       "title": "Oman",
-      "description": "Visited a site ending in .om."
+      "description": "Visited a site ending in .om.",
+      "rule": {
+        "type": "tld",
+        "value": "om"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/pakistan.png",
       "code": "tld_pk",
       "title": "Pakistan",
-      "description": "Visited a site ending in .pk."
+      "description": "Visited a site ending in .pk.",
+      "rule": {
+        "type": "tld",
+        "value": "pk"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/palau.png",
       "code": "tld_pw",
       "title": "Palau",
-      "description": "Visited a site ending in .pw."
+      "description": "Visited a site ending in .pw.",
+      "rule": {
+        "type": "tld",
+        "value": "pw"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/palestine.png",
       "code": "tld_ps",
       "title": "Palestinian Territories",
-      "description": "Visited a site ending in .ps."
+      "description": "Visited a site ending in .ps.",
+      "rule": {
+        "type": "tld",
+        "value": "ps"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/panama.png",
       "code": "tld_pa",
       "title": "Panama",
-      "description": "Visited a site ending in .pa."
+      "description": "Visited a site ending in .pa.",
+      "rule": {
+        "type": "tld",
+        "value": "pa"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/papua_new_guinea.png",
       "code": "tld_pg",
       "title": "Papua New Guinea",
-      "description": "Visited a site ending in .pg."
+      "description": "Visited a site ending in .pg.",
+      "rule": {
+        "type": "tld",
+        "value": "pg"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/paraguay.png",
       "code": "tld_py",
       "title": "Paraguay",
-      "description": "Visited a site ending in .py."
+      "description": "Visited a site ending in .py.",
+      "rule": {
+        "type": "tld",
+        "value": "py"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/peru.png",
       "code": "tld_pe",
       "title": "Peru",
-      "description": "Visited a site ending in .pe."
+      "description": "Visited a site ending in .pe.",
+      "rule": {
+        "type": "tld",
+        "value": "pe"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/philippines.png",
       "code": "tld_ph",
       "title": "Philippines",
-      "description": "Visited a site ending in .ph."
+      "description": "Visited a site ending in .ph.",
+      "rule": {
+        "type": "tld",
+        "value": "ph"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/poland.png",
       "code": "tld_pl",
       "title": "Poland",
-      "description": "Visited a site ending in .pl."
+      "description": "Visited a site ending in .pl.",
+      "rule": {
+        "type": "tld",
+        "value": "pl"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/portugal.png",
       "code": "tld_pt",
       "title": "Portugal",
-      "description": "Visited a site ending in .pt."
+      "description": "Visited a site ending in .pt.",
+      "rule": {
+        "type": "tld",
+        "value": "pt"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/qatar.png",
       "code": "tld_qa",
       "title": "Qatar",
-      "description": "Visited a site ending in .qa."
+      "description": "Visited a site ending in .qa.",
+      "rule": {
+        "type": "tld",
+        "value": "qa"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/romania.png",
       "code": "tld_ro",
       "title": "Romania",
-      "description": "Visited a site ending in .ro."
+      "description": "Visited a site ending in .ro.",
+      "rule": {
+        "type": "tld",
+        "value": "ro"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/russia.png",
       "code": "tld_ru",
       "title": "Russia",
-      "description": "Visited a site ending in .ru."
+      "description": "Visited a site ending in .ru.",
+      "rule": {
+        "type": "tld",
+        "value": "ru"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/rwanda.png",
       "code": "tld_rw",
       "title": "Rwanda",
-      "description": "Visited a site ending in .rw."
+      "description": "Visited a site ending in .rw.",
+      "rule": {
+        "type": "tld",
+        "value": "rw"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/samoa.png",
       "code": "tld_ws",
       "title": "Samoa",
-      "description": "Visited a site ending in .ws."
+      "description": "Visited a site ending in .ws.",
+      "rule": {
+        "type": "tld",
+        "value": "ws"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/san_marino.png",
       "code": "tld_sm",
       "title": "San Marino",
-      "description": "Visited a site ending in .sm."
+      "description": "Visited a site ending in .sm.",
+      "rule": {
+        "type": "tld",
+        "value": "sm"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/sao_tome_and_principe.png",
       "code": "tld_st",
       "title": "São Tomé & Príncipe",
-      "description": "Visited a site ending in .st."
+      "description": "Visited a site ending in .st.",
+      "rule": {
+        "type": "tld",
+        "value": "st"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/saudi_arabia.png",
       "code": "tld_sa",
       "title": "Saudi Arabia",
-      "description": "Visited a site ending in .sa."
+      "description": "Visited a site ending in .sa.",
+      "rule": {
+        "type": "tld",
+        "value": "sa"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/senegal.png",
       "code": "tld_sn",
       "title": "Senegal",
-      "description": "Visited a site ending in .sn."
+      "description": "Visited a site ending in .sn.",
+      "rule": {
+        "type": "tld",
+        "value": "sn"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/serbia.png",
       "code": "tld_rs",
       "title": "Serbia",
-      "description": "Visited a site ending in .rs."
+      "description": "Visited a site ending in .rs.",
+      "rule": {
+        "type": "tld",
+        "value": "rs"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/seychelles.png",
       "code": "tld_sc",
       "title": "Seychelles",
-      "description": "Visited a site ending in .sc."
+      "description": "Visited a site ending in .sc.",
+      "rule": {
+        "type": "tld",
+        "value": "sc"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/sierra_leone.png",
       "code": "tld_sl",
       "title": "Sierra Leone",
-      "description": "Visited a site ending in .sl."
+      "description": "Visited a site ending in .sl.",
+      "rule": {
+        "type": "tld",
+        "value": "sl"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/singapore.png",
       "code": "tld_sg",
       "title": "Singapore",
-      "description": "Visited a site ending in .sg."
+      "description": "Visited a site ending in .sg.",
+      "rule": {
+        "type": "tld",
+        "value": "sg"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/sint_maarten.png",
       "code": "tld_sx",
       "title": "Sint Maarten",
-      "description": "Visited a site ending in .sx."
+      "description": "Visited a site ending in .sx.",
+      "rule": {
+        "type": "tld",
+        "value": "sx"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/slovakia.png",
       "code": "tld_sk",
       "title": "Slovakia",
-      "description": "Visited a site ending in .sk."
+      "description": "Visited a site ending in .sk.",
+      "rule": {
+        "type": "tld",
+        "value": "sk"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/slovenia.png",
       "code": "tld_si",
       "title": "Slovenia",
-      "description": "Visited a site ending in .si."
+      "description": "Visited a site ending in .si.",
+      "rule": {
+        "type": "tld",
+        "value": "si"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/solomon_islands.png",
       "code": "tld_sb",
       "title": "Solomon Islands",
-      "description": "Visited a site ending in .sb."
+      "description": "Visited a site ending in .sb.",
+      "rule": {
+        "type": "tld",
+        "value": "sb"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/somalia.png",
       "code": "tld_so",
       "title": "Somalia",
-      "description": "Visited a site ending in .so."
+      "description": "Visited a site ending in .so.",
+      "rule": {
+        "type": "tld",
+        "value": "so"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/south_africa.png",
       "code": "tld_za",
       "title": "South Africa",
-      "description": "Visited a site ending in .za."
+      "description": "Visited a site ending in .za.",
+      "rule": {
+        "type": "tld",
+        "value": "za"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/south_korea.png",
       "code": "tld_kr",
       "title": "South Korea",
-      "description": "Visited a site ending in .kr."
+      "description": "Visited a site ending in .kr.",
+      "rule": {
+        "type": "tld",
+        "value": "kr"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/south_sudan.png",
       "code": "tld_ss",
       "title": "South Sudan",
-      "description": "Visited a site ending in .ss."
+      "description": "Visited a site ending in .ss.",
+      "rule": {
+        "type": "tld",
+        "value": "ss"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/spain.png",
       "code": "tld_es",
       "title": "Spain",
-      "description": "Visited a site ending in .es."
+      "description": "Visited a site ending in .es.",
+      "rule": {
+        "type": "tld",
+        "value": "es"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/sri_lanka.png",
       "code": "tld_lk",
       "title": "Sri Lanka",
-      "description": "Visited a site ending in .lk."
+      "description": "Visited a site ending in .lk.",
+      "rule": {
+        "type": "tld",
+        "value": "lk"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/saint_kitts_and_nevis.png",
       "code": "tld_kn",
       "title": "St. Kitts & Nevis",
-      "description": "Visited a site ending in .kn."
+      "description": "Visited a site ending in .kn.",
+      "rule": {
+        "type": "tld",
+        "value": "kn"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/saint_lucia.png",
       "code": "tld_lc",
       "title": "St. Lucia",
-      "description": "Visited a site ending in .lc."
+      "description": "Visited a site ending in .lc.",
+      "rule": {
+        "type": "tld",
+        "value": "lc"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/saint_martin.png",
       "code": "tld_mf",
       "title": "St. Martin",
-      "description": "Visited a site ending in .mf."
+      "description": "The .mf country code is reserved for Saint Martin but is not delegated in DNS. This flag is not required for Explorer Level 3. Existing awards are preserved.",
+      "rule": {
+        "type": "tld",
+        "value": "mf"
+      },
+      "country": true,
+      "available": false
     },
     {
       "icon": "/assets/achievements/countries/sudan.png",
       "code": "tld_sd",
       "title": "Sudan",
-      "description": "Visited a site ending in .sd."
+      "description": "Visited a site ending in .sd.",
+      "rule": {
+        "type": "tld",
+        "value": "sd"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/suriname.png",
       "code": "tld_sr",
       "title": "Suriname",
-      "description": "Visited a site ending in .sr."
+      "description": "Visited a site ending in .sr.",
+      "rule": {
+        "type": "tld",
+        "value": "sr"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/sweden.png",
       "code": "tld_se",
       "title": "Sweden",
-      "description": "Visited a site ending in .se."
+      "description": "Visited a site ending in .se.",
+      "rule": {
+        "type": "tld",
+        "value": "se"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/switzerland.png",
       "code": "tld_ch",
       "title": "Switzerland",
-      "description": "Visited a site ending in .ch."
+      "description": "Visited a site ending in .ch.",
+      "rule": {
+        "type": "tld",
+        "value": "ch"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/syria.png",
       "code": "tld_sy",
       "title": "Syria",
-      "description": "Visited a site ending in .sy."
+      "description": "Visited a site ending in .sy.",
+      "rule": {
+        "type": "tld",
+        "value": "sy"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/taiwan.png",
       "code": "tld_tw",
       "title": "Taiwan",
-      "description": "Visited a site ending in .tw."
+      "description": "Visited a site ending in .tw.",
+      "rule": {
+        "type": "tld",
+        "value": "tw"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/tajikistan.png",
       "code": "tld_tj",
       "title": "Tajikistan",
-      "description": "Visited a site ending in .tj."
+      "description": "Visited a site ending in .tj.",
+      "rule": {
+        "type": "tld",
+        "value": "tj"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/tanzania.png",
       "code": "tld_tz",
       "title": "Tanzania",
-      "description": "Visited a site ending in .tz."
+      "description": "Visited a site ending in .tz.",
+      "rule": {
+        "type": "tld",
+        "value": "tz"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/thailand.png",
       "code": "tld_th",
       "title": "Thailand",
-      "description": "Visited a site ending in .th."
+      "description": "Visited a site ending in .th.",
+      "rule": {
+        "type": "tld",
+        "value": "th"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/timor_leste.png",
       "code": "tld_tl",
       "title": "Timor-Leste",
-      "description": "Visited a site ending in .tl."
+      "description": "Visited a site ending in .tl.",
+      "rule": {
+        "type": "tld",
+        "value": "tl"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/togo.png",
       "code": "tld_tg",
       "title": "Togo",
-      "description": "Visited a site ending in .tg."
+      "description": "Visited a site ending in .tg.",
+      "rule": {
+        "type": "tld",
+        "value": "tg"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/tokelau.png",
       "code": "tld_tk",
       "title": "Tokelau",
-      "description": "Visited a site ending in .tk."
+      "description": "Visited a site ending in .tk.",
+      "rule": {
+        "type": "tld",
+        "value": "tk"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/tonga.png",
       "code": "tld_to",
       "title": "Tonga",
-      "description": "Visited a site ending in .to."
+      "description": "Visited a site ending in .to.",
+      "rule": {
+        "type": "tld",
+        "value": "to"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/trinidad_and_tobago.png",
       "code": "tld_tt",
       "title": "Trinidad & Tobago",
-      "description": "Visited a site ending in .tt."
+      "description": "Visited a site ending in .tt.",
+      "rule": {
+        "type": "tld",
+        "value": "tt"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/tunisia.png",
       "code": "tld_tn",
       "title": "Tunisia",
-      "description": "Visited a site ending in .tn."
+      "description": "Visited a site ending in .tn.",
+      "rule": {
+        "type": "tld",
+        "value": "tn"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/turkey.png",
       "code": "tld_tr",
       "title": "Turkey",
-      "description": "Visited a site ending in .tr."
+      "description": "Visited a site ending in .tr.",
+      "rule": {
+        "type": "tld",
+        "value": "tr"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/turkmenistan.png",
       "code": "tld_tm",
       "title": "Turkmenistan",
-      "description": "Visited a site ending in .tm."
+      "description": "Visited a site ending in .tm.",
+      "rule": {
+        "type": "tld",
+        "value": "tm"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/tuvalu.png",
       "code": "tld_tv",
       "title": "Tuvalu",
-      "description": "Visited a site ending in .tv."
+      "description": "Visited a site ending in .tv.",
+      "rule": {
+        "type": "tld",
+        "value": "tv"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/uganda.png",
       "code": "tld_ug",
       "title": "Uganda",
-      "description": "Visited a site ending in .ug."
+      "description": "Visited a site ending in .ug.",
+      "rule": {
+        "type": "tld",
+        "value": "ug"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/ukraine.png",
       "code": "tld_ua",
       "title": "Ukraine",
-      "description": "Visited a site ending in .ua."
+      "description": "Visited a site ending in .ua.",
+      "rule": {
+        "type": "tld",
+        "value": "ua"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/united_arab_emirates.png",
       "code": "tld_ae",
       "title": "United Arab Emirates",
-      "description": "Visited a site ending in .ae."
+      "description": "Visited a site ending in .ae.",
+      "rule": {
+        "type": "tld",
+        "value": "ae"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/united_states.png",
       "code": "tld_us",
       "title": "United States",
-      "description": "Visited a site ending in .us."
+      "description": "Visited a site ending in .us.",
+      "rule": {
+        "type": "tld",
+        "value": "us"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/uruguay.png",
       "code": "tld_uy",
       "title": "Uruguay",
-      "description": "Visited a site ending in .uy."
+      "description": "Visited a site ending in .uy.",
+      "rule": {
+        "type": "tld",
+        "value": "uy"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/uzbekistan.png",
       "code": "tld_uz",
       "title": "Uzbekistan",
-      "description": "Visited a site ending in .uz."
+      "description": "Visited a site ending in .uz.",
+      "rule": {
+        "type": "tld",
+        "value": "uz"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/vanuatu.png",
       "code": "tld_vu",
       "title": "Vanuatu",
-      "description": "Visited a site ending in .vu."
+      "description": "Visited a site ending in .vu.",
+      "rule": {
+        "type": "tld",
+        "value": "vu"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/vatican_city.png",
       "code": "tld_va",
       "title": "Vatican City",
-      "description": "Visited a site ending in .va."
+      "description": "Visited a site ending in .va.",
+      "rule": {
+        "type": "tld",
+        "value": "va"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/venezuela.png",
       "code": "tld_ve",
       "title": "Venezuela",
-      "description": "Visited a site ending in .ve."
+      "description": "Visited a site ending in .ve.",
+      "rule": {
+        "type": "tld",
+        "value": "ve"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/vietnam.png",
       "code": "tld_vn",
       "title": "Vietnam",
-      "description": "Visited a site ending in .vn."
+      "description": "Visited a site ending in .vn.",
+      "rule": {
+        "type": "tld",
+        "value": "vn"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/yemen.png",
       "code": "tld_ye",
       "title": "Yemen",
-      "description": "Visited a site ending in .ye."
+      "description": "Visited a site ending in .ye.",
+      "rule": {
+        "type": "tld",
+        "value": "ye"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/zambia.png",
       "code": "tld_zm",
       "title": "Zambia",
-      "description": "Visited a site ending in .zm."
+      "description": "Visited a site ending in .zm.",
+      "rule": {
+        "type": "tld",
+        "value": "zm"
+      },
+      "country": true
     },
     {
       "icon": "/assets/achievements/countries/zimbabwe.png",
       "code": "tld_zw",
       "title": "Zimbabwe",
-      "description": "Visited a site ending in .zw."
+      "description": "Visited a site ending in .zw.",
+      "rule": {
+        "type": "tld",
+        "value": "zw"
+      },
+      "country": true
+    },
+    {
+      "icon": "/assets/achievements/countries/saint_vincent_and_the_grenadines.png",
+      "code": "tld_vc",
+      "title": "Saint Vincent & the Grenadines",
+      "description": "Visit a website ending in .vc.",
+      "country": true,
+      "rule": {
+        "type": "tld",
+        "value": "vc"
+      }
+    },
+    {
+      "icon": "/assets/achievements/countries/soviet_union.png",
+      "code": "tld_su",
+      "title": "Soviet Union — Internet Time Capsule",
+      "description": "Visit a website ending in .su.",
+      "country": true,
+      "rule": {
+        "type": "tld",
+        "value": "su"
+      }
     }
   ],
-  "slots": 295
+  "slots": 257
 }

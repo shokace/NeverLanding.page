@@ -1,3 +1,5 @@
+import {syncAchievements} from './lib/achievements.js';
+
 const LIST_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 const LIST_META_URL = "https://tranco-list.eu/api/lists/date/latest";
 const DNS_FILTER_TTL_MS = 24 * 60 * 60 * 1000;
@@ -730,38 +732,7 @@ export default {
       )
         .bind(auth.user.id, urlValue, titleValue || null)
         .run();
-      const visitsCount = await env.DB.prepare(
-        "SELECT COUNT(*) as count FROM visits WHERE user_id = ?"
-      )
-        .bind(auth.user.id)
-        .first();
-      if (visitsCount && visitsCount.count >= 100) {
-        await grantAchievement(env, auth.user.id, "explorer_level_1");
-      }
-      if (visitsCount && visitsCount.count >= 2026) {
-        await grantAchievement(env, auth.user.id, "explorer_level_2");
-        const totalTld = await env.DB.prepare(
-          "SELECT COUNT(*) as count FROM achievements WHERE code LIKE 'tld_%'"
-        ).first();
-        const userTld = await env.DB.prepare(
-          `SELECT COUNT(DISTINCT achievements.code) as count
-           FROM user_achievements
-           JOIN achievements ON achievements.id = user_achievements.achievement_id
-           WHERE user_achievements.user_id = ? AND achievements.code LIKE 'tld_%'`
-        )
-          .bind(auth.user.id)
-          .first();
-        if (totalTld && userTld && userTld.count >= totalTld.count) {
-          await grantAchievement(env, auth.user.id, "explorer_level_3");
-        }
-      }
-      const tldInfo = extractTld(urlValue);
-      if (tldInfo && tldInfo.tld) {
-        await grantAchievement(env, auth.user.id, `tld_${tldInfo.tld}`);
-        if (tldInfo.hasGov && tldInfo.tld !== "gov") {
-          await grantAchievement(env, auth.user.id, "tld_gov");
-        }
-      }
+      await syncAchievements(env, auth.user.id);
       return jsonResponse({ ok: true }, { status: 201 });
     }
 
@@ -849,6 +820,7 @@ export default {
       }
       const auth = await requireUser(env, request);
       if (auth.error) return auth.error;
+      await syncAchievements(env, auth.user.id);
       const rows = await env.DB.prepare(
         `SELECT achievements.code as code
          FROM user_achievements

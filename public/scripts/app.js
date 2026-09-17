@@ -562,8 +562,10 @@ if (shareMenuItem) {
       metaEl.textContent = "No URL to share yet.";
     }
     openShareModal();
-    if (currentUser) {
-      fetch("/api/achievements/share", { method: "POST" }).catch(() => {});
+    if (currentUser && currentUrl) {
+      fetch("/api/achievements/share", {method: "POST"})
+        .then(res => {if (res.ok) document.dispatchEvent(new CustomEvent("achievements-changed"));})
+        .catch(() => {});
     }
   });
 }
@@ -678,6 +680,7 @@ async function logVisit(url) {
       openRateLimitModal();
       return;
     }
+    if (!res.ok) return;
     fetchProgress();
     document.dispatchEvent(new CustomEvent("achievements-changed"));
   } catch {}
