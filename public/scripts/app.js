@@ -1,3 +1,5 @@
+import { LandingQueue } from "./landing-queue.js";
+
 const getButton = document.getElementById("get");
 const backButton = document.getElementById("back");
 const forwardButton = document.getElementById("forward");
@@ -5,7 +7,7 @@ const stopButton = document.getElementById("stop");
 const refreshButton = document.getElementById("refresh");
 const urlEl = document.getElementById("url");
 const metaEl = document.getElementById("meta");
-const viewerEl = document.getElementById("viewer");
+let viewerEl = document.getElementById("viewer");
 const embedNoteEl = document.getElementById("embed-note");
 const loadingEl = document.getElementById("loading");
 const throbberEl = document.getElementById("throbber");
@@ -62,8 +64,8 @@ let currentUser = null;
 let favorites = [];
 let favoritesByUrl = new Map();
 let isLoading = false;
-let prefetchedEntry = null;
-let prefetchPromise = null;
+let navigationVersion = 0;
+let viewerTimer = null;
 
 function setStopState(active) {
   isLoading = active;
@@ -285,8 +287,7 @@ function renderFavoritesList() {
       if (!targetUrl) return;
       event.preventDefault();
       closeFavoritesModal();
-      applyEntry({ url: targetUrl, crawl: "favorite", at: "" });
-      pushHistory({ url: targetUrl, crawl: "favorite", at: "" });
+      applyEntry({url: targetUrl, crawl: "favorite"}).then(ok => {if (ok) pushHistory({url: targetUrl, crawl: "favorite"});});
     });
     const toggle = document.createElement("button");
     toggle.type = "button";
@@ -360,6 +361,7 @@ async function toggleFavorite() {
     });
     if (!res.ok) return;
     await fetchFavorites();
+    document.dispatchEvent(new CustomEvent("achievements-changed"));
   } catch {}
 }
 
@@ -378,6 +380,7 @@ async function applyFavoriteRemovals() {
       )
     );
     await fetchFavorites();
+    document.dispatchEvent(new CustomEvent("achievements-changed"));
   } catch {}
 }
 
@@ -749,27 +752,69 @@ function normalizeSharedUrl(raw) {
   }
 }
 
-function applyEntry(entry) {
-  currentUrl = entry.url || "";
-  urlEl.textContent = currentUrl || "No URL returned.";
-  urlEl.href = currentUrl || "#";
-  const metaParts = [];
-  if (entry.crawl) metaParts.push(entry.crawl);
-  if (entry.at) metaParts.push(entry.at);
-  metaEl.textContent = metaParts.join(" - ");
-  viewerEl.src = currentUrl || "about:blank";
-  setStopState(Boolean(currentUrl));
-  if (!currentUrl && !hasStarted) {
-    loadingEl.classList.remove("is-hidden");
+function finishViewerLoad() {
+  if (!currentUrl) return;
+  clearTimeout(viewerTimer);
+  throbberEl.classList.add("is-hidden");
+  loadingEl.classList.add("is-hidden");
+  hasStarted = true;
+  setStopState(false);
+}
+
+async function applyEntry(entry) {
+  const version = ++navigationVersion;
+  try {
+    if (!entry.frame) {
+      const response = await fetch("/api/resolve", {
+        method: "POST", headers: {"content-type": "application/json"},
+        body: JSON.stringify({url: entry.url}), signal: AbortSignal.timeout(20000),
+      });
+      if (!response.ok) throw new Error("This page could not pass the safety and preview checks.");
+      entry = {...entry, ...await response.json()};
+    }
+    if (version !== navigationVersion) {entry.frame?.remove(); return false;}
+    currentUrl = entry.url;
+    urlEl.textContent = currentUrl;
+    urlEl.href = currentUrl;
+    metaEl.textContent = entry.source || entry.crawl || "Happy exploring.";
+    clearTimeout(viewerTimer);
+    if (entry.frame) {
+      viewerEl.remove();
+      viewerEl = entry.frame;
+      viewerEl.id = "viewer";
+      viewerEl.title = "Random website preview";
+      viewerEl.classList.remove("preloaded-frame");
+      viewerEl.removeAttribute("aria-hidden");
+      viewerEl.removeAttribute("tabindex");
+      viewerEl.inert = false;
+      viewerEl.addEventListener("load", finishViewerLoad);
+      finishViewerLoad();
+    } else {
+      viewerEl.src = currentUrl;
+      setStopState(true);
+      throbberEl.classList.remove("is-hidden");
+      viewerTimer = setTimeout(() => {
+        finishViewerLoad();
+        metaEl.textContent = "Preview taking too long? Use the address link or press Go.";
+      }, 15000);
+    }
+    updateShareParam(currentUrl);
+    updateFavoriteButton();
+    updateShareModal();
+    return true;
+  } catch (error) {
+    if (version === navigationVersion) {
+      metaEl.textContent = error.message || "Could not open this page.";
+      setStopState(false);
+      throbberEl.classList.add("is-hidden");
+    }
+    return false;
   }
-  updateShareParam(currentUrl);
-  updateFavoriteButton();
-  updateShareModal();
 }
 
 function pushHistory(entry) {
   history = history.slice(0, historyIndex + 1);
-  history.push(entry);
+  history.push({url: entry.url, source: entry.source || "", crawl: entry.crawl || "", at: entry.at || ""});
   if (history.length > HISTORY_LIMIT) {
     history.shift();
   } else {
@@ -902,75 +947,42 @@ function recordLandingForAds() {
   saveAdState();
 }
 
-function normalizeRandomEntry(data) {
-  return {
-    url: data && data.url ? data.url : "",
-    crawl: data && data.crawl ? data.crawl : "",
-    at: data && data.at ? data.at : "",
-  };
-}
-
-async function prefetchRandom() {
-  if (prefetchPromise || prefetchedEntry) return;
-  prefetchPromise = fetch("/api/random", { method: "GET" })
-    .then((res) => {
-      if (!res.ok) throw new Error("Prefetch failed");
-      return res.json();
-    })
-    .then((data) => {
-      prefetchedEntry = normalizeRandomEntry(data);
-    })
-    .catch(() => {
-      prefetchedEntry = null;
-    })
-    .finally(() => {
-      prefetchPromise = null;
-    });
-}
+const queueStatus = document.getElementById("queue-status");
+const landingQueue = new LandingQueue({
+  container: viewerEl.parentElement,
+  onChange: ({ready, loading, target}) => {
+    if (queueStatus) queueStatus.textContent = `${ready}/${target} ready${loading ? " · preparing more" : ""}`;
+  },
+});
 
 async function loadRandom() {
-  if (maybeShowAd()) return;
+  if (getButton.disabled || maybeShowAd()) return;
   if (adShowing) hideAdIntermission();
+  const controller = new AbortController();
+  fetchController = controller;
+  const version = ++navigationVersion;
   getButton.disabled = true;
-  urlEl.textContent = "Loading...";
-  urlEl.href = "#";
-  metaEl.textContent = "";
-  viewerEl.src = "about:blank";
   setStopState(true);
   loadingEl.classList.add("is-hidden");
   throbberEl.classList.remove("is-hidden");
-
+  if (!landingQueue.readyCount) metaEl.textContent = "Preparing your next landing…";
   try {
-    let entry = prefetchedEntry;
-    prefetchedEntry = null;
-    if (!entry || !entry.url) {
-      fetchController = new AbortController();
-      const res = await fetch("/api/random", {
-        method: "GET",
-        signal: fetchController.signal,
-      });
-      if (!res.ok) {
-        throw new Error("Request failed");
-      }
-      const data = await res.json();
-      entry = normalizeRandomEntry(data);
+    const entry = await landingQueue.take(controller.signal);
+    if (controller.signal.aborted || version !== navigationVersion) {entry.frame.remove(); return;}
+    if (await applyEntry(entry)) {
+      pushHistory(entry);
+      logVisit(entry.url);
+      recordLandingForAds();
     }
-    applyEntry(entry);
-    if (entry.url) pushHistory(entry);
-    if (entry.url) logVisit(entry.url);
-    if (entry.url) recordLandingForAds();
-    prefetchRandom();
-  } catch (err) {
-    currentUrl = "";
-    urlEl.textContent = "Error loading a URL.";
-    urlEl.href = "#";
-    metaEl.textContent = "Please try again.";
-    throbberEl.classList.add("is-hidden");
-    if (!hasStarted) loadingEl.classList.remove("is-hidden");
-    setStopState(false);
+  } catch (error) {
+    if (version === navigationVersion) {
+      metaEl.textContent = error.name === "AbortError" ? "Stopped." : error.message;
+      throbberEl.classList.add("is-hidden");
+      if (!hasStarted) loadingEl.classList.remove("is-hidden");
+      setStopState(false);
+    }
   } finally {
-    getButton.disabled = false;
-    fetchController = null;
+    if (fetchController === controller) {fetchController = null; getButton.disabled = false;}
   }
 }
 
@@ -981,66 +993,51 @@ if (favoriteToggleButton) {
 }
 
 getButton.addEventListener("click", loadRandom);
-backButton.addEventListener("click", () => {
-  if (historyIndex <= 0) return;
-  historyIndex -= 1;
-  const entry = history[historyIndex];
-  applyEntry(entry);
-  saveHistory();
-  updateBackButton();
-  updateForwardButton();
-});
-
-forwardButton.addEventListener("click", () => {
-  if (historyIndex >= history.length - 1) return;
-  historyIndex += 1;
-  const entry = history[historyIndex];
-  applyEntry(entry);
-  saveHistory();
-  updateBackButton();
-  updateForwardButton();
-});
+async function navigateHistory(index) {
+  if (index < 0 || index >= history.length) return;
+  if (await applyEntry(history[index])) {
+    historyIndex = index;
+    saveHistory();
+    updateBackButton();
+    updateForwardButton();
+  }
+}
+backButton.addEventListener("click", () => navigateHistory(historyIndex - 1));
+forwardButton.addEventListener("click", () => navigateHistory(historyIndex + 1));
 
 stopButton.addEventListener("click", () => {
-  if (fetchController) {
-    fetchController.abort();
-    fetchController = null;
-  }
-  try {
-    if (viewerEl.contentWindow) {
-      viewerEl.contentWindow.stop();
-    }
-  } catch {}
+  navigationVersion++;
+  fetchController?.abort();
+  fetchController = null;
+  getButton.disabled = false;
+  clearTimeout(viewerTimer);
+  throbberEl.classList.add("is-hidden");
+  // Replacing src is the only reliable stop for a cross-origin iframe.
+  if (isLoading && currentUrl) viewerEl.src = "about:blank";
   setStopState(false);
+  metaEl.textContent = "Stopped.";
 });
 
 refreshButton.addEventListener("click", () => {
-  if (!currentUrl) return;
-  viewerEl.src = "about:blank";
-  setTimeout(() => {
-    viewerEl.src = currentUrl;
-  }, 60);
+  if (currentUrl) applyEntry({url: currentUrl, source: "Refreshed landing"});
 });
 
 loadHistory();
 loadAdState();
 updateBackButton();
 updateForwardButton();
-prefetchRandom();
+landingQueue.start();
 
 const sharedParam = new URLSearchParams(window.location.search).get(SHARE_PARAM);
 const sharedUrl = normalizeSharedUrl(sharedParam);
 if (sharedUrl) {
-  applyEntry({ url: sharedUrl, crawl: "shared link", at: "" });
-  pushHistory({ url: sharedUrl, crawl: "shared link", at: "" });
+  applyEntry({url: sharedUrl, crawl: "shared link"}).then(ok => {if (ok) pushHistory({url: sharedUrl, crawl: "shared link"});});
 }
 
-viewerEl.addEventListener("load", () => {
-  if (!currentUrl) return;
-  throbberEl.classList.add("is-hidden");
-  if (!hasStarted) {
-    loadingEl.classList.add("is-hidden");
-    hasStarted = true;
-  }
-  setStopState(false);
+viewerEl.addEventListener("load", finishViewerLoad);
+window.addEventListener("pagehide", () => landingQueue.close());
+window.addEventListener("pageshow", event => {if (event.persisted) window.location.reload();});
+
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) landingQueue.start();
 });

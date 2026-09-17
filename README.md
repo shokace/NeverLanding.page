@@ -3,7 +3,8 @@
 A retro browser game for discovering random websites and collecting TLD
 achievements. Random selection covers the full Tranco Top 1M plus a supplement
 of interesting sites and IANA-sourced registry destinations; there is no
-popularity weighting. Every candidate passes live adult-content, DNS, redirect,
+popularity weighting. Each tab prepares five pages in the background and Go
+displays a loaded page without reloading it. Every candidate passes live adult-content, DNS, redirect,
 HTML, and preview checks.
 
 ## Local run
@@ -37,6 +38,6 @@ npx wrangler deploy --keep-vars
 
 Apply migrations before deploying code that uses new columns. Existing earned
 achievements and their IDs are preserved. See [achievement notes](docs/ACHIEVEMENTS.md)
-and [discovery/filtering notes](docs/DISCOVERY.md) for maintenance and verification.
+[discovery/filtering notes](docs/DISCOVERY.md), and [queue notes](docs/QUEUE.md) for maintenance and verification.
 The deployed CSV's source, list ID, count, and SHA-256 are recorded in
 `public/data/tranco-source.json`; the previous R2 object is retained for rollback.

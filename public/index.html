@@ -173,6 +173,8 @@
               id="viewer"
               title="Random website preview"
               sandbox="allow-forms allow-scripts allow-same-origin allow-popups"
+              referrerpolicy="no-referrer"
+              allow="autoplay 'none'; camera 'none'; microphone 'none'; geolocation 'none'"
             ></iframe>
           </div>
           <div id="embed-note" class="embed-note">
@@ -181,6 +183,7 @@
         </div>
         <div class="statusbar">
           <span id="meta" class="status-left">Waiting for your first click.</span>
+          <span id="queue-status" class="queue-status" role="status">Preparing pages…</span>
           <a
             class="status-link"
             href="https://github.com/shokace"
@@ -445,6 +448,6 @@
     </div>
 
     <script src="/scripts/achievements.js"></script>
-    <script src="/scripts/app.js"></script>
+    <script type="module" src="/scripts/app.js"></script>
   </body>
 </html>

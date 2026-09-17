@@ -931,5 +931,14 @@ body {
   }
 }
 
+/* Keep every prepared browsing context in place; promoting it never reloads it. */
+.viewer iframe.preloaded-frame {
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+.queue-status { font-size: 11px; white-space: nowrap; padding: 0 8px; }
 .achievement-tile:focus-visible { outline: 2px dotted #000080; outline-offset: 2px; }
 .achievement-tile.is-unavailable { opacity: .4; }
