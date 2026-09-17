@@ -62,7 +62,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 07.ico",
-      "description": "Give the web another life on .eco. Visit a website ending in .eco.",
+      "description": "Give the web another life on .eco.",
       "code": "tld_eco",
       "title": "Reduce, Reuse, Reload",
       "rule": {
@@ -72,7 +72,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 08.ico",
-      "description": "Take the scenic route to .green. Visit a website ending in .green.",
+      "description": "Take the scenic route to .green.",
       "code": "tld_green",
       "title": "Greener Pastures",
       "rule": {
@@ -82,7 +82,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 09.ico",
-      "description": "Open the toolbox on .tools. Visit a website ending in .tools.",
+      "description": "Open the toolbox on .tools.",
       "code": "tld_tools",
       "title": "Some Assembly Required",
       "rule": {
@@ -92,7 +92,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 100.ico",
-      "description": "Press start on .game. Visit a website ending in .game.",
+      "description": "Press start on .game.",
       "code": "tld_game",
       "title": "Player One",
       "rule": {
@@ -102,7 +102,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 106.ico",
-      "description": "Turn the key on .security. Visit a website ending in .security.",
+      "description": "Turn the key on .security.",
       "code": "tld_security",
       "title": "Lock and Scroll",
       "rule": {
@@ -112,7 +112,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 108.ico",
-      "description": "Load a little .video nostalgia. Visit a website ending in .video.",
+      "description": "Load a little .video nostalgia.",
       "code": "tld_video",
       "title": "Be Kind, Rewind",
       "rule": {
@@ -122,7 +122,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 109.ico",
-      "description": "Crash a .events party. Visit a website ending in .events.",
+      "description": "Crash a .events party.",
       "code": "tld_events",
       "title": "You Are Invited",
       "rule": {
@@ -132,7 +132,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 110.ico",
-      "description": "Make a connection on .social. Visit a website ending in .social.",
+      "description": "Make a connection on .social.",
       "code": "tld_social",
       "title": "Buddy List",
       "rule": {
@@ -142,7 +142,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 111.ico",
-      "description": "Find the gears turning on .engineering. Visit a website ending in .engineering.",
+      "description": "Find the gears turning on .engineering.",
       "code": "tld_engineering",
       "title": "Works on My Machine",
       "rule": {
@@ -152,7 +152,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 113.ico",
-      "description": "Admire the pixels on .design. Visit a website ending in .design.",
+      "description": "Admire the pixels on .design.",
       "code": "tld_design",
       "title": "Pixel Perfect",
       "rule": {
@@ -162,7 +162,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 122.ico",
-      "description": "Boot up a .tech discovery. Visit a website ending in .tech.",
+      "description": "Boot up a .tech discovery.",
       "code": "tld_tech",
       "title": "Future, Meet Floppy",
       "rule": {
@@ -172,7 +172,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 125.ico",
-      "description": "Plug into .energy. Visit a website ending in .energy.",
+      "description": "Plug into .energy.",
       "code": "tld_energy",
       "title": "Fully Charged",
       "rule": {
@@ -182,7 +182,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 126.ico",
-      "description": "There is a whole .world out there. Visit a website ending in .world.",
+      "description": "There is a whole .world out there.",
       "code": "tld_world",
       "title": "World Wide Wanderer",
       "rule": {
@@ -192,7 +192,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 127.ico",
-      "description": "Find a happy little .app. Visit a website ending in .app.",
+      "description": "Find a happy little .app.",
       "code": "tld_app",
       "title": "Appy Camper",
       "rule": {
@@ -202,7 +202,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 128.ico",
-      "description": "Turn the dial to .audio. Visit a website ending in .audio.",
+      "description": "Turn the dial to .audio.",
       "code": "tld_audio",
       "title": "Sound Check",
       "rule": {
@@ -212,7 +212,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 13.ico",
-      "description": "Find the missing .info. Visit a website ending in .info.",
+      "description": "Find the missing .info.",
       "code": "tld_info",
       "title": "Read the Manual",
       "rule": {
@@ -222,7 +222,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 131.ico",
-      "description": "Drop into .chat. Visit a website ending in .chat.",
+      "description": "Drop into .chat.",
       "code": "tld_chat",
       "title": "You Have Company",
       "rule": {
@@ -232,7 +232,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 14.ico",
-      "description": "Make time for .watch. Visit a website ending in .watch.",
+      "description": "Make time for .watch.",
       "code": "tld_watch",
       "title": "Just a Second",
       "rule": {
@@ -242,7 +242,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 15.ico",
-      "description": "Unlock a .codes discovery. Visit a website ending in .codes.",
+      "description": "Unlock a .codes discovery.",
       "code": "tld_codes",
       "title": "Secret Decoder Ring",
       "rule": {
@@ -252,7 +252,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 16.ico",
-      "description": "Land on a .site worth seeing. Visit a website ending in .site.",
+      "description": "Land on a .site worth seeing.",
       "code": "tld_site",
       "title": "Site Unseen",
       "rule": {
@@ -262,7 +262,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 17.ico",
-      "description": "Step through a .digital doorway. Visit a website ending in .digital.",
+      "description": "Step through a .digital doorway.",
       "code": "tld_digital",
       "title": "Digital Native",
       "rule": {
@@ -272,7 +272,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 34.ico",
-      "description": "Open a fresh chapter on .news. Visit a website ending in .news.",
+      "description": "Open a fresh chapter on .news.",
       "code": "tld_news",
       "title": "New Folder, New Story",
       "rule": {
@@ -282,7 +282,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 35.ico",
-      "description": "Paint your journey with .art. Visit a website ending in .art.",
+      "description": "Paint your journey with .art.",
       "code": "tld_art",
       "title": "Happy Little Pixels",
       "rule": {
@@ -292,7 +292,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 43.ico",
-      "description": "Cast your browser into .net. Visit a website ending in .net.",
+      "description": "Cast your browser into .net.",
       "code": "tld_net",
       "title": "Caught in the Net",
       "rule": {
@@ -302,7 +302,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 52.ico",
-      "description": "Find a .download destination; no download required. Visit a website ending in .download.",
+      "description": "Find a .download destination; no download required.",
       "code": "tld_download",
       "title": "Please Insert Disc",
       "rule": {
@@ -312,7 +312,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 55.ico",
-      "description": "See what makes .systems tick. Visit a website ending in .systems.",
+      "description": "See what makes .systems tick.",
       "code": "tld_systems",
       "title": "All Systems Go",
       "rule": {
@@ -322,7 +322,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 59.ico",
-      "description": "Find your groove on .music. Visit a website ending in .music.",
+      "description": "Find your groove on .music.",
       "code": "tld_music",
       "title": "Now That Is What I Call Surfing",
       "rule": {
@@ -332,7 +332,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 63.ico",
-      "description": "Discover a .software destination. Visit a website ending in .software.",
+      "description": "Discover a .software destination.",
       "code": "tld_software",
       "title": "Windows of Opportunity",
       "rule": {
@@ -342,7 +342,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 70.ico",
-      "description": "Browse the classic .com neighborhood. Visit a website ending in .com.",
+      "description": "Browse the classic .com neighborhood.",
       "code": "tld_com",
       "title": "Window Shopping",
       "rule": {
@@ -352,7 +352,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 71.ico",
-      "description": "Visit the builders on .dev. Visit a website ending in .dev.",
+      "description": "Visit the builders on .dev.",
       "code": "tld_dev",
       "title": "Under Construction",
       "rule": {
@@ -362,7 +362,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 76.ico",
-      "description": "Read a page from .blog. Visit a website ending in .blog.",
+      "description": "Read a page from .blog.",
       "code": "tld_blog",
       "title": "Dear Internet Diary",
       "rule": {
@@ -372,7 +372,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 83.ico",
-      "description": "Float into .cloud. Visit a website ending in .cloud.",
+      "description": "Float into .cloud.",
       "code": "tld_cloud",
       "title": "Head in the Clouds",
       "rule": {
@@ -382,7 +382,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 84.ico",
-      "description": "It looks like you are visiting .help. Visit a website ending in .help.",
+      "description": "It looks like you are visiting .help.",
       "code": "tld_help",
       "title": "Clippy Would Be Proud",
       "rule": {
@@ -392,7 +392,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 85.ico",
-      "description": "Get a little wiser on .edu. Visit a website ending in .edu.",
+      "description": "Get a little wiser on .edu.",
       "code": "tld_edu",
       "title": "Honor Roll",
       "rule": {
@@ -402,7 +402,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 86.ico",
-      "description": "Find your way to .org. Visit a website ending in .org.",
+      "description": "Find your way to .org.",
       "code": "tld_org",
       "title": "Organized Adventure",
       "rule": {
@@ -412,7 +412,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 88.ico",
-      "description": "Launch into .space. Visit a website ending in .space.",
+      "description": "Launch into .space.",
       "code": "tld_space",
       "title": "Out of This Browser",
       "rule": {
@@ -422,7 +422,7 @@
     },
     {
       "icon": "/assets/achievements/Windows98Scaled Icon 97.ico",
-      "description": "Unpack a .zip website; no file download required. Visit a website ending in .zip.",
+      "description": "Unpack a .zip website; no file download required.",
       "code": "tld_zip",
       "title": "Compressed Adventure",
       "rule": {
@@ -434,7 +434,7 @@
       "icon": "/assets/achievements/Windows98Scaled Icon 03.ico",
       "code": "tld_network",
       "title": "LAN Party",
-      "description": "Find your people on .network. Visit a website ending in .network.",
+      "description": "Find your people on .network.",
       "rule": {
         "type": "tld",
         "value": "network"
@@ -444,7 +444,7 @@
       "icon": "/assets/achievements/Windows98Scaled Icon 02.ico",
       "code": "tld_computer",
       "title": "Boot Camp",
-      "description": "A fresh boot into .computer. Visit a website ending in .computer.",
+      "description": "A fresh boot into .computer.",
       "rule": {
         "type": "tld",
         "value": "computer"
