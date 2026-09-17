@@ -16,7 +16,7 @@ async function loadLeaderboard() {
   table.hidden = true;
   status.textContent = 'Loading leaderboard…';
   try {
-    const response = await fetch('/api/leaderboard', {signal:pending.signal, credentials:'omit'});
+    const response = await fetch('/api/leaderboard', {signal:pending.signal, credentials:'omit', cache:'no-store'});
     if (!response.ok) throw new Error('Leaderboard unavailable');
     const data = await response.json();
     if (controller !== pending) return;
@@ -67,4 +67,10 @@ document.addEventListener('keydown',event=>{
     if (event.shiftKey && document.activeElement === first) {event.preventDefault();last.focus();}
     else if (!event.shiftKey && document.activeElement === last) {event.preventDefault();first.focus();}
   }
+});
+
+document.addEventListener("auth-changed", () => {
+  rows.replaceChildren();
+  table.hidden = true;
+  if (!modal.classList.contains("is-hidden")) loadLeaderboard();
 });

@@ -228,7 +228,47 @@ export default {
       return jsonResponse(entry, {headers: {"cache-control": "no-store"}});
     }
 
-    if (pathname === "/api/account/username" && method === "POST") {
+    if (pathname === "/api/account" && method === "GET") {
+      const auth = await requireUser(env, request, {allowIncomplete:true});
+      if (auth.error) return auth.error;
+      const account = await env.DB.prepare("SELECT password_hash IS NOT NULL AS has_password FROM users WHERE id = ?").bind(auth.user.id).first();
+      return jsonResponse({hasPassword:Boolean(account?.has_password)});
+    }
+
+    if (pathname === "/api/account/sessions/revoke" && method === "POST") {
+      const auth = await requireUser(env, request, {allowIncomplete:true});
+      if (auth.error) return auth.error;
+      await env.DB.prepare("DELETE FROM sessions WHERE user_id = ? AND session_token != ?")
+        .bind(auth.user.id, readCookie(request, "nl_session")).run();
+      return jsonResponse({ok:true});
+    }
+
+    if (pathname === "/api/account/delete" && method === "POST") {
+      const auth = await requireUser(env, request, {allowIncomplete:true});
+      if (auth.error) return auth.error;
+      const body = await readJson(request);
+      if (body?.confirmation !== "DELETE") return jsonResponse({error:"Type DELETE to confirm."}, {status:400});
+      if (!allowRateLimit(`delete:${auth.user.id}`)) return jsonResponse({error:"Please wait a moment and try again."}, {status:429});
+      const account = await env.DB.prepare("SELECT password_hash, password_salt FROM users WHERE id = ?").bind(auth.user.id).first();
+      if (!account) return jsonResponse({error:"Unauthorized"}, {status:401});
+      if (account.password_hash) {
+        if (typeof body.password !== "string" || !body.password || !account.password_salt) return jsonResponse({error:"Enter your password to delete this account."}, {status:400});
+        const {hash} = await hashPassword(body.password, account.password_salt);
+        if (hash !== account.password_hash) return jsonResponse({error:"That password is incorrect."}, {status:403});
+      } else {
+        // A Google-only account must have authenticated within the last ten minutes.
+        const recent = await env.DB.prepare("SELECT id FROM sessions WHERE user_id = ? AND session_token = ? AND datetime(created_at) >= datetime('now', '-10 minutes')")
+          .bind(auth.user.id, readCookie(request, "nl_session")).first();
+        if (!recent) return jsonResponse({error:"Sign in again, then return to Settings to delete your account.",code:"REAUTH_REQUIRED"}, {status:403});
+      }
+      // One atomic delete; foreign keys cascade to every account-owned table.
+      await env.DB.prepare("DELETE FROM users WHERE id = ?").bind(auth.user.id).run();
+      const headers = new Headers();
+      clearSessionCookie(headers, new URL(url));
+      return jsonResponse({ok:true}, {headers});
+    }
+
+    if (["/api/account/username", "/api/account/profile"].includes(pathname) && method === "POST") {
       const auth = await requireUser(env, request, {allowIncomplete:true});
       if (auth.error) return auth.error;
       const body = await readJson(request);
@@ -236,10 +276,11 @@ export default {
       if (!isPublicUsername(username) || username.length < 3 || username.length > 24) {
         return jsonResponse({error:"Use 3–24 letters, numbers, underscores, or hyphens. Email addresses are not usernames."}, {status:400});
       }
-      if (!auth.user.needsUsername) return jsonResponse({error:"This account already has a username"}, {status:409});
+      const setupOnly = pathname === "/api/account/username";
+      if (setupOnly && !auth.user.needsUsername) return jsonResponse({error:"This account already has a username"}, {status:409});
       try {
-        const updated = await env.DB.prepare(`UPDATE users SET username = ?, updated_at = datetime('now') WHERE id = ? AND (username IS NULL OR length(username) NOT BETWEEN 1 AND 32 OR username GLOB '*[^A-Za-z0-9_-]*')`)
-          .bind(username, auth.user.id).run();
+        const updated = await env.DB.prepare(`UPDATE users SET username = ?, updated_at = datetime('now') WHERE id = ? AND (? = 0 OR username IS NULL OR length(username) NOT BETWEEN 1 AND 32 OR username GLOB '*[^A-Za-z0-9_-]*')`)
+          .bind(username, auth.user.id, setupOnly ? 1 : 0).run();
         if (!updated.meta.changes) return jsonResponse({error:"This account already has a username"}, {status:409});
       } catch (error) {
         if (String(error).includes("UNIQUE constraint failed")) return jsonResponse({error:"That username is already taken. Choose another."}, {status:409});

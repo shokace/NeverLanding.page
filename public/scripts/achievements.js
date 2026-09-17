@@ -1,3 +1,4 @@
+import {reducedMotion} from "./preferences.js";
 const achievementsGrid = document.getElementById("achievements-grid");
 const achievementsPanel = document.getElementById("achievements-modal");
 const celebratingTiles = new Set();
@@ -136,7 +137,7 @@ function celebrateVisibleUnlocks() {
     if (!code || !unlockedCodes.has(code) || seenCodes.has(code)) continue;
     // Seeing a tile qualifies it for acknowledgement when this panel closes.
     viewedThisSession.add(code);
-    if (celebratingTiles.has(tile) || matchMedia("(prefers-reduced-motion: reduce)").matches) continue;
+    if (celebratingTiles.has(tile) || reducedMotion()) continue;
     tile.classList.add("is-celebrating");
     for (let i = 0; i < 6; i++) {
       const sparkle = document.createElement("span");
@@ -299,4 +300,9 @@ document.addEventListener("keydown", (event) => {
 if (achievementsMenuButton) achievementsMenuButton.addEventListener("click", () => {
   if (!achievementData.length) loadAchievements();
   refreshUnlocked();
+});
+
+document.addEventListener("motion-changed", () => {
+  if (reducedMotion()) stopCelebrations();
+  else celebrateVisibleUnlocks();
 });

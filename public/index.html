@@ -77,6 +77,7 @@
             <ul class="menu-list" role="menu" aria-label="File">
               <li role="menuitem" id="login-menu">Login</li>
               <li role="menuitem" id="share-menu">Share</li>
+              <li role="menuitem"><button id="settings-menu" class="menu-item-button" type="button">Settings</button></li>
               <li role="menuitem" id="logout-menu">Logout</li>
             </ul>
           </div>
@@ -244,6 +245,54 @@
             </label>
             <button class="modal-button" type="submit">Create Account</button>
           </form>
+        </div>
+      </div>
+    </div>
+
+    <div id="settings-modal" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="modal-window settings-window">
+        <div class="modal-titlebar">
+          <span id="settings-title">Settings</span>
+          <button class="modal-close" type="button" aria-label="Close settings">×</button>
+        </div>
+        <div class="modal-body settings-body">
+          <section class="settings-section" aria-labelledby="settings-browsing-title">
+            <h2 id="settings-browsing-title">Your browser, your way</h2>
+            <label class="field"><span>Animations</span>
+              <select id="settings-motion"><option value="system">Follow device settings</option><option value="reduce">Reduce motion</option></select>
+            </label>
+            <button id="settings-clear-history" class="modal-button" type="button">Clear this tab’s history</button>
+            <small>Your saved progress and favorites stay put.</small>
+          </section>
+          <section id="settings-guest" class="settings-section" hidden>
+            <p>Sign in to manage your account.</p>
+            <button id="settings-login" class="modal-button" type="button">Sign in</button>
+          </section>
+          <section id="settings-account" class="settings-section" aria-labelledby="settings-account-title" hidden>
+            <h2 id="settings-account-title">Your explorer name</h2>
+            <form id="settings-username-form" class="settings-form">
+              <label class="field"><span>Username</span>
+                <input name="username" autocomplete="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_\-]+" aria-describedby="settings-username-help" required />
+              </label>
+              <small id="settings-username-help">3–24 letters, numbers, _ or -. Public on the leaderboard.</small>
+              <button class="modal-button" type="submit">Save username</button>
+            </form>
+            <button id="settings-revoke-sessions" class="modal-button" type="button">Sign out other devices</button>
+          </section>
+          <section id="settings-danger" class="settings-section" hidden>
+            <details id="settings-delete-details">
+              <summary>Delete account…</summary>
+              <p id="settings-delete-warning">Permanently deletes your account, landings, favorites, achievements, and leaderboard entry. This cannot be undone.</p>
+              <form id="settings-delete-form" class="settings-form" aria-describedby="settings-delete-warning">
+                <label class="field"><span>Type DELETE to confirm</span><input name="confirmation" autocomplete="off" spellcheck="false" pattern="DELETE" required /></label>
+                <label id="settings-password-field" class="field" hidden><span>Current password</span><input name="password" type="password" autocomplete="current-password" /></label>
+                <p id="settings-delete-help" class="modal-copy"></p>
+                <button id="settings-delete-submit" class="modal-button settings-delete-button" type="submit" disabled>Delete my account permanently</button>
+              </form>
+              <button id="settings-reauth" class="modal-button" type="button" hidden>Sign in again</button>
+            </details>
+          </section>
+          <p id="settings-status" role="status" aria-live="polite"></p>
         </div>
       </div>
     </div>
@@ -486,7 +535,7 @@
       </div>
     </div>
 
-    <script src="/scripts/achievements.js"></script>
+    <script type="module" src="/scripts/achievements.js"></script>
     <script type="module" src="/scripts/app.js"></script>
   </body>
 </html>

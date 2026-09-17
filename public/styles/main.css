@@ -1039,3 +1039,25 @@ body {
   65% { opacity: 1; }
   100% { opacity: 0; transform: translate(var(--sparkle-x), var(--sparkle-y)) scale(.3) rotate(80deg); }
 }
+
+/* Settings shares the desktop window styling, with a scrollable mobile body. */
+.menu-item-button { font: inherit; color: inherit; background: none; border: 0; padding: 0; width: 100%; text-align: left; cursor: pointer; }
+.settings-window { width: min(440px, 92vw); max-height: 88dvh; display: flex; flex-direction: column; }
+.settings-body { overflow-y: auto; min-height: 0; display: grid; gap: 14px; }
+.settings-section { display: grid; gap: 10px; }
+.settings-section + .settings-section { border-top: 1px solid var(--win-shadow); padding-top: 12px; }
+.settings-section h2, .settings-section p, #settings-status { margin: 0; }
+.settings-section h2 { font-size: 1rem; }
+.settings-form { display: grid; gap: 8px; }
+.settings-section .modal-button { justify-self: start; max-width: 100%; white-space: normal; }
+.settings-section select { font: inherit; padding: 5px; max-width: 100%; }
+.settings-section small { color: #444; }
+.settings-section summary { cursor: pointer; color: #8d1515; }
+.settings-section details[open] > p, .settings-section details[open] > form { margin-top: 12px; }
+.settings-delete-button { color: #8d1515; font-weight: bold; }
+#settings-status:empty { display: none; }
+#settings-modal [hidden] { display: none; }
+html[data-reduced-motion="true"] *, html[data-reduced-motion="true"] *::before, html[data-reduced-motion="true"] *::after {
+  animation: none !important; transition: none !important; scroll-behavior: auto !important;
+}
+html[data-reduced-motion="true"] .achievement-sparkle { display: none; }

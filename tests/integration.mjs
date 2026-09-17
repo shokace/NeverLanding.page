@@ -90,7 +90,7 @@ cookie = '';
 const leaderboard = await request('/api/leaderboard?limit=999999&userId=anything&sort=email');
 assert.equal(leaderboard.status,200);
 assert.equal(leaderboard.headers.get('set-cookie'),null);
-assert.equal(leaderboard.headers.get('cache-control'),'public, max-age=60');
+assert.equal(leaderboard.headers.get('cache-control'),'no-store');
 assert.deepEqual(Object.keys(leaderboard.body),['items']);
 assert.ok(leaderboard.body.items.length <=100);
 assert.ok(leaderboard.body.items.some(row=>row.username===name && row.visits===3));

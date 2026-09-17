@@ -10,9 +10,10 @@ field allowlist. HTML is never constructed from player data.
 
 D1 stores totals maintained by insert/delete triggers on visits. Migration 0012
 backfills counts from historical visits without changing visits or awards. An
-index orders the totals, and the Worker Cache API caches the public response for
-60 seconds at each location. The cache key ignores query parameters and cookies;
-there is no private "my rank" result mixed into the shared cache. This uses the
+index orders the totals. Each leaderboard request reads the top 100 from D1 and
+returns `Cache-Control: no-store`, so renames and deletions appear on the next
+refresh without a stale browser or edge cache. There is no private "my rank"
+result mixed into this public response. This uses the
 existing Worker and D1; no paid add-on is required. It still consumes the
 account's normal Workers/D1 allowances.
 
@@ -81,3 +82,43 @@ are remembered per account in this browser using the existing seen-achievements
 storage; reopening or reloading does not replay them. Off-screen awards stay unread
 and keep their sparkle for a later session. Reduced-motion users get the steady
 glow without animation.
+
+
+## Settings and account deletion
+
+File → Settings opens an accessible window for changing a username, choosing
+reduced motion (saved per browser), clearing this tab’s local navigation history,
+and signing out every other device. History cleanup does not erase saved visits,
+favorites, or achievements. Guests can use browser preferences and sign in from
+Settings. Device reduced-motion preferences remain respected.
+
+`POST /api/account/profile` renames only the authenticated account, retaining its
+ID, visits, favorites, and achievements. The same 3–24-character validation and
+case-insensitive unique index used at signup reject collisions, including races.
+The original `/api/account/username` remains limited to mandatory initial setup.
+`POST /api/account/sessions/revoke` removes the current user’s other sessions;
+the current session and every other account remain untouched.
+
+Deletion requires typing `DELETE`, plus the current password for password-based
+accounts. Google-only accounts require a session created within the preceding ten
+minutes; older sessions get a sign-out/sign-in path before retrying. The server
+checks these conditions itself and ignores client-supplied account IDs. Existing
+JSON, same-origin, session, and no-store protections apply to all account routes.
+The client never receives password hashes or OAuth credentials.
+
+`POST /api/account/delete` executes a single atomic users deletion. Existing
+foreign-key cascades remove visits, favorites, earned achievements, visit totals,
+provider credentials, and all sessions for that account. The global achievement
+catalog and other users are preserved. The response expires the session cookie.
+The client clears private account state, local navigation history, and that
+account’s seen-achievement storage, and notifies other open tabs to clear theirs.
+Late progress/favorites responses cannot restore the deleted account’s UI data.
+As with any D1 deletion, provider-managed database recovery retention is separate
+from the live application database; this endpoint does not purge Cloudflare backups.
+
+`tests/settings-integration.mjs` uses only disposable local D1 users to verify
+renames, collisions, preserved awards, session isolation, deletion credentials,
+CSRF rejection, all cascade targets, immediate public ranking updates, and Google
+session age checks. `tests/settings-browser.mjs` covers confirmation, errors,
+preferences, guest controls, cleanup, reauthentication, keyboard focus, and mobile
+layout. No production account is deleted during verification.

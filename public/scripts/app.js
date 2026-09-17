@@ -1,5 +1,6 @@
 import { LandingQueue } from "./landing-queue.js";
 import { openLeaderboard } from "./leaderboard.js";
+import { initializeSettings } from "./settings.js";
 
 const getButton = document.getElementById("get");
 const backButton = document.getElementById("back");
@@ -275,6 +276,7 @@ function setLoginStatus(message) {
 
 function setAuthState(user) {
   currentUser = user || null;
+  if (!currentUser) favoritesPendingRemovals.clear();
   initializeOnboarding(currentUser);
   const needsUsername = Boolean(user && (user.needsUsername || !user.username));
   usernameSetupModal.classList.toggle("is-hidden", !needsUsername);
@@ -382,11 +384,13 @@ function updateFavoriteButton() {
 }
 
 async function fetchFavorites() {
-  if (!currentUser) return;
+  const userId = currentUser?.id;
+  if (!userId) return;
   try {
     const res = await fetch("/api/favorites");
     if (!res.ok) return;
     const data = await res.json();
+    if (currentUser?.id !== userId) return;
     favorites = Array.isArray(data.items) ? data.items : [];
     favoritesByUrl = new Map(favorites.map((item) => [item.url, item]));
     renderFavoritesList();
@@ -633,9 +637,8 @@ document.getElementById("username-setup-logout").addEventListener("click", () =>
 if (logoutMenuItem) {
   logoutMenuItem.addEventListener("click", async () => {
     closeMenus();
-    await fetch("/api/auth/logout", { method: "POST", headers: {"content-type":"application/json"}, body: "{}" });
-    metaEl.textContent = "Signed out.";
-    setAuthState(null);
+    try {await signOut();}
+    catch {metaEl.textContent = "Unable to sign out. Please try again.";}
   });
 }
 
@@ -733,6 +736,24 @@ if (providerButtons.length) {
     .catch(() => {});
 }
 
+async function signOut() {
+  const response = await fetch("/api/auth/logout", {method:"POST", headers:{"content-type":"application/json"}, body:"{}"});
+  if (!response.ok) throw new Error("Unable to sign out. Please try again.");
+  setAuthState(null);
+  metaEl.textContent = "Signed out.";
+}
+
+function clearLocalHistory() {
+  history = [];
+  historyIndex = -1;
+  try {sessionStorage.removeItem(HISTORY_KEY);} catch {}
+  updateBackButton();
+  updateForwardButton();
+}
+
+initializeSettings({getUser:() => currentUser, setUser:setAuthState, clearHistory:clearLocalHistory,
+  notify:message => {metaEl.textContent = message;}, openLogin:openLoginModal, signOut});
+
 fetch("/api/auth/me")
   .then((res) => (res.ok ? res.json() : null))
   .then((data) => {
@@ -743,11 +764,13 @@ fetch("/api/auth/me")
   .catch(() => {});
 
 async function fetchProgress() {
-  if (!landingCounter) return;
+  const userId = currentUser?.id;
+  if (!landingCounter || !userId) return;
   try {
     const res = await fetch("/api/progress");
     if (!res.ok) return;
     const data = await res.json();
+    if (currentUser?.id !== userId) return;
     landingCounter.textContent = `Landings: ${data.visits || 0}`;
   } catch {}
 }
